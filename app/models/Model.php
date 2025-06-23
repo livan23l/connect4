@@ -110,10 +110,10 @@ class Model
 
     /**
      * Retrieves the last record ordered by a specific column.
-     * @param string $column The column to order by.
+     * @param string $column The column to order by (optional).
      * @return array|false
      */
-    public function last($column = 'id')
+    public function last($column = 'created_at')
     {
         $this->query("SELECT * FROM $this->table ORDER BY $column DESC LIMIT 1;");
         return $this->first();
