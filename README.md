@@ -2,6 +2,7 @@
 Connect4 is the classic "connect four" game made with HTML, CSS, and JS, available in Spanish and English. Play alone or with friends and unlock achievements on the site.
 
 ## Project structure
+<pre>
   ┌── app/                    Project source code
   │   └── controllers/        Controllers of the app
   ├── config/                 Configuration files
@@ -20,3 +21,4 @@ Connect4 is the classic "connect four" game made with HTML, CSS, and JS, availab
   │   ├── components/         System components
   │   └── views/              Project views
   └── README.md               General project documentation
+</pre>
