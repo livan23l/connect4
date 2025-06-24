@@ -55,16 +55,18 @@ class Model
     }
 
     /**
-     * Executes a prepared SQL query with parameters.
-     * @param string $sql The SQL query to prepare.
-     * @param array $params The parameter names.
-     * @param array $values The parameter values.
+     * Executes a prepared SQL statement with named parameters.
+     *
+     * @param string $sql The SQL query with named placeholders (e.g., :name).
+     * @param array $values An associative array of parameters (e.g., [':name' => 'value']).
+     * @return void
      */
-    protected function preparedQuery($sql, $params, $values)
+
+    protected function preparedQuery($sql, $values)
     {
         $this->query = $this->connection->prepare($sql);
-        for ($i = 0; $i < count($params); $i++) {
-            $this->query->bindParam(":$params[$i]", $values[$i]);
+        foreach ($values as $name => $value) {
+            $this->query->bindValue($name, $value);
         }
         $this->query->execute();
     }
@@ -103,9 +105,11 @@ class Model
      */
     public function find($id)
     {
-        return $this
-            ->query("SELECT * FROM $this->table WHERE $this->pk_column = '$id';")
-            ->first();
+        $this->preparedQuery(
+            "SELECT * FROM $this->table WHERE $this->pk_column = :id;",
+            [':id' => $id]
+        );
+        return $this->first();
     }
 
     /**
@@ -128,7 +132,11 @@ class Model
      */
     public function where($column, $value, $operator = '=')
     {
-        return $this->query("SELECT * FROM $this->table WHERE $column $operator '$value';");
+        $this->preparedQuery(
+            "SELECT * FROM $this->table WHERE $column $operator :val;",
+            [':val' => $value]
+        );
+        return $this;
     }
 
     /**
@@ -147,8 +155,8 @@ class Model
      * 
      *   operator (string, optional): The comparison operator (default '=')
      * 
-     *   conditional_operator (string, optional): Logical operator to combine
-     * with the next condition (default 'AND')
+     *   conditional (string, optional): Logical operator to combine with the
+     * next condition (default 'AND')
      * 
      * ]
      *
@@ -163,19 +171,30 @@ class Model
      */
     public function whereConditions($conditions)
     {
-        $where = "";
-        $last = count($conditions) - 1;
-        for ($i = 0; $i < $last; $i++) {
-            $cond = $conditions[$i];
-            $action = $cond[2] ?? "=";
-            $op = $cond[3] ?? "AND";
-            $where .= "$cond[0] $action '$cond[1]' $op ";
-        }
-        $cond = $conditions[$last];
-        $action = $cond[2] ?? "=";
-        $where .= "$cond[0] $action '$cond[1]'";
+        $where = '';
+        $values = [];
+        $size = count($conditions);
+        for ($i = 0; $i < $size; $i++) {
+            $cond = $conditions[$i];  // The current condition
 
-        return $this->query("SELECT * FROM $this->table WHERE $where;");
+            // Get the condition elements
+            $column = $cond[0];
+            $value = $cond[1];
+            $operator = $cond[2] ?? '=';
+            $conditional = $cond[3] ?? 'AND';
+
+            if ($i == $size - 1) $conditional = '';
+
+            // Add the condition sentence and prepare the values
+            $where .= "$column $operator :$column $conditional ";
+            $values[":$column"] = "$value";
+        }
+
+        $this->preparedQuery(
+            "SELECT * FROM $this->table WHERE $where;",
+            $values
+        );
+        return $this;
     }
 
     /**
@@ -186,13 +205,16 @@ class Model
     public function create($data)
     {
         $columns = array_keys($data);
-        $columns_names = implode(", ", $columns);
-        $columns_params = ":" . implode(", :", $columns);
-        $values = array_values($data);
+        $columns_names = implode(', ', $columns);
+        $columns_params = ':' . implode(', :', $columns);
 
         $sql = "INSERT INTO $this->table ($columns_names) VALUES ($columns_params);";
 
-        $this->preparedQuery($sql, $columns, $values);
+        $values = array_combine(
+            explode(', ', $columns_params),
+            array_values($data)
+        );
+        $this->preparedQuery($sql, $values);
 
         return $this->last();
     }
@@ -222,14 +244,30 @@ class Model
     }
 
     /**
-     * Deletes a record by its primary key.
+     * Deletes a record by its primary key and returns the deleted element.
      * @param mixed $id The primary key value.
      * @return array|false
      */
     public function delete($id)
     {
         $object = $this->find($id);
-        $this->query("DELETE FROM $this->table WHERE $this->pk_column = $id;");
+        $this->preparedQuery(
+            "DELETE FROM $this->table WHERE $this->pk_column = :id;",
+            [':id' => $id]
+        );
         return $object;
+    }
+
+    /**
+     * Deletes all records from the associated database table.
+     *
+     * This method executes a SQL DELETE statement to remove all rows from the table
+     * represented by the current model. Use with caution, as this action is irreversible.
+     *
+     * @return void
+     */
+    public function deleteAll()
+    {
+        $this->query("DELETE FROM $this->table;");
     }
 }
