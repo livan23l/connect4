@@ -23,13 +23,17 @@ class Router
         var_dump(self::$POST);
     }
 
-    private static function execute($action, $vars = [])
+    private static function execute($action, $parameters = [])
     {
         // Get the controller and method from the action
         [$controller, $method] = $action;
 
-        $cont = new $controller($vars);  // Create a new controller instance
-        echo $cont->$method();  // Execute the instance
+        // Create a new controller instance
+        $request = $_POST;
+        $cont = new $controller($parameters, $request);
+
+        // Execute the method of the instance
+        echo $cont->$method();
     }
 
     public static function dispatch()
