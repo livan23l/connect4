@@ -6,7 +6,8 @@ return new class {
             user VARCHAR(50) PRIMARY KEY,
             `password` VARCHAR(255) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            CONSTRAINT ck_users_min_user_len CHECK (CHAR_LENGTH(user) >= 5)
         );';
         return $sql;
     }
