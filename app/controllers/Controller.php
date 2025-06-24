@@ -22,7 +22,7 @@ class Controller
 
         // Get and save the view
         ob_start();
-        $view = str_replace(".", "/", $view);
+        $view = str_replace('.', '/', $view);
         require_once BASE . "resources/views/$view.php";
         $file = ob_get_clean();  // Get the buffer data and close it
 
@@ -46,6 +46,7 @@ class Controller
         $_SESSION['error'] = $error ?? $this->errors;
         $_SESSION['old'] = $old ?? $this->request;
         header("Location: $route");
+        exit;
     }
 
     /**

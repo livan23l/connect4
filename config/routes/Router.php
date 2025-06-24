@@ -1,6 +1,6 @@
 <?php
 
-require_once BASE . "app/controllers/IndexController.php";
+require_once BASE . 'app/controllers/IndexController.php';
 
 class Router
 {
@@ -73,7 +73,7 @@ class Router
             }
         }
 
-        self::execute([IndexController::class, "notFound"]);
+        self::execute([IndexController::class, 'notFound']);
         return;
     }
 }

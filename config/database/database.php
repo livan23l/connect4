@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "/../config.php";
+require_once __DIR__ . '/../config.php';
 
 class Database
 {
@@ -26,10 +26,10 @@ class Database
         try {
             $this->connection = new PDO($dsn, $db_user, $db_pass);
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
+            echo 'Error: ' . $e->getMessage();
         }
 
-        $this->migrationRoute = BASE . "config/database/migrations/";
+        $this->migrationRoute = BASE . 'config/database/migrations/';
     }
 
     /**
@@ -51,7 +51,7 @@ class Database
             };
             echo "$message migration: $file\n";
         } catch (PDOException $e) {
-            echo "SQL error: " . $e->getMessage() . "\n";
+            echo 'SQL error: ' . $e->getMessage() . "\n";
             die();
         }
     }
@@ -67,14 +67,14 @@ class Database
     private function upOrDown($migration, $type)
     {
         // Check if it's just one migration
-        if ($migration !== "") {
-            $file = $this->migrationRoute . $migration . ".php";
+        if ($migration !== '') {
+            $file = $this->migrationRoute . $migration . '.php';
 
             // Check that the current migration file exists
             if (file_exists($file)) {
                 $this->executeMigration("$migration.php", $type);
             } else {
-                echo "The specified migration does not exist.";
+                echo 'The specified migration does not exist.';
                 die();
             }
 
@@ -89,12 +89,12 @@ class Database
 
         // Check if there is at least one migration
         if (count($files) == 0) {
-            echo "There are no migration files";
+            echo 'There are no migration files';
             die();
         }
 
         // Reverse the files array if the type is 'down' to avoid errors
-        if ($type == "down") {
+        if ($type == 'down') {
             $files = array_reverse($files);
         }
 
@@ -110,9 +110,9 @@ class Database
      *
      * @param string $migration The name of the migration to run (optional).
      */
-    public function up($migration = "")
+    public function up($migration = '')
     {
-        $this->upOrDown($migration, "up");
+        $this->upOrDown($migration, 'up');
     }
 
     /**
@@ -121,9 +121,9 @@ class Database
      *
      * @param string $migration The name of the migration to revert (optional).
      */
-    public function down($migration = "")
+    public function down($migration = '')
     {
-        $this->upOrDown($migration, "down");
+        $this->upOrDown($migration, 'down');
     }
 
     /**
@@ -132,7 +132,7 @@ class Database
      *
      * @param string $migration The name of the migration to refresh (optional).
      */
-    public function refresh($migration = "")
+    public function refresh($migration = '')
     {
         $this->down($migration);
         $this->up($migration);
