@@ -4,9 +4,14 @@ Connect4 is the classic "connect four" game made with HTML, CSS, and JS, availab
 ## Project structure
 <pre>
   ┌── app/                    Project source code
-  │   └── controllers/        Controllers of the app
+  │   ├── controllers/        Controllers of the app
+  │   ├── enums/              Enumerator files
+  │   └── models/             Application data models
   ├── config/                 Configuration files
   │   ├── config.php          Main system configuration
+  │   ├── database/           Database-related files
+  │   │   ├── database.php    File that controls database migrations
+  │   │   └── migrations/     The app migrations
   │   └── routes/             Route-related settings
   │       ├── Router.php      Router file
   │       └── web.php         Web routes file

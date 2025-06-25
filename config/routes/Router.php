@@ -1,6 +1,6 @@
 <?php
 
-require_once BASE . "app/controllers/IndexController.php";
+require_once BASE . 'app/controllers/IndexController.php';
 
 class Router
 {
@@ -23,13 +23,17 @@ class Router
         var_dump(self::$POST);
     }
 
-    private static function execute($action, $vars = [])
+    private static function execute($action, $parameters = [])
     {
         // Get the controller and method from the action
         [$controller, $method] = $action;
 
-        $cont = new $controller($vars);  // Create a new controller instance
-        echo $cont->$method();  // Execute the instance
+        // Create a new controller instance
+        $request = $_POST;
+        $cont = new $controller($parameters, $request);
+
+        // Execute the method of the instance
+        echo $cont->$method();
     }
 
     public static function dispatch()
@@ -37,6 +41,12 @@ class Router
         // Get the request information
         $URI = trim($_SERVER['REQUEST_URI'], '/');
         $METHOD = $_SERVER['REQUEST_METHOD'];
+
+        // Ignore query parameters
+        $query_pos = strpos($URI, '?');
+        if ($query_pos !== false) {
+            $URI = substr($URI, 0, $query_pos);
+        }
 
         // Regular expresion for route variables
         $pattern = '/(:[a-zA-Z0-9_]+)/';  // ':' followed by letters or numbers
@@ -69,7 +79,7 @@ class Router
             }
         }
 
-        self::execute([IndexController::class, "notFound"]);
+        self::execute([IndexController::class, 'notFound']);
         return;
     }
 }
