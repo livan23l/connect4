@@ -16,6 +16,7 @@ enum ValidateErrorsEnum: int
     case W_LOWER = 12;
     case W_NUMBER = 13;
     case W_SPECIAL = 14;
+    case CONFIRMED = 15;
 
     public function errorMessage($field, $restriction = 0)
     {
@@ -36,6 +37,7 @@ enum ValidateErrorsEnum: int
             self::W_LOWER => "The :$field field must have at least :$restriction lowercase letter" . $plural,
             self::W_NUMBER => "The :$field field must have at least :$restriction number" . $plural,
             self::W_SPECIAL => "The :$field field must have at least :$restriction special character" . $plural,
+            self::CONFIRMED => "The :$field field does not match its confirmation field.",
         };
     }
 }
