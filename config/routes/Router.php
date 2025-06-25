@@ -42,6 +42,12 @@ class Router
         $URI = trim($_SERVER['REQUEST_URI'], '/');
         $METHOD = $_SERVER['REQUEST_METHOD'];
 
+        // Ignore query parameters
+        $query_pos = strpos($URI, '?');
+        if ($query_pos !== false) {
+            $URI = substr($URI, 0, $query_pos);
+        }
+
         // Regular expresion for route variables
         $pattern = '/(:[a-zA-Z0-9_]+)/';  // ':' followed by letters or numbers
 
