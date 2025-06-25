@@ -29,6 +29,7 @@ class Controller
         // Return the view file
         return $file;
     }
+
     /**
      * Redirects the user to a specified route while storing error and old input
      * data in the session.
@@ -67,25 +68,49 @@ class Controller
      * 'required'.
      * 
      * Supported validation rules:
-     * 1) required  - Field must be present and not empty.
-     * 2) str       - Field must be a string.
-     * 3) int       - Field must be an integer.
-     * 4) float     - Field must be a decimal number (contain a dot).
-     * 5) number    - Field must be numeric (int or float).
-     * 6) minlen:val- String length must be at least val.
-     * 7) maxlen:val- String length must be no more than val.
-     * 8) email     - Field must be a valid email address.
-     * 9) min:val   - Numeric value must be >= val.
-     * 10) max:val  - Numeric value must be <= val.
+     * 1) required      - Field must be present and not empty.
+     * 2) str           - Field must be a string.
+     * 3) int           - Field must be an integer.
+     * 4) float         - Field must be a decimal number (contain a dot).
+     * 5) number        - Field must be numeric (int or float).
+     * 6) minlen:val    - String length must be at least `val`.
+     * 7) maxlen:val    - String length must be no more than `val`.
+     * 8) email         - Field must be a valid email address.
+     * 9) min:val       - Numeric value must be >= `val`.
+     * 10) max:val      - Numeric value must be <= `val`.
+     * 11) w_upper:val  - String must have at least uppercase `val`.
+     * 12) w_lower:val  - String must have at least lowercase `val`.
+     * 13) w_number:val - String must have at least `val` numbers.
+     * 14) w_special:val- String must have at least `val` special characters.
+     * 15) confirmed    - The value must be equal to `field_confirmation`.
      * 
      * @return bool True if all validations pass; false otherwise.
      */
     protected function validate($validations)
     {
-        // Assume it's validated
-        $validated = true;
+        // Organize validations by type
+        $regular_validations = [
+            'required',
+            'str',
+            'int',
+            'float',
+            'number',
+            'minlen',
+            'maxlen',
+            'email',
+            'min',
+            'max',
+        ];
+        $with_validations = [
+            'w_upper',
+            'w_lower',
+            'w_number',
+            'w_special',
+        ];
+        $other_validations = ['confirmed'];
 
         // Check all the validations
+        $validated = true;  // Assume everything is correct
         foreach ($validations as $field => $validation) {
             // Separte all the validations
             $validation_array = explode('|', $validation);
@@ -113,23 +138,22 @@ class Controller
                     $current_validation = substr($current_validation, 0, $pos);
                 }
 
-                // Perform the action corresponding to the current validation
-                $action = match ($current_validation) {
-                    'required' => $value !== '' && $value !== null && $value !== [],
-                    'str' => is_string($value),
-                    'int' => filter_var($value, FILTER_VALIDATE_INT) !== false,
-                    'float' => is_numeric($value) && strpos($value, '.') !== false,
-                    'number' => is_numeric($value),
-                    'minlen' => mb_strlen($value) >= $restriction,
-                    'maxlen' => mb_strlen($value) <= $restriction,
-                    'email' => filter_var($value, FILTER_VALIDATE_EMAIL) !== false,
-                    'min' => (float)$value >= (float)$restriction,
-                    'max' => (float)$value <= (float)$restriction,
-                    default => false,
-                };
-
-                // Perform a special action in the 'with' cases
-                if (str_starts_with($current_validation, 'w_')) {
+                // Check the validation according to it's type
+                $action = false;
+                if (in_array($current_validation, $regular_validations)) {
+                    $action = match ($current_validation) {
+                        'required' => $value !== '' && $value !== null && $value !== [],
+                        'str' => is_string($value),
+                        'int' => filter_var($value, FILTER_VALIDATE_INT) !== false,
+                        'float' => is_numeric($value) && strpos($value, '.') !== false,
+                        'number' => is_numeric($value),
+                        'minlen' => mb_strlen($value) >= $restriction,
+                        'maxlen' => mb_strlen($value) <= $restriction,
+                        'email' => filter_var($value, FILTER_VALIDATE_EMAIL) !== false,
+                        'min' => (float)$value >= (float)$restriction,
+                        'max' => (float)$value <= (float)$restriction,
+                    };
+                } elseif (in_array($current_validation, $with_validations)) {
                     // Get the pattern for the regular expression
                     $pattern = match ($current_validation) {
                         'w_upper' => '/[a-z]/',
@@ -142,8 +166,22 @@ class Controller
                     if (preg_match_all($pattern, $value, $matches)) {
                         $action = count($matches[0]) >= $restriction;
                     }
+                } elseif (in_array($current_validation, $other_validations)) {
+                    switch ($current_validation) {
+                        case 'confirmed':
+                            // Check if exist the 'field_confirmation' field and
+                            // compare the values
+                            if (
+                                isset($this->request[$field . '_confirmation']) &&
+                                $this->request[$field . '_confirmation'] == $value
+                            ) {
+                                $action = true;
+                            }
+                            break;
+                    }
                 }
 
+                // Check if the action is false to set an error
                 if (!$action) {
                     $validated = false;
                     $this->errors[$field] = ValidateErrorsEnum::{strtoupper($current_validation)}
