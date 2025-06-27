@@ -17,26 +17,24 @@ require_once BASE . "resources/components/header.php";
 
 <!-- Principal hero -->
 <section class="hero">
-    <a href="/play" class="btn btn--blue btn--backdrop text-2xl font-bold uppercase fade-in">Play now</a>
+    <a href="/play" class="btn btn--blue btn--backdrop text-2xl font-bold uppercase fade-in" data-translate>Play now</a>
 </section>
 
 <a href="#about-us" id="arrow" class="arrow arrow--hidden">↓</a>
 
 <!-- About us -->
 <section class="about">
-    <h1 id="about-us" class="about__title">About us</h1>
+    <h1 id="about-us" class="about__title" data-translate>About us</h1>
 
     <!-- Sections -->
     <div class="about__sections">
         <!-- About the game -->
         <div class="about__section">
             <article class="about__content">
-                <h2 class="about__subtitle">About the game</h2>
+                <h2 class="about__subtitle" data-translate>About the game</h2>
                 <p class="about__text">
-                    Connect 4 is a simple, fast-paced, and very popular game that
-                    combines strategy and fun. The goal is to connect four same-colored
-                    discs in a row on a vertical board.
-                    <a class="anchor" href="/play">Try it for free.</a>
+                    <span id="test" data-translate>Connect 4 is a simple, fast-paced, and very popular game that combines strategy and fun. The goal is to connect four same-colored discs in a row on a vertical board.</span>
+                    <a class="anchor" href="/play" data-translate>Try it for free.</a>
                 </p>
             </article>
             <figure class="about__figure">
@@ -47,13 +45,11 @@ require_once BASE . "resources/components/header.php";
         <!-- About the site -->
         <div class="about__section about__section--reverse">
             <article class="about__content">
-                <h2 class="about__subtitle">About the site</h2>
+                <h2 class="about__subtitle" data-translate>About the site</h2>
                 <p class="about__text">
-                    We're a free site where you can play Connect 4 with friends or
-                    on your own. We offer a variety of challenges to make your
-                    experience as fun and enjoyable as possible. Just
-                    <a class="anchor" href="/access">create your account</a>
-                    and enjoy!
+                    <span data-translate>We're a free site where you can play Connect 4 with friends or on your own. We offer a variety of challenges to make your experience as fun and enjoyable as possible. Just</span>
+                    <a class="anchor" href="/access" data-translate>create your account</a>
+                    <span data-translate>and enjoy!</span>
                 </p>
             </article>
             <figure class="about__figure">
@@ -64,14 +60,12 @@ require_once BASE . "resources/components/header.php";
         <!-- About the Connect4 project -->
         <div class="about__section">
             <article class="about__content">
-                <h2 class="about__subtitle">About the Connect4 project</h2>
+                <h2 class="about__subtitle" data-translate>About the Connect4 project</h2>
                 <p class="about__text">
-                    Connect4 is an open-source project on
-                    <a class="anchor" href="https://github.com/livan23l/connect4" target="_blank">GitHub</a>
-                    designed to be fast
-                    and fun. We don't ask for your email because we never send spam.
-                    Let us know if you have any issues or ideas via our
-                    <a class="anchor" href="/contact">contact form</a>.
+                    <span data-translate>Connect4 is an open-source project on</span>
+                    <a class="anchor" href="https://github.com/livan23l/connect4" target="_blank" data-translate>GitHub</a>
+                    <span data-translate>designed to be fast and fun. We don't ask for an email address to log in because we'll never spam you. Let us know if you have any issues or ideas via our</span>
+                    <a class="anchor" href="/contact" data-translate>contact form.</a>
                 </p>
             </article>
             <figure class="about__figure">
