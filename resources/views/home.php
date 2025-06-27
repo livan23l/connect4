@@ -1,47 +1,83 @@
 <?php
+$title = "Home page";
+$styles = ['home', 'utilities'];
+$scripts = ['home'];
 require_once BASE . "resources/components/header.php";
 ?>
 
-<h1>Connect4</h1>
+<!-- Discs flying on the page -->
+<img class="disc disc--1" src="img/disc_01.png" alt="Disc 1">
+<img class="disc disc--2" src="img/disc_02.png" alt="Disc 2">
+<img class="disc disc--3" src="img/disc_03.png" alt="Disc 3">
+<img class="disc disc--4" src="img/disc_04.png" alt="Disc 4">
+<img class="disc disc--5" src="img/disc_05.png" alt="Disc 5">
+<img class="disc disc--6" src="img/disc_06.png" alt="Disc 6">
 
-<p>
-    Connect4 strives to be a quick entertainment site, we'll never ask for your
-    email address to enjoy our content. Log in or create an account with just a
-    username and password.
-</p>
+<!-- Principal hero -->
+<section class="hero">
+    <button class="btn btn--blue btn--backdrop text-2xl font-bold uppercase fade-in">Play now</button>
+</section>
 
-<!-- Login form -->
-<form id="signin" action="/signin" method="post" novalidate>
-    <h2>Login</h2>
+<a href="#about-us" id="arrow" class="arrow arrow--hidden">↓</a>
 
-    <label for="signin_user">Username</label>
-    <input id="signin_user" name="user" type="text" minlength="5" maxlength="50" value="<?= old('signin_user') ?>" required>
+<!-- About us -->
+<section class="about">
+    <h1 id="about-us" class="about__title">About us</h1>
 
-    <label for="signin_password">Password</label>
-    <input id="signin_password" name="password" type="password" minlength="8" value="<?= old('signin_password') ?>" required>
-    <p><?= error('signin') ?></p>
-
-    <button type="submit">Sign in</button>
-</form>
-
-<!-- Sign up form -->
-<form id="signup" action="/signup" method="post" novalidate>
-    <h2>Login</h2>
-
-    <label for="signup_user">Username</label>
-    <input id="signup_user" name="user" type="text" minlength="5" maxlength="50" value="<?= old('signup_user') ?>" required>
-    <p><?= error('signup_user') ?></p>
-
-    <label for="signup_password">Password</label>
-    <input id="signup_password" name="password" type="password" minlength="8" value="<?= old('signup_password') ?>" required>
-    <p><?= error('signup_password') ?></p>
-
-    <label for="signup_password_confirmation">Confirm your password</label>
-    <input id="signup_password_confirmation" name="password_confirmation" type="password" minlength="8" value="<?= old('signup_password_confirmation') ?>" required>
-    <p><?= error('signup') ?></p>
-
-    <button type="submit">Continue</button>
-</form>
+    <!-- Sections -->
+    <div class="about__sections">
+        <!-- About the game -->
+        <div class="about__section">
+            <article class="about__content">
+                <h2 class="about__subtitle">About the game</h2>
+                <p class="about__text">
+                    Connect 4 is a simple, fast-paced, and very popular game that
+                    combines strategy and fun. The goal is to connect four same-colored
+                    discs in a row on a vertical board.
+                    <a class="about__anchor" href="#">Try it for free.</a>
+                </p>
+            </article>
+            <figure class="about__figure">
+                <img class="about__image" src="img/game.webp" alt="Image of hands playing connect 4">
+            </figure>
+        </div>
+    
+        <!-- About the site -->
+        <div class="about__section about__section--reverse">
+            <article class="about__content">
+                <h2 class="about__subtitle">About the site</h2>
+                <p class="about__text">
+                    We're a free site where you can play Connect 4 with friends or
+                    on your own. We offer a variety of challenges to make your
+                    experience as fun and enjoyable as possible. Just
+                    <a class="about__anchor" href="#">create your account</a>
+                    and enjoy!
+                </p>
+            </article>
+            <figure class="about__figure">
+                <img class="about__image" src="img/page.webp" alt="Representative image of the page">
+            </figure>
+        </div>
+    
+        <!-- About the Connect4 project -->
+        <div class="about__section">
+            <article class="about__content">
+                <h2 class="about__subtitle">About the Connect4 project</h2>
+                <p class="about__text">
+                    Connect4 is an open-source project on
+                    <a class="about__anchor" href="https://github.com/livan23l/connect4" target="_blank">GitHub</a>
+                    designed to be fast
+                    and fun. We don't ask for your email because we never send spam.
+                    Let us know if you have any issues or ideas via our
+                    <a class="about__anchor" href="#">contact form</a>.
+                </p>
+            </article>
+            <figure class="about__figure">
+                <img class="about__image" src="img/project.webp" alt="Representative image of the project">
+            </figure>
+        </div>
+    </div>
+</section>
 
 <?php
 require_once BASE . "resources/components/footer.php";

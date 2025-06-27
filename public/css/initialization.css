@@ -1,6 +1,15 @@
 /* Variables */
 :root {
-    --text-primary: #000000;
+    --background-primary: #00061A;
+    --background-secondary: #00132F;
+    --primary-blue: #042C4E;
+    --primary-red: #A31400;
+    --text-primary: #03B4DF;
+    --text-blue: #15BAD3;
+    --text-red: #F7AB00;
+    --small-screen: 22rem;
+    --medium-screen: 42rem;
+    --large-screen: 66rem;
 }
 
 /* Font load */
@@ -36,8 +45,13 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     min-height: 100vh;
+    background-color: var(--background-primary);
     font-family: 'Barlow';
     color: var(--text-primary);
 }
