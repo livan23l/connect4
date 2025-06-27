@@ -1,6 +1,6 @@
 <?php
 $title = "Home page";
-$styles = ['home', 'utilities'];
+$styles = ['home'];
 $scripts = ['home'];
 require_once BASE . "resources/components/header.php";
 ?>
@@ -12,10 +12,12 @@ require_once BASE . "resources/components/header.php";
 <img class="disc disc--4" src="img/disc_04.png" alt="Disc 4">
 <img class="disc disc--5" src="img/disc_05.png" alt="Disc 5">
 <img class="disc disc--6" src="img/disc_06.png" alt="Disc 6">
+<img class="disc disc--7" src="img/disc_07.png" alt="Disc 7">
+<img class="disc disc--8" src="img/disc_08.png" alt="Disc 8">
 
 <!-- Principal hero -->
 <section class="hero">
-    <button class="btn btn--blue btn--backdrop text-2xl font-bold uppercase fade-in">Play now</button>
+    <a href="/play" class="btn btn--blue btn--backdrop text-2xl font-bold uppercase fade-in">Play now</a>
 </section>
 
 <a href="#about-us" id="arrow" class="arrow arrow--hidden">↓</a>
@@ -34,7 +36,7 @@ require_once BASE . "resources/components/header.php";
                     Connect 4 is a simple, fast-paced, and very popular game that
                     combines strategy and fun. The goal is to connect four same-colored
                     discs in a row on a vertical board.
-                    <a class="about__anchor" href="#">Try it for free.</a>
+                    <a class="anchor" href="/play">Try it for free.</a>
                 </p>
             </article>
             <figure class="about__figure">
@@ -50,7 +52,7 @@ require_once BASE . "resources/components/header.php";
                     We're a free site where you can play Connect 4 with friends or
                     on your own. We offer a variety of challenges to make your
                     experience as fun and enjoyable as possible. Just
-                    <a class="about__anchor" href="#">create your account</a>
+                    <a class="anchor" href="/access">create your account</a>
                     and enjoy!
                 </p>
             </article>
@@ -65,11 +67,11 @@ require_once BASE . "resources/components/header.php";
                 <h2 class="about__subtitle">About the Connect4 project</h2>
                 <p class="about__text">
                     Connect4 is an open-source project on
-                    <a class="about__anchor" href="https://github.com/livan23l/connect4" target="_blank">GitHub</a>
+                    <a class="anchor" href="https://github.com/livan23l/connect4" target="_blank">GitHub</a>
                     designed to be fast
                     and fun. We don't ask for your email because we never send spam.
                     Let us know if you have any issues or ideas via our
-                    <a class="about__anchor" href="#">contact form</a>.
+                    <a class="anchor" href="/contact">contact form</a>.
                 </p>
             </article>
             <figure class="about__figure">

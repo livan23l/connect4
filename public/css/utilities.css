@@ -11,6 +11,7 @@
     background-color: var(--btn-back);
     color: var(--btn-text);
     transition: all 0.35s;
+    text-decoration: none;
 }
 
 .btn:hover {
@@ -32,6 +33,29 @@
 .btn--blue {
     --btn-text: var(--text-blue);
     --btn-back: var(--primary-blue);
+}
+
+/* Anchors */
+.anchor {
+    display: inline-block;
+    position: relative;
+    color: var(--text-red);
+    text-decoration: none;
+}
+
+.anchor::after {
+    content: "";
+    width: 0;
+    border-bottom: 1px solid var(--text-red);
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    translate: -50% -50%;
+    transition: width 0.2s ease-in-out;
+}
+
+.anchor:hover::after {
+    width: 100%;
 }
 
 
