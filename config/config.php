@@ -1,6 +1,6 @@
 <?php
 
-// Starts the session
+// Start the session
 session_start();
 
 // Define the time zone
