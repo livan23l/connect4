@@ -4,9 +4,16 @@ class Translator {
     #language
     #translations
 
-    #setLanguage() {
+    /**
+     * Translate to the current language all translatable elements on the page.
+     * If translations have not been loaded, the method exits early.
+     * 
+     * @private
+     * @returns {void}
+     */
+    #translate() {
         // Check that the translations have been loaded correctly
-        if (typeof this.#translations == undefined) return
+        if (typeof this.#translations == undefined) return;
 
         this.#$translatables.forEach((element) => {
             // Get the current text
@@ -16,9 +23,9 @@ class Translator {
             if (text in this.#translations) {
                 // Get and set the translation
                 const translation = this.#translations[text];
-                element.textContent = translation
+                element.textContent = translation;
             }
-        })
+        });
     }
 
     /**
@@ -45,7 +52,7 @@ class Translator {
             .then(response => response.json())
             .then(data => {
                 this.#translations = data;
-                this.#setLanguage()
+                this.#translate()
             })
             .catch(() => {
                 return;
