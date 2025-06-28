@@ -1,8 +1,8 @@
 class Translator {
-    #$translatables
-    #$document
-    #language
-    #translations
+    #$translatables;
+    #$document;
+    #language;
+    #translations;
 
     /**
      * Translate to the current language all translatable elements on the page.
@@ -16,8 +16,8 @@ class Translator {
         if (typeof this.#translations == undefined) return;
 
         this.#$translatables.forEach((element) => {
-            // Get the current text
-            const text = element.textContent;
+            // Get the text to be translated
+            const text = element.dataset.translate;
 
             // Verify the text can be translated
             if (text in this.#translations) {
@@ -36,13 +36,16 @@ class Translator {
      * translated is different from the current one.
      *
      * @private
-     * @param {string} language - The language code (e.g., 'en', 'es') to load translations for.
+     * @param {string} language - The language code.
      * @returns {void}
      */
     #loadAndTranslate(language) {
         // Check the language is different from the current one
         const currentLang = this.#$document.getAttribute('lang');
         if (currentLang == language) return;
+
+        // Change the document lang attribute
+        this.#$document.setAttribute('lang', language);
 
         // Get the current translations file path
         const translationPath = `/translations/${language}.json`;
@@ -56,9 +59,30 @@ class Translator {
             })
             .catch(() => {
                 return;
-            });;
+            });
     }
 
+    /**
+     * Registers an event listener for the custom 'changeLanguage' event.
+     * When the event is triggered, retrieves the selected language from the
+     * event details and calls the method to load and apply the translation.
+     *
+     * @private
+     * @returns {void}
+     * @listens window#changeLanguage
+     * @param {CustomEvent} event - The custom event containing the language to switch to in event.detail.language.
+     */
+    #changeLanguageEvent() {
+        window.addEventListener('changeLanguage', (event) => {
+            // Get and set the language
+            const language = event.detail.language;
+            this.#loadAndTranslate(language);
+        });
+    }
+
+    /**
+     * Initializes the Translator instance and translate the page.
+     */
     constructor() {
         // Get the DOM elements
         this.#$translatables = document.querySelectorAll(`[data-translate]`);
@@ -75,9 +99,10 @@ class Translator {
 
         // Load the translation file and translate the translatables elements
         this.#loadAndTranslate(this.#language);
+
+        // Prepare the global event to change the language
+        this.#changeLanguageEvent();
     }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    new Translator();
-})
+new Translator();
