@@ -78,7 +78,7 @@ require_once BASE . "resources/components/header.php";
 
 <!-- Change language -->
 <div class="language">
-    <div data-language="en" class="language__option language__option--selected">
+    <div data-language="en" class="language__option">
         <img class="language__image" src="img/langs/en.png" alt="Flag of EEUU">
         <p class="language__name">English</p>
     </div>

@@ -74,8 +74,22 @@ class Translator {
      */
     #changeLanguageEvent() {
         window.addEventListener('changeLanguage', (event) => {
-            // Get and set the language
+            // Get the language
             const language = event.detail.language;
+
+            // Change the language in the current session
+            window.dispatchEvent(
+                new CustomEvent('sendRequest', {
+                    detail: {
+                        url: '/api/change-language',
+                        body: {
+                            language
+                        }
+                    }
+                })
+            );
+
+            // Set the language
             this.#loadAndTranslate(language);
         });
     }

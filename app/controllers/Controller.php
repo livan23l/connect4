@@ -51,6 +51,19 @@ class Controller
     }
 
     /**
+     * Sends an HTTP response with the specified status code.
+     *
+     * @param int  $code   The HTTP status code to send in the response.
+     *
+     * @return void
+     */
+    protected function response($code)
+    {
+        echo http_response_code($code);
+        exit;
+    }
+
+    /**
      * Validates request fields based on provided validation rules.
      * Returns true if all validations pass; otherwise, false.
      * Validation errors are stored in $this->errors.

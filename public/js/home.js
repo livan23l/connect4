@@ -2,6 +2,15 @@ class Home {
     #changeLanguage() {
         // Get the DOM elements
         const $languageSection = document.querySelector('.language');
+        const selectedClass = 'language__option--selected';
+
+        // Select and reposition the current language
+        const lang = document.documentElement.getAttribute('lang');
+        const reposition = (selected) => {
+            selected.classList.add(selectedClass);
+            $languageSection.prepend(selected);
+        };
+        reposition($languageSection.querySelector(`[data-language="${lang}"]`));
 
         // Click event on the section
         $languageSection.addEventListener('pointerdown', (event) => {
@@ -15,10 +24,24 @@ class Home {
             }
 
             // Check if is the selected option
-            if (target.classList.contains('language__option--selected')) {
+            if (target.classList.contains(selectedClass)) {
                 $languageSection.classList.toggle('language--visible');
                 return;
             }
+
+            // Change the language
+            const language = target.dataset.language;
+            window.dispatchEvent(
+                new CustomEvent('changeLanguage', { detail: { language } })
+            );
+
+            // Change the selected language
+            //--Remove the last selected option class
+            const $selected = $languageSection.querySelector('.' + selectedClass);
+            $selected.classList.remove(selectedClass);
+
+            //--Reposition the new selected option
+            reposition(target);
         });
     }
 

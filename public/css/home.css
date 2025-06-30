@@ -136,7 +136,7 @@
 }
 
 .language {
-    max-width: 40%;
+    max-width: 70%;
     max-height: 4rem;
     width: fit-content;
     background-color: var(--primary-blue);
@@ -146,9 +146,10 @@
     z-index: 15;
     bottom: 5%;
     right: 2%;
-    overflow-y: hidden;
     display: flex;
     flex-flow: column-reverse nowrap;
+    overflow-y: hidden;
+    scrollbar-width: thin;
     transition: max-height 0.35s ease-in-out, overflow-y 0.35s ease-in-out allow-discrete;
 }
 
@@ -212,6 +213,10 @@
 @media (max-width: 22rem) {
     .disc {
         visibility: hidden;
+    }
+
+    .language {
+        bottom: 10%;
     }
 }
 

@@ -11,6 +11,9 @@ date_default_timezone_set('America/Mexico_City');
 define('BASE', str_replace('\\', '/', rtrim(__DIR__, 'config')));
 define('HTML_BASE', 'http://connect4.test/');
 
+// Languages
+define('LANGUAGES', ['en', 'es', 'pt', 'fr']);
+
 //-Database
 define('DB_MANAGER', 'mysql');
 define('DB_HOST', '127.0.0.1');
