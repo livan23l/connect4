@@ -2,32 +2,4 @@
 @import url('./initialization.css');
 @import url('./animations.css');
 @import url('./utilities.css');
-
-.footer {
-    background-color: var(--background-secondary);
-    box-shadow: 0 -5px 15px var(--text-primary);
-    position: relative;
-}
-
-.footer__content {
-    max-width: var(--max-width);
-    margin-inline: auto;
-    padding: 1rem 0.5rem;
-    position: relative;
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    font-size: 1.1rem;
-}
-
-.footer__content::after {
-    content: "";
-    height: 2rem;
-    border-right: 3px solid var(--primary-blue);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
-}
+@import url('./footer.css');

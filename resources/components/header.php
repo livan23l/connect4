@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-lang="<?= $_SESSION['language'] ?? '' ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?? "Connect4" ?></title>
+    <title data-translate="<?= $title ?? "Connect4" ?>"><?= $title ?? "Connect4" ?></title>
     <base href="<?= HTML_BASE ?>">
     <link rel="stylesheet" href="css/app.css">
     <script type="module" src="js/app.js"></script>

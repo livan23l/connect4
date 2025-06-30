@@ -1,6 +1,6 @@
 <?php
 
-// Starts the session
+// Start the session
 session_start();
 
 // Define the time zone
@@ -10,6 +10,9 @@ date_default_timezone_set('America/Mexico_City');
 //-General
 define('BASE', str_replace('\\', '/', rtrim(__DIR__, 'config')));
 define('HTML_BASE', 'http://connect4.test/');
+
+// Languages
+define('LANGUAGES', ['en', 'es', 'pt', 'fr']);
 
 //-Database
 define('DB_MANAGER', 'mysql');
