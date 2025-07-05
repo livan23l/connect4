@@ -1,3 +1,24 @@
+/* Icons */
+.icon {
+    width: 100%;
+    height: 100%;
+}
+
+.icon--sm {
+    max-width: 2rem;
+    max-height: 2rem;
+}
+
+.icon--min-xs {
+    min-width: 1.5rem;
+    min-height: 1.5rem;
+}
+
+.icon--lg {
+    max-width: 7.5rem;
+    max-height: 7.5rem;
+}
+
 /* Button styles */
 .btn {
     --btn-text: #000000;
@@ -72,6 +93,23 @@
     font-size: 1.75rem;
 }
 
+.text-blue {
+    color: var(--text-blue);
+}
+
+.text-red {
+    color: var(--text-red);
+}
+
+.text-primary-blue {
+    color: var(--primary-blue);
+}
+
+.text-primary-red {
+    color: var(--primary-red);
+}
+
+
 /* var(--small-screen) */
 @media (min-width: 22rem) {
     .text-xl {
@@ -93,4 +131,9 @@
 
 .uppercase {
     text-transform: uppercase;
+}
+
+/* Others */
+.spacer-1 {
+    flex: 1;
 }

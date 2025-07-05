@@ -1,0 +1,91 @@
+.modal {
+    width: fit-content;
+    padding: 0;
+    border: 1px solid var(--text-primary);
+    border-radius: 10px;
+    background-color: var(--primary-blue);
+    position: fixed;
+    top: 15%;
+    z-index: 15;
+    opacity: 0;
+    transition: top 0.4s ease-in-out, opacity 0.4s ease-in-out, display 0.4s allow-discrete;
+}
+
+.modal::backdrop {
+    background-color: transparent;
+    transition: background-color 0.4s ease-in-out, display 0.4s allow-discrete;
+}
+
+.modal[open] {
+    top: -15%;
+    opacity: 1;
+
+    @starting-style {
+        top: 15%;
+        opacity: 0;
+    }
+}
+
+.modal[open]::backdrop {
+    background-color: #00000080;
+    cursor: alias;
+
+    @starting-style {
+        background-color: transparent;
+    }
+}
+
+.modal__content {
+    padding: 1rem 2rem;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    gap: 2rem;
+    color: var(--text-blue-secondary);
+}
+
+.modal__title {
+    font-size: 1.35rem;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.modal__options {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    gap: 1rem;
+}
+
+.modal__button {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--text-primary);
+    border-radius: 10px;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-blue-secondary);
+    text-decoration: none;
+    overflow: hidden;
+    transition: scale 0.2s ease-in-out;
+}
+
+.modal__button:hover {
+    scale: 0.97;
+}
+
+.modal__button::before {
+    content: "";
+    background-color: var(--secondary-blue);
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.modal__button:hover::before {
+    opacity: 0.4;
+}

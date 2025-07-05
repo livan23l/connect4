@@ -1,0 +1,254 @@
+:root {
+    --board: #001B41;
+    --board-boder: #0098EA;
+    --board-slot: #000F23;
+    --disc-red: #A31400;
+    --disc-red-light: #FF1E00;
+    --disc-red-dark: #5D0B00;
+    --disc-blue: #004075;
+    --disc-blue-light: #1F9AFF;
+    --disc-blue-dark: #002442;
+    --animation-duration: 70ms;
+    --animation-delay: calc(var(--animation-duration) / 2);
+}
+
+.board {
+    --color: transparent;
+    --color-light: transparent;
+    --color-dark: transparent;
+    aspect-ratio: 7/6;
+    max-width: 34rem;
+    width: 80%;
+    margin: 10rem auto 5rem;
+    padding-inline: 0.5rem;
+    border-radius: 10px;
+    border: 1px solid var(--board-boder);
+    background-color: var(--board);
+    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.board::before, .board::after {
+    content: "";
+    height: 70%;
+    width: 5%;
+    border: 1px solid var(--board-boder);
+    background-color: var(--board);
+    position: absolute;
+    z-index: 1;
+    bottom: -10px;
+}
+
+.board::before {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 2px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 2px;
+    left: 0;
+    translate: -80% 0;
+}
+
+.board::after {
+    border-top-left-radius: 2px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 15px;
+    right: 0;
+    translate: 80% 0;
+}
+
+.board__floating-disc {
+    aspect-ratio: 1;
+    width: calc((100% - 5rem) / 7);
+    position: absolute;
+    top: 0;
+    left: 0;
+    translate: 0 calc(-100% + -0.5rem);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out, left 0.2s ease-in-out;
+}
+
+.board__floating-disc::after {
+    content: "";
+    max-width: 3.5rem;
+    max-height: 3.5rem;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px outset var(--color-light);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    background: radial-gradient(var(--color) 0%, var(--color-dark) 75%);
+}
+
+.board__column {
+    flex: 1;
+    height: 100%;
+    padding-block: 0.5rem;
+    position: relative;
+    display: flex;
+    flex-flow: column-reverse nowrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.board__column::before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: var(--board-slot);
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 150ms;
+}
+
+.board__column:hover::before {
+    opacity: 0.5;
+}
+
+.board__column:hover ~ .board__floating-disc {
+    opacity: 1;
+}
+
+.board__slot {
+    flex: 1;
+    aspect-ratio: 1;
+    max-width: 3.5rem;
+    max-height: 3.5rem;
+    border-radius: 50%;
+    border: 1px solid var(--board-boder);
+    background-color: var(--board-slot);
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.board__slot::after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px outset var(--color-light);
+    background: radial-gradient(var(--color) 0%, var(--color-dark) 75%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -150%;
+    visibility: hidden;
+}
+
+.board__slot--red::after {
+    border-color: var(--disc-red-light);
+    background: radial-gradient(var(--disc-red) 0%, var(--disc-red-dark) 75%);
+    visibility: visible;
+    scale: 0.9;
+    translate: -50% -50%;
+}
+
+.board__slot--blue::after {
+    border-color: var(--disc-blue-light);
+    background: radial-gradient(var(--disc-blue) 0%, var(--disc-blue-dark) 75%);
+    visibility: visible;
+    scale: 0.9;
+    translate: -50% -50%;
+}
+
+/*--Slot animations--*/
+.board__slot--active::after {
+    animation-name: disc-active;
+    animation-duration: 300ms;
+    animation-timing-function: linear;
+}
+
+.board__slot--active ~ .board__slot::after {
+    animation-name: disc-fall;
+    animation-duration: var(--animation-duration);
+    animation-timing-function: linear;
+}
+
+.board__slot--1::after {
+    animation-delay: calc(5 * var(--animation-delay));
+}
+
+.board__slot--2::after {
+    animation-delay: calc(4 * var(--animation-delay));
+}
+
+.board__slot--3::after {
+    animation-delay: calc(3 * var(--animation-delay));
+}
+
+.board__slot--4::after {
+    animation-delay: calc(2 * var(--animation-delay));
+}
+
+.board__slot--5::after {
+    animation-delay: var(--animation-delay);
+}
+
+.board__slot--6::after {
+    animation-delay: 0s;
+}
+
+/* Animations */
+@keyframes disc-active {
+    0% {
+        visibility: visible;
+        translate: -50% -150%;
+    }
+
+    20%,
+    90%,
+    100% {
+        visibility: visible;
+        translate: -50% -50%;
+    }
+
+    70% {
+        translate: -50% -125%;
+    }
+}
+
+@keyframes disc-fall {
+    from {
+        visibility: visible;
+        translate: -50% -150%;
+    }
+
+    to {
+        translate: -50% 150%;
+    }
+}
+
+/* Media queries */
+/* var(--small-screen) */
+@media (max-width: 22rem) {
+    .board__column {
+        gap: 0.2rem;
+    }
+
+    .board__floating-disc::after, .board__slot::after {
+        border-width: 1px;
+    }
+}
+
+/* var(--medium-screen) */
+@media (min-width: 42rem) {
+    .board {
+        padding-inline: 1rem;
+    }
+
+    .board__column {
+        padding-block: 1rem;
+        gap: 1rem;
+    }
+}

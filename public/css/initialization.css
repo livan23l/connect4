@@ -3,11 +3,12 @@
     --background-primary: #00061A;
     --background-secondary: #00132F;
     --primary-blue: #042C4E;
-    --primary-red: #A31400;
+    --secondary-blue: #003878;
+    --primary-red: #560A00;
     --text-primary: #03B4DF;
     --text-blue: #15BAD3;
+    --text-blue-secondary: #57B4DF;
     --text-red: #F7AB00;
-    --max-width: 36rem;
     --small-screen: 22rem;
     --medium-screen: 42rem;
     --large-screen: 66rem;
