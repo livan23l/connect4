@@ -12,15 +12,19 @@ require_once BASE . 'resources/components/header_game.php';
         </p>
 
         <div class="game__players">
-            <div data-player="1" class="player">
+            <div data-player="1" class="player player--red">
                 <img class="player__image" src="img/profile/red-disc.webp" alt="Player image">
                 <p class="player__name">_Anonymous</p>
             </div>
             <p class="game__vs">vs</p>
-            <div data-player="2" class="player">
+            <div data-player="2" class="player player--blue">
                 <img class="player__image" src="img/profile/blue-robot.webp" alt="Player image">
                 <p class="player__name">Robot</p>
             </div>
+        </div>
+
+        <div class="game__options">
+            <a class="game__option" href="/play">Go back to the lobby</a>
         </div>
     </aside>
 

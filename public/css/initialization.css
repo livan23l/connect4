@@ -5,10 +5,13 @@
     --primary-blue: #042C4E;
     --secondary-blue: #003878;
     --primary-red: #560A00;
+    --secondary-red: #671F00;
     --text-blue: #03B4DF;
     --text-blue-light: #A1E1FF;
     --text-red: #F7AB00;
+    --text-red-light: #FFD899;
     --small-screen: 22rem;
+    --smartphone-screen: 28rem;
     --medium-screen: 42rem;
     --large-screen: 66rem;
 }
