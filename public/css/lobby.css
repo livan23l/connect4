@@ -22,8 +22,8 @@
     flex: 3;
     height: 3.5rem;
     display: flex;
-    justify-content: center;
-    gap: 1rem;
+    justify-content: flex-start;
+    gap: 0.2rem;
 }
 
 .header__section {
@@ -48,6 +48,10 @@
 .header__section--active {
     border-top: 1px solid var(--text-red);
     border-bottom: 1px solid var(--text-red);
+}
+
+.header__section-p {
+    display: none;
 }
 
 /*--Menus--*/
@@ -114,7 +118,7 @@
 /* Main styles */
 .main {
     width: 100%;
-    padding: 2rem 1rem;
+    padding: 2rem 1rem 3rem;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
@@ -163,4 +167,16 @@
     max-width: 100%;
     min-width: 0;
     border-radius: 50%;
+}
+
+/* var(--medium-screen) */
+@media (min-width: 42rem) {
+    .header__sections {
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .header__section-p {
+        display: block;
+    }
 }

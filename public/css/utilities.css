@@ -109,6 +109,19 @@
     color: var(--primary-red);
 }
 
+.font-bold {
+    font-weight: bold;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+/* Others */
+.spacer-1 {
+    display: none;
+    flex: 1;
+}
 
 /* var(--small-screen) */
 @media (min-width: 22rem) {
@@ -125,15 +138,9 @@
     }
 }
 
-.font-bold {
-    font-weight: bold;
-}
-
-.uppercase {
-    text-transform: uppercase;
-}
-
-/* Others */
-.spacer-1 {
-    flex: 1;
+/* var(--medium-screen) */
+@media (min-width: 42rem) {
+    .spacer-1 {
+        display: block;
+    }
 }
