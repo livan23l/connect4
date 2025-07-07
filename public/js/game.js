@@ -262,37 +262,71 @@ class Board {
         const oppositeColorValue = oppositeColor[color];
 
         // Define a function to get the bigger connection with one color
-        const getBiggerConnection = (colorVal) => {
-            let biggerValue = -1;
+        const getBestPlay = (opponent = false) => {
+            const colorVal = opponent ? oppositeColorValue : colorValue;
+            const oppositeColorVal = opponent ? colorValue : oppositeColorValue;
+            let biggerValue = 0;
             const connections = [];
+            const setBestMove = (value, move) => {
+                biggerValue = value;
+
+                connections.length = 0;
+                connections.push({
+                    value: value,
+                    position: move
+                });
+            };
 
             for (let col = 0; col < this.#game.cols; col++) {
-                // Check if the current col is available
-                const discs = this.#game.discs[col];
-
                 // Check if the current column has no empty slots
-                if (discs >= this.#game.discsPerCol) continue;
+                const disc = this.#game.discs[col];
+                if (disc >= this.#game.discsPerCol) continue;
 
                 // Get the current number of connections
-                const move = [col, discs];
-                const currentConnection = this.#getMaxNumberOfConnections(
+                const move = [col, disc];
+                let value = this.#getMaxNumberOfConnections(
                     move, colorVal
-                );
+                ) + 1;  // Add the current disc
 
-                // Check if the current connection value is bigger
-                if (currentConnection > biggerValue) {
-                    connections.length = 0;  // Reset the array
-                    biggerValue = currentConnection;
-                    connections.push({
-                        value: currentConnection,
-                        position: move
-                    });
+                // Finish if the current value is lower
+                if (value < Math.floor(biggerValue)) continue;
 
-                    // Check if this is a winning column
-                    if (currentConnection >= 4) break;
-                } else if (currentConnection == biggerValue) {
+                // Check if the player wins with this move
+                if (value >= 4) {
+                    setBestMove(value, move);
+                    break;
+                }
+
+                // Slightly increase the value if it is closer to the center
+                //--Check the column
+                if (col == 1 || col == 5) value += 0.1;
+                else if (col == 2 || col == 4) value += 0.2;
+                else if (col == 3) value += 0.3;
+                //--Check the disc
+                if (disc == 1 || disc == 4) value += 0.1;
+                else if (disc == 2 || disc == 3) value += 0.2;
+
+                // Round to only one decimal in the value
+                value = Math.floor(value * 10) / 10;
+
+                // Get the next connections depending on who the opponent is
+                const nextMove = [col, disc + 1];
+                const nextIsValid = (disc + 1 < this.#game.discsPerCol);
+                const nextColor = opponent ? colorVal : oppositeColorVal;
+
+                const nextValue = nextIsValid
+                        ? this.#getMaxNumberOfConnections(nextMove, nextColor) + 1
+                        : 1;
+
+                // Check if the opponent wins with the current move
+                if (nextValue >= 4) value = 0;  // The current play is bad
+
+                // Now check if the resulting value is bigger or equal
+                if (value > biggerValue) {
+                    setBestMove(value, move);
+                } else if (value == biggerValue) {
                     connections.push({
-                        value: currentConnection,
+                        value: value,
                         position: move
                     });
                 }
@@ -303,21 +337,21 @@ class Board {
         };
 
         // Check all the columns with the color to search a win
-        const biggerConnection = getBiggerConnection(colorValue);
-        if (biggerConnection.value >= 4) return biggerConnection.position;
+        const bestPlay = getBestPlay();
+        if (bestPlay.value >= 4) return bestPlay.position;
 
         // Check if there is a winning play for the opponent
-        const opBiggerConnection = getBiggerConnection(oppositeColorValue);
-        if (opBiggerConnection.value >= 4) return opBiggerConnection.position;
+        const opBestPlay = getBestPlay(true);
+        if (opBestPlay.value >= 4) return opBestPlay.position;
 
         // Return the position with the bigger value
-        if (biggerConnection.value > opBiggerConnection.value) {
-            return biggerConnection.position;
-        } else if (opBiggerConnection.value > biggerConnection.value) {
-            return opBiggerConnection.position;
+        if (bestPlay.value > opBestPlay.value) {
+            return bestPlay.position;
+        } else if (bestPlay.value < opBestPlay.value) {
+            return opBestPlay.position;
         } else {  // If both are equal choose randomly one
-            if (Math.random() > 0.5) return biggerConnection.position;
-            else return opBiggerConnection.position;
+            if (Math.random() > 0.5) return bestPlay.position;
+            else return opBestPlay.position;
         }
     }
 
@@ -410,7 +444,6 @@ class Game {
             // Get the move according to the difficulty
             if (Math.random() <= precisionByDifficulty[difficulty]) {
                 // Make the best move
-                console.log('The best move');
                 this.#board.play(this.#board.getBestMove(oppositeColor[color]));
             } else {
                 // Make a random move
@@ -433,14 +466,24 @@ class Game {
                     this.#board.play(this.#board.getRandomMove());
                 }
 
-                // Get the difficulty level
+                // Get the difficulty in the params
                 const params = new URLSearchParams(window.location.search);
                 const difficulties = ['easy', 'normal', 'hard'];
                 const paramDifficulty = params.get('difficulty');
 
+                // Set the current difficulty
                 difficulty = difficulties.includes(paramDifficulty)
                     ? paramDifficulty
                     : 'normal';
+
+                // Set the difficulty in the DOM
+                const $difficulty = document.querySelector('#difficulty');
+                const $difficultySpan = $difficulty.querySelector('#difficulty-span');
+                $difficultySpan.innerText = difficulty;
+                $difficultySpan.setAttribute('data-translate', difficulty);
+
+                // Show the difficulty
+                $difficulty.classList.remove('game__difficulty--hidden');
                 break;
             case this.#gameModes.robot:
                 break;

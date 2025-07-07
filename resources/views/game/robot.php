@@ -5,7 +5,11 @@ require_once BASE . 'resources/components/header_game.php';
 
 <main class="game">
     <aside class="game__aside">
-        <h1 class="game__title">Playing vs robot</h1>
+        <h1 class="game__title" data-translate="Playing vs robot">Playing vs robot</h1>
+        <p id="difficulty" class="game__difficulty game__difficulty--hidden">
+            <span data-translate="Difficulty:">Difficulty:</span>
+            <span id="difficulty-span"></span>
+        </p>
 
         <div class="game__players">
             <div data-player="1" class="player">

@@ -42,6 +42,7 @@
     z-index: 15;
     top: -15%;
     opacity: 1;
+    user-select: none;
     transition: opacity var(--transition-duration) ease-in-out, top var(--transition-duration) ease-in-out;
 
     @starting-style {
@@ -106,6 +107,19 @@
 .game__title {
     text-align: center;
     text-transform: uppercase;
+}
+
+.game__difficulty {
+    position: relative;
+    top: 0;
+    color: var(--text-red);
+    text-align: center;
+    transition: opacity 0.3s ease-in-out, top 0.3s ease-in-out;
+}
+
+.game__difficulty--hidden {
+    top: -10%;
+    opacity: 0;
 }
 
 .game__players {
