@@ -3,17 +3,33 @@ $title = 'Play vs robot';
 require_once BASE . 'resources/components/header_game.php';
 ?>
 
-<h1>Playing vs robot</h1>
+<main class="game">
+    <aside class="game__aside">
+        <h1 class="game__title">Playing vs robot</h1>
 
-<div>
-    <div class="player">
-        <p class="player__name">_Anonymous</p>
-        <img class="player__image" src="" alt="Player image">
-    </div>
-    <div class="player">
-        <p class="player__name">Robot</p>
-        <img class="player__image" src="/img/profile/anonymous.webp" alt="Player image">
-    </div>
-</div>
+        <div class="game__players">
+            <div data-player="1" class="player">
+                <img class="player__image" src="img/profile/red-disc.webp" alt="Player image">
+                <p class="player__name">_Anonymous</p>
+            </div>
+            <p class="game__vs">vs</p>
+            <div data-player="2" class="player">
+                <img class="player__image" src="img/profile/blue-robot.webp" alt="Player image">
+                <p class="player__name">Robot</p>
+            </div>
+        </div>
+    </aside>
 
-<?php require_once BASE . 'resources/components/board.php'; ?>
+    <main class="game__main">
+        <?php require_once BASE . 'resources/components/board.php'; ?>
+    </main>
+</main>
+
+<dialog id="modal-versus" class="versus modal" closedby="none">
+    <div class="versus__content">
+        <img class="versus__logo" src="img/logo.webp" alt="Image of the app logo">
+        <div class="versus__players">
+            <p class="game__vs">vs</p>
+        </div>
+    </div>
+</dialog>

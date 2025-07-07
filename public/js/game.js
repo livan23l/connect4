@@ -1,78 +1,124 @@
-class Game {
+class Board {
     #$floatingDisc;
     #$board;
+    #animationDelay;
     #game;
     #gameValues;
-    #gameMode;
-    #gameModes;
-    #players;
     #sounds;
-    #block;  // Defines wheter the game is blocked
+    #currentColor;
+    #isOver;
+    #boardLock;
 
-    #verifyEnd(move) {
+    lock() {
+        this.#boardLock = true;
+
+        // Get the hover column and delete the hover class
+        const hoverColumn = this.#$board.querySelector('.board__column--hover');
+
+        if (hoverColumn) {
+            hoverColumn.classList.remove('board__column--hover');
+        }
+    }
+
+    unlock() {
+        this.#boardLock = false;
+    }
+
+    #getMaxNumberOfConnections(move, colorValue) {
         const [column, slot] = move;
-        const color = this.#game.board[column][slot];
 
         const validations = {
-            down: [0, -1],  // Same column, bottom slot
-            left: [-1, 0],  // Previous column, same slot
-            right: [1, 0],  // Next column, same slot
-            // Diagonals
-            upLeft: [-1, 1],  // Previous column, top slot
-            upRight: [1, 1],  // Next column, top slot
-            downLeft: [-1, -1],  // Previous column, bottom slot
-            downRight: [1, -1],  // Next column, bottom slot
+            down: [[0, -1]],  // Same column, bottom slot
+            horizontal: [[-1, 0], [1, 0]],  // Previous and nex column, same slot
+            diagonalPositive: [[-1, -1], [1, 1]],  // The positive diagonal
+            diagonalNegative: [[-1, 1], [1, -1]],  // The negative diagonal
         }
-        let end = false;
+
+        // Initialize the maximum number and if the move has the color value
+        const moveHasColor = this.#game.board[column][slot] == colorValue;
+        let maxNumber = 0;
+
+        // Check if the current move has the color value
+        if (moveHasColor) maxNumber++;
 
         // Check all the validations
         for (const key in validations) {
             const validation = validations[key];
-            const [valCol, valSlot] = validation;
+            const sameDiscs = [];
+            if (moveHasColor) sameDiscs.push(move);
 
-            // Get and save the current column and slot
-            let curCol = column;
-            let curSlot = slot;
-            const sameDiscs = [[curCol, curSlot]];
+            // Check the rest of the discs in the directions of the validation
+            for (const direction of validation) {
+                const [valCol, valSlot] = direction;
 
-            // Validate until get another color or reach the end of the board
-            let validate = true;
-            while (validate) {
-                // Get the new column and slot
-                curCol += valCol;
-                curSlot += valSlot;
+                // Get and save the current column and slot
+                let curCol = column;
+                let curSlot = slot;
 
-                // Check that they are valid values
-                if ((curCol < 0 || curCol >= this.#game.cols) ||
-                    (curSlot < 0 || curSlot >= this.#game.discsPerCol)) {
-                    validate = false;
-                    continue;
+                // Validate until get another color or reach the end of the board
+                let validate = true;
+                while (validate) {
+                    // Get the new column and slot
+                    curCol += valCol;
+                    curSlot += valSlot;
+
+                    // Check that they are valid values
+                    if ((curCol < 0 || curCol >= this.#game.cols) ||
+                        (curSlot < 0 || curSlot >= this.#game.discsPerCol)) {
+                        validate = false;
+                        continue;
+                    }
+
+                    // Check if the disc has not the same color value
+                    if (this.#game.board[curCol][curSlot] != colorValue) {
+                        validate = false;
+                        continue;
+                    }
+
+                    // Add the current position to the same disc array
+                    sameDiscs.push([curCol, curSlot]);
                 }
-
-                // Check that it is the same color
-                if (this.#game.board[curCol][curSlot] != color) {
-                    validate = false;
-                    continue;
-                }
-
-                sameDiscs.push([curCol, curSlot]);  // Add the current position
             }
 
-            // Verify if there are at least four of the same color
-            if (sameDiscs.length >= 4) {
-                end = true;
-                break;
-            }
+            // Check if the sameDiscs array has more elements than the max number
+            maxNumber = Math.max(maxNumber, sameDiscs.length);
         }
 
-        return end;
+        return maxNumber;
     }
 
-    #setColor(color) {
+    #verifyEnd(move) {
+        const [column, slot] = move;
+        const value = this.#game.board[column][slot];
+
+        const connections = this.#getMaxNumberOfConnections(move, value);
+
+        if (connections >= 4) {
+            this.#isOver = true;
+            return;
+        }
+
+        // Check if is a draw
+        for (const discs of this.#game.discs) {
+            if (discs < this.#game.discsPerCol) return;
+        }
+
+        this.#isOver = true;
+    }
+
+    #changeColor() {
+        // Change the current color
+        if (this.#currentColor == null) {
+            this.#currentColor = 'red';
+        }
+        else {
+            this.#currentColor = (this.#currentColor == 'red') ? 'blue' : 'red';
+        }
+
         // Define the color classes
-        const colorVar = `var(--disc-${color})`;
-        const colorLightVar = `var(--disc-${color}-light)`;
-        const colorDarkVar = `var(--disc-${color}-dark)`;
+        const colorVar = `var(--disc-${this.#currentColor})`;
+        const colorLightVar = `var(--disc-${this.#currentColor}-light)`;
+        const colorDarkVar = `var(--disc-${this.#currentColor}-dark)`;
 
         // Update the color classes on the board
         this.#$board.style.setProperty('--color', colorVar);
@@ -80,9 +126,75 @@ class Game {
         this.#$board.style.setProperty('--color-dark', colorDarkVar);
     }
 
-    #moveFloatingDisc() {
+    #dispatchMoveEvent(move) {
+        const oldColor = (this.#currentColor == 'red') ? 'blue' : 'red';
+
+        window.dispatchEvent(new CustomEvent(
+            'playEnd',
+            {
+                detail: {
+                    color: oldColor,
+                    end: this.#isOver,
+                    board: this.#game.board,
+                    move,
+                }
+            }
+        ));
+    }
+
+    #showPlay(column) {
+        // Get the amount of discs and check there are empty slots in the column
+        const disc = this.#game.discs[column];
+        if (disc >= this.#game.discsPerCol) return false;
+
+        // Increase the discs number in the current column
+        this.#game.discs[column]++;
+
+        // Get and update the current slot in the current column
+        const $column = this.#$board.querySelector(`[data-column="${column}"]`);
+        const $slot = $column.querySelector(`[data-slot="${disc}"]`);
+        $slot.classList.add('board__slot--active');
+
+        // Update the board game with the value of the current color
+        this.#game.board[column][disc] = this.#gameValues[this.#currentColor];
+
+        // Play the 'drop' sound after the corresponding animation delay
+        setTimeout(() => {
+            this.#sounds.drop.currentTime = 0;
+            this.#sounds.drop.play();
+        }, this.#animationDelay * (this.#game.discsPerCol - 1 - disc));
+
+        // Define the behavior for when the animation ends
+        $slot.addEventListener('animationend', () => {
+            // Remove the active class in the slot and add the corresponding
+            $slot.classList.remove('board__slot--active');
+            $slot.classList.add(`board__slot--${this.#currentColor}`);
+
+            // Check if the game is over
+            const move = [column, disc];
+            this.#verifyEnd(move);
+
+            // Change the color and dispatch the play event
+            this.#changeColor();
+            this.#dispatchMoveEvent(move);
+        }, { once: true });
+
+        // The defined behavior is to lock the board after each move
+        this.lock();
+
+        return true;
+    }
+
+    #moveFloatingDiscEvent() {
         this.#$board.addEventListener('mousemove', (event) => {
-            if (this.#block) return;
+            if (this.#boardLock || this.#isOver) {
+                // Remove all the hover class in the column elements
+                const hoverElements = this.#$board.querySelectorAll('.board__column--hover');
+                hoverElements.forEach((element) => {
+                    element.classList.remove('board__column--hover');
+                });
+                return;
+            };
 
             // Check if the clicked target is a column
             let target = event.target;
@@ -92,6 +204,9 @@ class Game {
                 if (!target.classList.contains('board__column')) return;
             }
 
+            // Add the hover class to the column
+            target.classList.add('board__column--hover');
+
             // Change the 'left' property based on the column
             const col = target.dataset.column;
             const left = `calc(1rem + (0.5rem * ${col}) + (((100% - 5rem) / 7) * ${col}))`;
@@ -100,54 +215,10 @@ class Game {
         });
     }
 
-    #showVersus() {
-
-    }
-
-    #unlock() {
-        this.#block = false;
-    }
-
-    #lock() {
-        this.#block = true;
-    }
-
-    #play() {
-        /* Initialize the game. The board is defined according to the game
-        values. The discs only hold the current number of discs per column. */
-        const v = this.#gameValues.empty;
-        this.#game = {
-            board: [
-                [v, v, v, v, v, v],
-                [v, v, v, v, v, v],
-                [v, v, v, v, v, v],
-                [v, v, v, v, v, v],
-                [v, v, v, v, v, v],
-                [v, v, v, v, v, v],
-                [v, v, v, v, v, v]
-            ],
-            discs: [0, 0, 0, 0, 0, 0, 0],
-            cols: 7,
-            discsPerCol: 6,
-        };
-
-        // Define game variables
-        const animationDelay = (parseInt(
-            getComputedStyle(document.documentElement)
-                .getPropertyValue('--animation-duration')
-        ) / 2) - 5;  // The animation delay for each slot minus 5 ms.
-        let end = false;  // Define whether the game is over
-        let color = 'red';  // Define the current disc color
-
-        // Initialices the color
-        this.#setColor(color);
-
-        // Show the versus animation
-        this.#showVersus();
-
+    #boardClickEvent() {
         this.#$board.addEventListener('click', (event) => {
             // Check if a new move is allowed
-            if (this.#block || end) return;
+            if (this.#boardLock || this.#isOver) return;
 
             // Get the clicked element
             let target = event.target;
@@ -159,101 +230,106 @@ class Game {
                 if (!target.classList.contains('board__column')) return;
             }
 
-            // Get and check the current slot
+            // Show the current play
             const column = Number(target.dataset.column);
-            const slotNum = this.#game.discs[column]++;  // Increase the value
-            if (slotNum >= this.#game.discsPerCol) return;
-
-            // Get and update the current slot
-            const $slot = target.querySelector(`[data-slot="${slotNum}"]`);
-            $slot.classList.add('board__slot--active');
-
-            // Update the board game
-            this.#game.board[column][slotNum] = this.#gameValues[color];
-
-            // Play the 'drop' sound after the corresponding animation delay
-            setTimeout(() => {
-                this.#sounds.drop.currentTime = 0;
-                this.#sounds.drop.play();
-            }, animationDelay * (this.#game.discsPerCol - 1 - slotNum));
-
-            // Block the game until all animations are finished
-            this.#lock();
-            $slot.addEventListener('animationend', () => {
-                // Remove the active class in the slot and add the corresponding
-                $slot.classList.remove('board__slot--active');
-                $slot.classList.add(`board__slot--${color}`);
-
-                // Check if the game is over
-                end = this.#verifyEnd([column, slotNum]);
-
-                // Change an set the new color if the game is not over
-                if (!end) {
-                    color = (color == 'red') ? 'blue' : 'red';
-                    this.#setColor(color);
-                }
-
-                this.#unlock();  // Unlock
-            }, { once: true });
+            this.#showPlay(column);
         });
     }
 
-    #getPlayers() {
-        const names = document.querySelectorAll('.player__name');
-        const isAnonymous = names[0].innerText == '_Anonymous';
-        if (isAnonymous) names[0].innerText = 'Anonymous';
-        const images = document.querySelectorAll('.player__image');
-        const players = [{
-            number: 1,
-            name: null,
-            image: null,
-        }, {
-            number: 2,
-            name: null,
-            image: null,
-        }];
+    getRandomMove() {
+        if (this.#isOver) return [-1, -1];
 
-        // Check if is one offline mode
-        switch (this.#gameMode) {
-            case this.#gameModes.robot:
-                // Randomly select whether the robot will be player 1 or 2
-                const number = Math.floor(Math.random() * 2) + 1;
+        const move = [];
+        while (move.length == 0) {
+            const column = Math.floor(Math.random() * this.#game.cols);
+            const slot = this.#game.discs[column];
 
-                // Check if is anonymous and put the corresponding disc image
-                if (isAnonymous) {
-                    if (number == 1) {
-                        images[0].src = 'img/profile/blue-disc.webp';
-                    } else if (number == 2) {
-                        images[0].src = 'img/profile/red-disc.webp';
-                    }
-                }
-
-                // Check if the robot is player 1 and change the names and images
-                if (number == 1) {
-                    names[1].innerText = names[0].innerText;
-                    names[0].innerText = 'robot';
-                    images[1].src = images[0].src;
-                    images[0].src = 'img/profile/anonymous.webp';
-                }
-                break;
-            case this.#gameModes.local:
-                break;
-            case this.#gameModes.friend:
-                break;
-            case this.#gameModes.quick:
-                break;
+            if (slot < this.#game.discsPerCol) {
+                move.push(column, slot);
+            }
         }
 
-        // Get the names and images
-        for (let i = 0; i < 2; i++) {
-            const name = names[i];
-            const image = images[i];
+        return move;
+    }
 
-            players[i].name = name.innerText;
-            players[i].image = image.src;
+    getBestMove(color) {
+        const oppositeColor = {
+            red: this.#gameValues.blue,
+            blue: this.#gameValues.red
+        };
+
+        const colorValue = this.#gameValues[color];
+        const oppositeColorValue = oppositeColor[color];
+
+        // Define a function to get the bigger connection with one color
+        const getBiggerConnection = (colorVal) => {
+            let biggerValue = -1;
+            const connections = [];
+
+            for (let col = 0; col < this.#game.cols; col++) {
+                // Check if the current col is available
+                const discs = this.#game.discs[col];
+
+                // Check if the current column has no empty slots
+                if (discs >= this.#game.discsPerCol) continue;
+
+                // Get the current number of connections
+                const move = [col, discs];
+                const currentConnection = this.#getMaxNumberOfConnections(
+                    move, colorVal
+                );
+
+                // Check if the current connection value is bigger
+                if (currentConnection > biggerValue) {
+                    connections.length = 0;  // Reset the array
+                    biggerValue = currentConnection;
+                    connections.push({
+                        value: currentConnection,
+                        position: move
+                    });
+
+                    // Check if this is a winning column
+                    if (currentConnection >= 4) break;
+                } else if (currentConnection == biggerValue) {
+                    connections.push({
+                        value: currentConnection,
+                        position: move
+                    });
+                }
+            }
+
+            // Return one of the bigger connections selected randomly
+            return connections[Math.floor(Math.random() * connections.length)];
+        };
+
+        // Check all the columns with the color to search a win
+        const biggerConnection = getBiggerConnection(colorValue);
+        if (biggerConnection.value >= 4) return biggerConnection.position;
+
+        // Check if there is a winning play for the opponent
+        const opBiggerConnection = getBiggerConnection(oppositeColorValue);
+        if (opBiggerConnection.value >= 4) return opBiggerConnection.position;
+
+        // Return the position with the bigger value
+        if (biggerConnection.value > opBiggerConnection.value) {
+            return biggerConnection.position;
+        } else if (opBiggerConnection.value > biggerConnection.value) {
+            return opBiggerConnection.position;
+        } else {  // If both are equal choose randomly one
+            if (Math.random() > 0.5) return biggerConnection.position;
+            else return opBiggerConnection.position;
         }
+    }
 
-        this.#players = players;
+    play(move) {
+        if (this.#isOver) return false;
+
+        // Check if is a valid move
+        const [column, slot] = move;
+        if (this.#game.discs[column] != slot) return false;
+
+        // Make the move
+        return this.#showPlay(column);
     }
 
     constructor() {
@@ -270,6 +346,218 @@ class Game {
             red: 1,
             blue: 2
         };
+        this.#animationDelay = (parseInt(
+            getComputedStyle(document.documentElement)
+                .getPropertyValue('--animation-duration')
+        ) / 2) - 5;  // The animation delay for each slot minus 5 ms.
+        this.#isOver = false;
+        this.lock(); // The board is locked until execute 'play()'
+
+        /* Initialize the game. The board is defined according to the game
+        values. The discs only hold the current number of discs per column. */
+        const e = this.#gameValues.empty;
+        this.#game = {
+            board: [
+                [e, e, e, e, e, e],
+                [e, e, e, e, e, e],
+                [e, e, e, e, e, e],
+                [e, e, e, e, e, e],
+                [e, e, e, e, e, e],
+                [e, e, e, e, e, e],
+                [e, e, e, e, e, e]
+            ],
+            discs: [0, 0, 0, 0, 0, 0, 0],
+            cols: 7,
+            discsPerCol: 6,
+        };
+        this.#currentColor = null;
+        this.#changeColor();
+
+        // Set the game events
+        this.#moveFloatingDiscEvent();
+        this.#boardClickEvent();
+    }
+}
+
+class Game {
+    #gameMode;
+    #gameModes;
+    #players;
+    #hostNumber;
+    #hostColor;
+    #sounds;
+    #board;
+
+    #robotGame(detail, difficulty) {
+        const { color, end } = detail;
+        const oppositeColor = {
+            red: 'blue',
+            blue: 'red'
+        };
+        const precisionByDifficulty = {
+            easy: 0.2,
+            normal: 0.7,
+            hard: 1
+        };
+
+        if (end) {
+            console.log(detail.board);
+            return
+        };
+
+        // Check if the play was made by the host or the robot
+        if (this.#hostColor == color) {  // Host
+            // Get the move according to the difficulty
+            if (Math.random() <= precisionByDifficulty[difficulty]) {
+                // Make the best move
+                console.log('The best move');
+                this.#board.play(this.#board.getBestMove(oppositeColor[color]));
+            } else {
+                // Make a random move
+                this.#board.play(this.#board.getRandomMove());
+            }
+        } else {  // Robot
+            this.#board.unlock();
+        }
+    }
+
+    #manageGame() {
+        // Game preparation
+        if (this.#hostNumber == 1) this.#board.unlock();
+        let difficulty = null;
+
+        switch (this.#gameMode) {
+            case this.#gameModes.robot:
+                // Check if the robot is the first player and make a random move
+                if (this.#hostNumber == 2) {
+                    this.#board.play(this.#board.getRandomMove());
+                }
+
+                // Get the difficulty level
+                const params = new URLSearchParams(window.location.search);
+                const difficulties = ['easy', 'normal', 'hard'];
+                const paramDifficulty = params.get('difficulty');
+
+                difficulty = difficulties.includes(paramDifficulty)
+                    ? paramDifficulty
+                    : 'normal';
+                break;
+            case this.#gameModes.robot:
+                break;
+            case this.#gameModes.robot:
+                break;
+            case this.#gameModes.robot:
+                break;
+        }
+
+        // The event when each player ends his play
+        window.addEventListener('playEnd', (event) => {
+            const detail = event.detail;
+
+            switch (this.#gameMode) {
+                case this.#gameModes.robot:
+                    this.#robotGame(detail, difficulty);
+                    break;
+                case this.#gameModes.robot:
+                    break;
+                case this.#gameModes.robot:
+                    break;
+                case this.#gameModes.robot:
+                    break;
+            }
+        });
+    }
+
+    #getAndSetPlayers() {
+        // Get both players with their names and images
+        //--Player 1
+        const $player1 = document.querySelector('[data-player="1"]');
+        const $player1Name = $player1.querySelector('.player__name');
+        const $player1Image = $player1.querySelector('.player__image');
+        //--Player 2
+        const $player2 = document.querySelector('[data-player="2"]');
+        const $player2Name = $player2.querySelector('.player__name');
+        const $player2Image = $player2.querySelector('.player__image');
+
+        this.#hostNumber = 1;
+
+        // Check if the current user is '_Anonymous'
+        const isAnonymous = $player1Name.innerText == '_Anonymous';
+        if (isAnonymous) $player1Name.innerText = 'Anonymous';
+
+        // Check if it's an offline mode to change or correct the names
+        switch (this.#gameMode) {
+            case this.#gameModes.robot:
+                // Randomly select whether the robot will be player 1 or 2
+                const robot = Math.floor(Math.random() * 2) + 1;
+
+                // Check if the robot is player 1 and change the names and images
+                if (robot == 1) {
+                    // Names
+                    $player2Name.innerText = $player1Name.innerText;
+                    $player1Name.innerText = 'Robot';
+
+                    // Images
+                    $player2Image.src = $player1Image.src;
+                    if (isAnonymous) {
+                        $player2Image.src = 'img/profile/blue-disc.webp';
+                    }
+                    $player1Image.src = 'img/profile/red-robot.webp';
+
+                    // Change the current user
+                    this.#hostNumber = 2;
+                }
+                break;
+
+            case this.#gameModes.local:
+                break;
+        }
+
+        // Create an array for both players
+        this.#players = [{
+            number: 1,
+            element: $player1.cloneNode(true),
+            name: $player1Name,
+            image: $player1Image,
+        }, {
+            number: 2,
+            element: $player2.cloneNode(true),
+            name: $player2Name,
+            image: $player2Image,
+        }];
+
+        // Define the host player color
+        this.#hostColor = (this.#hostNumber == 1) ? 'red' : 'blue';
+    }
+
+    #showVersus() {
+        // Get and set the players
+        this.#getAndSetPlayers();
+
+        // Get the versus modal
+        const $versusModal = document.querySelector('#modal-versus');
+        const $versusPlayers = $versusModal.querySelector('.versus__players');
+
+        // Put both players in the versus modal
+        $versusPlayers.prepend(this.#players[0].element);
+        $versusPlayers.append(this.#players[1].element);
+
+        // Show the modal
+        $versusModal.showModal();
+
+        setTimeout(() => {
+            $versusModal.classList.add('versus--close');
+            this.#sounds.versus.play();
+
+            $versusModal.addEventListener('animationend', () => {
+                $versusModal.close();
+                this.#manageGame();
+            }, { once: true });
+        }, 1200);
+    }
+
+    constructor() {
+        // Set the game attributes
         this.#gameModes = {
             robot: 0,
             local: 1,
@@ -287,15 +575,16 @@ class Game {
                 this.#gameMode = this.#gameModes.local;
         }
 
-        // Block the game
-        this.#lock();
+        // Get the board
+        this.#board = new Board();
 
-        // Get the current players
-        this.#getPlayers();
+        // Get the sounds
+        this.#sounds = {
+            versus: new Audio('../sounds/versus.wav'),
+        };
 
-        // Define game events
-        this.#moveFloatingDisc();
-        this.#play();
+        // Show the versus
+        this.#showVersus();
     }
 }
 
