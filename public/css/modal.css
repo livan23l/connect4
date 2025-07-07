@@ -1,7 +1,8 @@
+/* Modal and backdrop styles */
 .modal {
     width: fit-content;
     padding: 0;
-    border: 1px solid var(--text-primary);
+    border: 1px solid var(--text-blue);
     border-radius: 10px;
     background-color: var(--primary-blue);
     position: fixed;
@@ -41,9 +42,10 @@
     flex-flow: column nowrap;
     align-items: center;
     gap: 2rem;
-    color: var(--text-blue-secondary);
+    color: var(--text-blue-light);
 }
 
+/* Modal elemetns styles */
 .modal__title {
     font-size: 1.35rem;
     text-align: center;
@@ -51,15 +53,15 @@
 }
 
 .modal__options {
+    margin-top: 0.6rem;
     display: flex;
-    flex-flow: column nowrap;
     align-items: center;
     gap: 1rem;
 }
 
-.modal__button {
+.modal__tooltip {
     padding: 0.75rem 1rem;
-    border: 1px solid var(--text-primary);
+    border: 1px solid var(--text-blue);
     border-radius: 10px;
     position: relative;
     z-index: 10;
@@ -67,18 +69,18 @@
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
-    color: var(--text-blue-secondary);
+    color: var(--text-blue-light);
     text-decoration: none;
-    overflow: hidden;
     transition: scale 0.2s ease-in-out;
 }
 
-.modal__button:hover {
+.modal__tooltip:hover {
     scale: 0.97;
 }
 
-.modal__button::before {
+.modal__tooltip::before {
     content: "";
+    border-radius: 10px;
     background-color: var(--secondary-blue);
     position: absolute;
     z-index: -1;
@@ -86,6 +88,21 @@
     transition: opacity 0.2s ease-in-out;
 }
 
-.modal__button:hover::before {
+.modal__tooltip:hover::before {
     opacity: 0.4;
+}
+
+.modal__tooltip-text {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    opacity: 0;
+    translate: -50% 0;
+    transition: opacity 0.3s ease-in-out, translate 0.3s ease-in-out;
+}
+
+.modal__tooltip:hover .modal__tooltip-text:not(.modal__tooltip-text--static),
+.modal__tooltip-text--static {
+    translate: -50% -140%;
+    opacity: 1;
 }
