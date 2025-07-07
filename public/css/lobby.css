@@ -37,7 +37,7 @@
     align-items: center;
     gap: 0.5rem;
     cursor: pointer;
-    color: var(--text-primary);
+    color: var(--text-blue);
     text-decoration: none;
 }
 
@@ -84,7 +84,7 @@
 }
 
 .header__menu-anchor {
-    color: var(--text-primary);
+    color: var(--text-blue);
     text-decoration: none;
 }
 
@@ -128,7 +128,7 @@
     border-radius: 10px;
     background-color: var(--secondary-blue);
     font-size: 1.25rem;
-    color: var(--text-primary);
+    color: var(--text-blue);
     text-decoration: none;
     transition: scale 0.2s ease-in-out, filter 0.2s ease-in-out;
 }

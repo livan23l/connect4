@@ -144,7 +144,7 @@
     max-height: 4rem;
     width: fit-content;
     background-color: var(--primary-blue);
-    border: 1px solid var(--text-primary);
+    border: 1px solid var(--text-blue);
     border-radius: 10px;
     position: fixed;
     z-index: 15;

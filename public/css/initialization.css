@@ -5,9 +5,8 @@
     --primary-blue: #042C4E;
     --secondary-blue: #003878;
     --primary-red: #560A00;
-    --text-primary: #03B4DF;
-    --text-blue: #15BAD3;
-    --text-blue-secondary: #57B4DF;
+    --text-blue: #03B4DF;
+    --text-blue-light: #A1E1FF;
     --text-red: #F7AB00;
     --small-screen: 22rem;
     --medium-screen: 42rem;
@@ -55,7 +54,7 @@ body {
     min-height: 100vh;
     background-color: var(--background-primary);
     font-family: 'Barlow';
-    color: var(--text-primary);
+    color: var(--text-blue);
 }
 
 h1, h2, h3, h4, h5, h6 {
