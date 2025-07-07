@@ -133,16 +133,20 @@
 
 .game__difficulty {
     display: none;
-    font-size: 1rem;
-    font-weight: bold;
+    aspect-ratio: 1;
+    max-width: 5rem;
+    width: 50%;
+    margin-inline: auto;
+    padding: 1rem;
+    background-color: var(--secondary-blue);
+    border-radius: 5px;
     position: relative;
-    top: 0;
-    text-align: center;
-    transition: opacity 0.3s ease-in-out, top 0.3s ease-in-out;
+    left: 0;
+    transition: opacity 0.3s ease-in-out, left 0.3s ease-in-out;
 }
 
 .game__difficulty--hidden {
-    top: -10%;
+    left: -30%;
     opacity: 0;
 }
 

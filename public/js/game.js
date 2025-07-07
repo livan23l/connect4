@@ -478,9 +478,15 @@ class Game {
 
                 // Set the difficulty in the DOM
                 const $difficulty = document.querySelector('#difficulty');
-                const $difficultySpan = $difficulty.querySelector('#difficulty-span');
-                $difficultySpan.innerText = difficulty;
-                $difficultySpan.setAttribute('data-translate', difficulty);
+                const $difficultyIcon = $difficulty.querySelector('#difficulty-icon');
+
+                // Get the corresponding icon
+                const $templateIconClone = document.querySelector(
+                    `#template-icon-${difficulty}`
+                ).content.cloneNode(true);
+
+                // Append the icon clone to the DOM
+                $difficultyIcon.appendChild($templateIconClone);
 
                 // Show the difficulty
                 $difficulty.classList.remove('game__difficulty--hidden');
