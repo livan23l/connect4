@@ -490,7 +490,8 @@ class Game {
                 //--Append the icon copy to the difficulty icon element
                 $difficultyIcon.appendChild($templateIconClone);
 
-                //--Add and translate the difficulty name
+                //--Add the name and translate it
+                $difficultyName.innerText = difficulty;
                 $difficultyName.setAttribute('data-translate', difficulty);
                 window.dispatchEvent(new CustomEvent(
                     'translateElement', { detail: { element: $difficultyName} }
