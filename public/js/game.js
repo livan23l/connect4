@@ -490,6 +490,8 @@ class Game {
 
                 // Show the difficulty
                 $difficulty.classList.remove('game__difficulty--hidden');
+                $difficulty.classList.add(`game__difficulty--${difficulty}`);
+                $difficulty.setAttribute('data-difficulty', difficulty);
                 break;
             case this.#gameModes.robot:
                 break;
@@ -594,11 +596,22 @@ class Game {
         // Show the modal
         $versusModal.showModal();
 
+        // Prevent that the user close the modal
+        const preventCloseByEsc = (event) => {
+            event.preventDefault();
+        }
+
+        // Add the event to the emodal
+        $versusModal.addEventListener('cancel', preventCloseByEsc);
+
         setTimeout(() => {
             $versusModal.classList.add('versus--close');
             this.#sounds.versus.play();
 
             $versusModal.addEventListener('animationend', () => {
+                // Remove the listener from the modal
+                $versusModal.removeEventListener('cancel', preventCloseByEsc);
+                // Close the modal and manage the game
                 $versusModal.close();
                 this.#manageGame();
             }, { once: true });
