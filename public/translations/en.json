@@ -19,5 +19,37 @@
     "contact form.": "contact form.",
 
     "Contact": "Contact",
-    "Credits": "Credits"
+    "Credits": "Credits",
+
+
+
+    "Store": "Store",
+    "Access to unlock your profile": "Access to unlock your profile",
+
+    "Online modes": "Online modes",
+    "Play vs friend (online)": "Play vs friend (online)",
+    "Quick match": "Quick match",
+
+    "Local modes": "Local modes",
+    "Play vs robot": "Play vs robot",
+    "Two players (same device)": "Two players (same device)",
+
+    "Select the difficulty": "Select the difficulty",
+    "Easy": "Easy",
+    "Normal": "Normal",
+    "Hard": "Hard",
+
+
+
+    "Access to unlock the store": "Access to unlock the store",
+
+
+
+    "Playing vs robot": "Playing vs robot",
+    "easy": "easy",
+    "normal": "normal",
+    "hard": "hard",
+    "Anonymous": "Anonymous",
+    "Robot": "Robot",
+    "Go back to the lobby": "Go back to the lobby"
 }

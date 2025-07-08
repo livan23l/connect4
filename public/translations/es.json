@@ -19,5 +19,37 @@
     "contact form.": "formulario de contacto.",
 
     "Contact": "Contacto",
-    "Credits": "Créditos"
+    "Credits": "Créditos",
+
+
+
+    "Store": "Tienda",
+    "Access to unlock your profile": "Accede para desbloquear tu perfil",
+
+    "Online modes": "Modos en línea",
+    "Play vs friend (online)": "Jugar contra un amigo (en línea)",
+    "Quick match": "Partida rápida",
+
+    "Local modes": "Modos locales",
+    "Play vs robot": "Jugar contra el robot",
+    "Two players (same device)": "Dos jugadores (mismo dispositivo)",
+
+    "Select the difficulty": "Elige la dificultad",
+    "Easy": "Fácil",
+    "Normal": "Normal",
+    "Hard": "Difícil",
+
+
+
+    "Access to unlock the store": "Accede para desbloquear la tienda",
+
+
+
+    "Playing vs robot": "Partida contra el robot",
+    "easy": "fácil",
+    "normal": "normal",
+    "hard": "difícil",
+    "Anonymous": "Anónimo",
+    "Robot": "Robot",
+    "Go back to the lobby": "Volver al menú principal"
 }

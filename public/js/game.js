@@ -477,21 +477,28 @@ class Game {
                     : 'normal';
 
                 // Set the difficulty in the DOM
+                //--Get the DOM difficulty elements
                 const $difficulty = document.querySelector('#difficulty');
+                const $difficultyName = document.querySelector('#difficulty-name');
                 const $difficultyIcon = $difficulty.querySelector('#difficulty-icon');
 
-                // Get the corresponding icon
+                //--Get a copy of the template corresponding to the icon
                 const $templateIconClone = document.querySelector(
                     `#template-icon-${difficulty}`
                 ).content.cloneNode(true);
 
-                // Append the icon clone to the DOM
+                //--Append the icon copy to the difficulty icon element
                 $difficultyIcon.appendChild($templateIconClone);
 
-                // Show the difficulty
-                $difficulty.classList.remove('game__difficulty--hidden');
+                //--Add and translate the difficulty name
+                $difficultyName.setAttribute('data-translate', difficulty);
+                window.dispatchEvent(new CustomEvent(
+                    'translateElement', { detail: { element: $difficultyName} }
+                ));
+
+                //--Show the difficulty
                 $difficulty.classList.add(`game__difficulty--${difficulty}`);
-                $difficulty.setAttribute('data-difficulty', difficulty);
+                $difficulty.classList.remove('game__difficulty--hidden');
                 break;
             case this.#gameModes.robot:
                 break;
@@ -547,6 +554,11 @@ class Game {
                     // Names
                     $player2Name.innerText = $player1Name.innerText;
                     $player1Name.innerText = 'Robot';
+
+                    // Translations
+                    const translateTemporal = $player1Name.dataset.translate;
+                    $player1Name.dataset.translate = $player2Name.dataset.translate;
+                    $player2Name.dataset.translate = translateTemporal;
 
                     // Images
                     $player2Image.src = $player1Image.src;
