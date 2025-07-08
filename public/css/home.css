@@ -126,14 +126,14 @@
 .about__figure::before {
     /* Blue disc */
     border: 2px solid var(--text-blue);
-    background-color: var(--primary-blue);
+    background-color: var(--secondary-blue);
     animation: border-rotate-blue 3s linear infinite;
 }
 
 .about__figure::after {
     /* Red disc */
     border: 2px solid var(--text-red);
-    background-color: var(--primary-red);
+    background-color: var(--secondary-red);
     animation: border-rotate-red 3s linear infinite;
 }
 
