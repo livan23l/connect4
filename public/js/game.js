@@ -416,37 +416,26 @@ class Board {
 class Game {
     #gameMode;
     #gameModes;
+    #gameData;
+    #sounds;
+    #board;
     #players;
     #hostNumber;
     #hostColor;
-    #sounds;
-    #board;
 
-    #robotGame(detail, difficulty) {
-        const { color, end } = detail;
-        const oppositeColor = {
-            red: 'blue',
-            blue: 'red'
-        };
-        const precisionByDifficulty = {
-            easy: 0.2,
-            normal: 0.7,
-            hard: 1
-        };
-
-        if (end) {
-            console.log(detail.board);
-            return
-        };
+    #robotGame(detail) {
+        const { color } = detail;
 
         // Check if the play was made by the host or the robot
         if (this.#hostColor == color) {  // Host
             // Get the move according to the difficulty
-            if (Math.random() <= precisionByDifficulty[difficulty]) {
-                // Make the best move
-                this.#board.play(this.#board.getBestMove(oppositeColor[color]));
-            } else {
-                // Make a random move
+            const isBestMove = Math.random() <= this.#gameData.
+                precisionByDifficulty[this.#gameData.difficulty];
+
+            if (isBestMove) {  // Make the best move
+                const robotColor = this.#gameData.oppositeColor[color];
+                this.#board.play(this.#board.getBestMove(robotColor));
+            } else {  // Make a random move
                 this.#board.play(this.#board.getRandomMove());
             }
         } else {  // Robot
@@ -457,7 +446,6 @@ class Game {
     #manageGame() {
         // Game preparation
         if (this.#hostNumber == 1) this.#board.unlock();
-        let difficulty = null;
 
         switch (this.#gameMode) {
             case this.#gameModes.robot:
@@ -465,41 +453,6 @@ class Game {
                 if (this.#hostNumber == 2) {
                     this.#board.play(this.#board.getRandomMove());
                 }
-
-                // Get the difficulty in the params
-                const params = new URLSearchParams(window.location.search);
-                const difficulties = ['easy', 'normal', 'hard'];
-                const paramDifficulty = params.get('difficulty');
-
-                // Set the current difficulty
-                difficulty = difficulties.includes(paramDifficulty)
-                    ? paramDifficulty
-                    : 'normal';
-
-                // Set the difficulty in the DOM
-                //--Get the DOM difficulty elements
-                const $difficulty = document.querySelector('#difficulty');
-                const $difficultyName = document.querySelector('#difficulty-name');
-                const $difficultyIcon = $difficulty.querySelector('#difficulty-icon');
-
-                //--Get a copy of the template corresponding to the icon
-                const $templateIconClone = document.querySelector(
-                    `#template-icon-${difficulty}`
-                ).content.cloneNode(true);
-
-                //--Append the icon copy to the difficulty icon element
-                $difficultyIcon.appendChild($templateIconClone);
-
-                //--Add the name and translate it
-                $difficultyName.innerText = difficulty;
-                $difficultyName.setAttribute('data-translate', difficulty);
-                window.dispatchEvent(new CustomEvent(
-                    'translateElement', { detail: { element: $difficultyName} }
-                ));
-
-                //--Show the difficulty
-                $difficulty.classList.add(`game__difficulty--${difficulty}`);
-                $difficulty.classList.remove('game__difficulty--hidden');
                 break;
             case this.#gameModes.robot:
                 break;
@@ -512,10 +465,17 @@ class Game {
         // The event when each player ends his play
         window.addEventListener('playEnd', (event) => {
             const detail = event.detail;
+            const { end } = detail;
+
+            // Check if is the end
+            if (end) {
+                console.log(detail.board);
+                return
+            };
 
             switch (this.#gameMode) {
                 case this.#gameModes.robot:
-                    this.#robotGame(detail, difficulty);
+                    this.#robotGame(detail);
                     break;
                 case this.#gameModes.robot:
                     break;
@@ -538,11 +498,9 @@ class Game {
         const $player2Name = $player2.querySelector('.player__name');
         const $player2Image = $player2.querySelector('.player__image');
 
-        this.#hostNumber = 1;
-
-        // Check if the current user is '_Anonymous'
-        const isAnonymous = $player1Name.innerText == '_Anonymous';
-        if (isAnonymous) $player1Name.innerText = 'Anonymous';
+        // Get the host number
+        const $game = document.querySelector('#game');
+        this.#hostNumber = Number($game.dataset.hostNumber);
 
         // Check if it's an offline mode to change or correct the names
         switch (this.#gameMode) {
@@ -550,8 +508,15 @@ class Game {
                 // Randomly select whether the robot will be player 1 or 2
                 const robot = Math.floor(Math.random() * 2) + 1;
 
-                // Check if the robot is player 1 and change the names and images
+                // Check if the robot is player 1 and change the data
                 if (robot == 1) {
+                    // Images
+                    $player2Image.src = $player1Image.src;
+                    if ($player1Name.innerText == '_Anonymous') {
+                        $player2Image.src = 'img/profile/blue-disc.webp';
+                    }
+                    $player1Image.src = 'img/profile/red-robot.webp';
+
                     // Names
                     $player2Name.innerText = $player1Name.innerText;
                     $player1Name.innerText = 'Robot';
@@ -561,31 +526,29 @@ class Game {
                     $player1Name.dataset.translate = $player2Name.dataset.translate;
                     $player2Name.dataset.translate = translateTemporal;
 
-                    // Images
-                    $player2Image.src = $player1Image.src;
-                    if (isAnonymous) {
-                        $player2Image.src = 'img/profile/blue-disc.webp';
-                    }
-                    $player1Image.src = 'img/profile/red-robot.webp';
-
-                    // Change the current user
+                    // Change the host number
                     this.#hostNumber = 2;
                 }
                 break;
-
             case this.#gameModes.local:
                 break;
         }
 
+        // Check if the user names are '_Anonymous' and correct the names
+        //--Player 1
+        if ($player1Name.innerText == '_Anonymous') $player1Name.innerText = 'Anonymous';
+        //--Player 2
+        if ($player2Name.innerText == '_Anonymous') $player2Name.innerText = 'Anonymous';
+
         // Create an array for both players
         this.#players = [{
             number: 1,
-            element: $player1.cloneNode(true),
+            element: $player1,
             name: $player1Name,
             image: $player1Image,
         }, {
             number: 2,
-            element: $player2.cloneNode(true),
+            element: $player2,
             name: $player2Name,
             image: $player2Image,
         }];
@@ -594,11 +557,19 @@ class Game {
         this.#hostColor = (this.#hostNumber == 1) ? 'red' : 'blue';
     }
 
+    /**
+     * Displays the versus modal with both players and plays the versus sound.
+     * After a short delay and animation, closes the modal and proceeds to
+     * manage the game.
+     *
+     * @private
+     * @returns {void}
+     */
     #showVersus() {
         // Get and set the players
         this.#getAndSetPlayers();
 
-        // Get the versus modal
+        // Get the versus modal elements
         const $versusModal = document.querySelector('#modal-versus');
         const $versusPlayers = $versusModal.querySelector('.versus__players');
 
@@ -609,21 +580,33 @@ class Game {
         // Show the modal
         $versusModal.showModal();
 
-        // Prevent that the user close the modal
+        // Prevent the user from closing the modal by pressing 'esc'
         const preventCloseByEsc = (event) => {
             event.preventDefault();
         }
-
-        // Add the event to the emodal
         $versusModal.addEventListener('cancel', preventCloseByEsc);
 
+        // Wait 1.2 seconds before showing the closing animation
         setTimeout(() => {
+            // Put the closing animation on the versus and play the sound
             $versusModal.classList.add('versus--close');
             this.#sounds.versus.play();
 
+            // Wait until the animation ends to continue with the game
             $versusModal.addEventListener('animationend', () => {
                 // Remove the listener from the modal
                 $versusModal.removeEventListener('cancel', preventCloseByEsc);
+
+                // Return both players to the game players aside
+                const $asidePlayers = document.querySelector('.aside__players');
+                $asidePlayers.prepend(this.#players[0].element);
+                $asidePlayers.append(this.#players[1].element);
+                $asidePlayers.classList.remove('aside__players--hidden');
+
+                // Shows the options in the aside
+                const $options = document.querySelector('.aside__options');
+                $options.classList.remove('aside__options--hidden');
+
                 // Close the modal and manage the game
                 $versusModal.close();
                 this.#manageGame();
@@ -631,34 +614,88 @@ class Game {
         }, 1200);
     }
 
+    #setGameData() {
+        // Get the current game mode
+        const path = window.location.pathname.replaceAll('/', '');
+
+        // Set the current mode and get the corresponding preparation
+        switch (path) {
+            case 'playofflinerobot':
+                this.#gameMode = this.#gameModes.robot;
+
+                // Set general information to the robot mode
+                this.#gameData.oppositeColor = {
+                    red: 'blue',
+                    blue: 'red'
+                };
+                this.#gameData.precisionByDifficulty = {
+                    easy: 0.2,
+                    normal: 0.7,
+                    hard: 1
+                };
+
+                // Get and set the difficulty in the game preparation
+                //--Get the difficulty in the params
+                const params = new URLSearchParams(window.location.search);
+                const difficulties = ['easy', 'normal', 'hard'];
+                const paramDifficulty = params.get('difficulty');
+
+                //--Set the difficulty
+                this.#gameData.difficulty = difficulties.includes(paramDifficulty)
+                    ? paramDifficulty
+                    : 'normal';
+
+                // Set the difficulty in the DOM
+                //--Get the DOM difficulty elements
+                const $difficulty = document.querySelector('#difficulty');
+                const $difficultyName = $difficulty.querySelector('#difficulty-name');
+                const $difficultyIcon = $difficulty.querySelector('#difficulty-icon');
+
+                //--Get a copy of the template corresponding to the icon
+                const $iconCopy = document.querySelector(
+                    `#template-icon-${this.#gameData.difficulty}`
+                ).content.cloneNode(true);
+
+                //--Append the icon copy to the difficulty icon element
+                $difficultyIcon.appendChild($iconCopy);
+
+                //--Add the name and translate it
+                $difficultyName.innerText = this.#gameData.difficulty;
+                $difficultyName.setAttribute('data-translate', this.#gameData.difficulty);
+                window.dispatchEvent(new CustomEvent(
+                    'translateElement', { detail: { element: $difficultyName} }
+                ));
+
+                //--Add the corresponding class to the difficulty
+                $difficulty.classList.add(`difficulty--${this.#gameData.difficulty}`);
+                break;
+            case 'playofflinelocal':
+                this.#gameMode = this.#gameModes.local;
+        }
+    }
+
+    /**
+     * Initializes the game with all the events
+     * 
+     * @constructor
+     */
     constructor() {
         // Set the game attributes
+        this.#gameData = {};
+        this.#gameMode = null;
         this.#gameModes = {
             robot: 0,
             local: 1,
             friend: 2,
             quick: 3,
         };
-
-        // Get the current game mode
-        const path = window.location.pathname.replaceAll('/', '');
-        switch (path) {
-            case 'playofflinerobot':
-                this.#gameMode = this.#gameModes.robot;
-                break;
-            case 'playofflinelocal':
-                this.#gameMode = this.#gameModes.local;
-        }
-
-        // Get the board
-        this.#board = new Board();
-
-        // Get the sounds
-        this.#sounds = {
+        this.#board = new Board();  // Initialize a new instance of the board
+        this.#sounds = {  // Get the sounds
             versus: new Audio('../sounds/versus.wav'),
         };
 
-        // Show the versus
+        // Start the game events
+        this.#setGameData();
         this.#showVersus();
     }
 }

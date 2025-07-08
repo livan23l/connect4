@@ -21,29 +21,38 @@ require_once BASE . 'resources/components/header_game.php';
     </svg>
 </template>
 
-<main class="game">
+<main id="game" class="game" data-host-number="1">
     <aside class="game__aside">
-        <h1 class="game__title" data-translate="Playing vs robot">Playing vs robot</h1>
-        <div id="difficulty" class="game__difficulty game__difficulty--hidden">
-            <p id="difficulty-name" class="game__difficulty-name"></p>
-            <div id="difficulty-icon"></div>
-        </div>
-
-        <div class="game__players">
-            <div data-player="1" class="player player--red">
-                <img class="player__image" src="img/profile/red-disc.webp" alt="Player image">
-                <p class="player__name" data-translate="Anonymous">_Anonymous</p>
+        <header class="aside__header">
+            <h1 class="aside__title" data-translate="Playing vs robot">Playing vs robot</h1>
+            <div id="difficulty" class="difficulty">
+                <p id="difficulty-name" class="difficulty__name"></p>
+                <div id="difficulty-icon"></div>
             </div>
-            <p class="game__vs">vs</p>
-            <div data-player="2" class="player player--blue">
-                <img class="player__image" src="img/profile/blue-robot.webp" alt="Player image">
-                <p class="player__name" data-translate="Robot">Robot</p>
-            </div>
-        </div>
+        </header>
 
-        <div class="game__options">
-            <a class="game__option" href="/play" data-translate="Go back to the lobby">Go back to the lobby</a>
-        </div>
+        <main class="aside__main">
+            <div class="aside__players aside__players--hidden">
+                <!-- Player 1 -->
+                <div data-player="1" class="player player--red">
+                    <img class="player__image" src="img/profile/red-disc.webp" alt="Player image">
+                    <p class="player__name" data-translate="Anonymous">_Anonymous</p>
+                </div>
+
+                <!-- VS -->
+                <p class="aside__vs">vs</p>
+
+                <!-- Player 2 -->
+                <div data-player="2" class="player player--blue">
+                    <img class="player__image" src="img/profile/blue-robot.webp" alt="Player image">
+                    <p class="player__name" data-translate="Robot">Robot</p>
+                </div>
+            </div>
+    
+            <div class="aside__options aside__options--hidden">
+                <a class="aside__option" href="/play" data-translate="Go back to the lobby">Go back to the lobby</a>
+            </div>
+        </main>
     </aside>
 
     <main class="game__main">
@@ -55,7 +64,7 @@ require_once BASE . 'resources/components/header_game.php';
     <div class="versus__content">
         <img class="versus__logo" src="img/logo.webp" alt="Image of the app logo">
         <div class="versus__players">
-            <p class="game__vs">vs</p>
+            <p class="aside__vs">vs</p>
         </div>
     </div>
 </dialog>

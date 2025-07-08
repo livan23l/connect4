@@ -107,64 +107,33 @@
     gap: 1rem;
 }
 
-/* Game styles */
-.game {
-    min-height: 100vh;
-    width: 100%;
-    display: flex;
-    flex-flow: column nowrap;
-}
-
-.game__aside {
-    padding: 0 0.5rem 1rem;
-    background-color: var(--background-secondary);
-    position: relative;
-    z-index: 11;
-    display: flex;
-    flex-flow: column nowrap;
-    gap: 2rem;
-}
-
-.game__title {
-    display: none;
-    text-align: center;
-    text-transform: uppercase;
-}
-
-.game__difficulty {
+/* Difficulties styles */
+.difficulty {
     --border-color: transparent;
-    display: none;
     aspect-ratio: 1;
-    max-width: 5rem;
+    max-width: 4rem;
     width: 50%;
     margin-inline: auto;
-    padding: 1rem;
-    border: 5px outset var(--border-color);
+    padding: 0.5rem;
+    border: 4px outset var(--border-color);
     background-color: var(--secondary-blue);
     border-radius: 5px;
     position: relative;
-    left: 0;
-    transition: opacity 0.6s ease-in-out, left 0.5s ease-in-out;
 }
 
-.game__difficulty--hidden {
-    left: -30%;
-    opacity: 0;
-}
-
-.game__difficulty--easy {
+.difficulty--easy {
     --border-color: var(--text-blue);
 }
 
-.game__difficulty--normal {
+.difficulty--normal {
     --border-color: var(--text-red);
 }
 
-.game__difficulty--hard {
+.difficulty--hard {
     --border-color: var(--text-red-dark);
 }
 
-.game__difficulty-name {
+.difficulty__name {
     padding: 0.5rem 0.75rem;
     background-color: var(--secondary-blue);
     border-radius: 5px;
@@ -180,37 +149,90 @@
     transition: opacity 0.3s ease-in-out, translate 0.3s ease-in-out;
 }
 
-.game__difficulty:hover > .game__difficulty-name {
+.difficulty:hover > .difficulty__name {
     translate: 100% -50%;
     opacity: 1;
 }
 
-.game__players {
+/* Game styles */
+.game {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+/*--Game aside styles--*/
+.game__aside {
+    padding: 1rem 0.5rem;
+    background:
+        radial-gradient(circle at left bottom, var(--secondary-blue) 0%, transparent 35%),
+        radial-gradient(circle at right top, var(--secondary-blue) 0%, var(--background-secondary) 15%);
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.aside__header, .aside__main {
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.aside__header {
+    display: none;
+    gap: 1rem;
+}
+
+.aside__title {
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.aside__main {
+    gap: 1.5rem;
+}
+
+.aside__players {
     max-width: 36rem;
     width: 100%;
-    margin: 0.5rem auto 0;
+    height: 11.65rem;
+    margin-inline: auto;
     padding: 0;
-    border-radius: 10px;
+    position: relative;
+    top: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 0.75rem;
+    transition: top 0.35s ease-out, scale 0.45s ease-in;
 }
 
-.game__vs {
+.aside__players--hidden {
+    scale: 0;
+    top: -75%;
+}
+
+.aside__vs {
     font-weight: bold;
     color: var(--text-blue);
     text-transform: uppercase;
 }
 
-.game__options {
+.aside__options {
     width: 100%;
     display: flex;
     justify-content: center;
+    transition: opacity 0.75s ease-in-out 0.5s;
 }
 
-.game__option {
+.aside__options--hidden {
+    opacity: 0;
+}
+
+.aside__option {
     padding: 0.75rem 1rem;
     border: 1px solid var(--text-blue);
     border-radius: 5px;
@@ -223,7 +245,7 @@
     transition: scale 0.2s ease-in-out;
 }
 
-.game__option::before {
+.aside__option::before {
     content: "";
     background-color: var(--primary-blue);
     position: absolute;
@@ -232,14 +254,15 @@
     transition: opacity 0.2s ease-in-out;
 }
 
-.game__option:hover {
+.aside__option:hover {
     scale: 0.97;
 }
 
-.game__option:hover::before {
+.aside__option:hover::before {
     opacity: 0.6;
 }
 
+/*--Game main styles--*/
 .game__main {
     min-height: 65vh;
     padding: 3.2rem 0.5rem 1.5rem;
@@ -268,12 +291,13 @@
         width: 50%;
     }
 
-    .game__players {
+    .aside__players {
+        height: 6.5rem;
         padding: 1rem 0.5rem;
         flex-direction: row;
     }
 
-    .game__aside {
+    .aside__main {
         gap: 1rem;
     }
 }
@@ -303,14 +327,11 @@
     .game__aside {
         flex: 1;
         padding: 1rem;
+        gap: 2rem;
     }
 
-    .game__title {
-        display: block;
-    }
-
-    .game__difficulty {
-        display: block;
+    .aside__header {
+        display: flex;
     }
 
     .game__main {
