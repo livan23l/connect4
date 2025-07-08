@@ -9,7 +9,8 @@
     top: 15%;
     z-index: 15;
     opacity: 0;
-    transition: top 0.4s ease-in-out, opacity 0.4s ease-in-out, display 0.4s allow-discrete;
+    visibility: hidden;
+    transition: visibility 0.4s ease-in-out, 0.4s ease-in-out, opacity 0.4s ease-in-out, display 0.4s allow-discrete;
 }
 
 .modal::backdrop {
@@ -20,6 +21,7 @@
 .modal[open] {
     top: -15%;
     opacity: 1;
+    visibility: visible;
 
     @starting-style {
         top: 15%;
@@ -37,7 +39,7 @@
 }
 
 .modal__content {
-    padding: 1rem 2rem;
+    padding: 1rem;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
@@ -53,10 +55,13 @@
 }
 
 .modal__options {
+    width: 100%;
     margin-top: 0.6rem;
     display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: 2rem 1rem;
 }
 
 .modal__tooltip {
@@ -105,4 +110,12 @@
 .modal__tooltip-text--static {
     translate: -50% -140%;
     opacity: 1;
+}
+
+/* Media queries */
+/* var(--small-screen) */
+@media (min-width: 22rem) {
+    .modal__content {
+        padding: 1rem 2rem;
+    }
 }

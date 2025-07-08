@@ -1,5 +1,16 @@
 class Home {
-    #changeLanguage() {
+    /**
+     * Handles the language selection UI and logic.
+     * 
+     * - Highlights and repositions the currently selected language option.
+     * - Listens for user interaction to change the language.
+     * - Dispatches a 'changeLanguage' custom event with the selected language.
+     * - Updates the UI to reflect the new selection.
+     * 
+     * @private
+     * @returns { void }
+     */
+    #changeLanguageEvent() {
         // Get the DOM elements
         const $languageSection = document.querySelector('.language');
         const selectedClass = 'language__option--selected';
@@ -7,8 +18,8 @@ class Home {
         // Select and reposition the current language
         const lang = document.documentElement.getAttribute('lang');
         const reposition = (selected) => {
-            selected.classList.add(selectedClass);
-            $languageSection.prepend(selected);
+            selected.classList.add(selectedClass);  // Add the selected class
+            $languageSection.prepend(selected);  // Move the element
         };
         reposition($languageSection.querySelector(`[data-language="${lang}"]`));
 
@@ -25,6 +36,9 @@ class Home {
 
             // Check if is the selected option
             if (target.classList.contains(selectedClass)) {
+                // Place the scroll bar at the end
+                $languageSection.scrollTop = $languageSection.scrollHeight;
+                // Hides the language section
                 $languageSection.classList.toggle('language--visible');
                 return;
             }
@@ -45,7 +59,14 @@ class Home {
         });
     }
 
-    #arrowAnimation() {
+    /**
+     * Toggles the visibility of the arrow element based on the window's
+     * scroll position.
+     * 
+     * @private
+     * @returns { void }
+     */
+    #toggleArrowVissibility() {
         const $arrow = document.querySelector('#arrow');
 
         if (window.scrollY == 0) {
@@ -61,9 +82,14 @@ class Home {
         });
     }
 
+    /**
+     * Initializes the home with all the events
+     * 
+     * @constructor
+     */
     constructor() {
-        this.#arrowAnimation();
-        this.#changeLanguage();
+        this.#toggleArrowVissibility();
+        this.#changeLanguageEvent();
     }
 }
 

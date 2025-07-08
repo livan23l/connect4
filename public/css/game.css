@@ -4,7 +4,7 @@
 .player {
     min-width: 6rem;
     height: 4.5rem;
-    width: 50%;
+    width: 90%;
     padding: 0.5rem;
     border-radius: 10px;
     display: flex;
@@ -122,7 +122,7 @@
     z-index: 11;
     display: flex;
     flex-flow: column nowrap;
-    gap: 1rem;
+    gap: 2rem;
 }
 
 .game__title {
@@ -154,9 +154,10 @@
     max-width: 36rem;
     width: 100%;
     margin: 0.5rem auto 0;
-    padding: 1rem 0.5rem;
+    padding: 0;
     border-radius: 10px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 0.75rem;
@@ -212,6 +213,7 @@
     align-items: flex-end;
 }
 
+/* Animations */
 @keyframes versus-fade-out {
     from {
         scale: 1;
@@ -225,30 +227,30 @@
 }
 
 /* Media queries */
-/* --small-screen */
-@media (max-width: 22rem) {
-    .game__players {
-        padding: 0;
-        flex-direction: column;
+/* var(--small-screen) */
+@media (min-width: 22rem) {
+    .player {
+        width: 50%;
     }
 
-    .player {
-        width: 90%;
+    .game__players {
+        padding: 1rem 0.5rem;
+        flex-direction: row;
     }
 
     .game__aside {
-        gap: 2rem;
+        gap: 1rem;
     }
 }
 
-/* --smartphone-screen */
+/* var(--smartphone-screen) */
 @media (min-width: 28rem) {
     .game__main {
         padding: 5rem 0.5rem 1.5rem;
     }
 }
 
-/* --medium-screen */
+/* var(--medium-screen) */
 @media (min-width: 42rem) {
     .versus__players {
         min-height: 0;
@@ -257,7 +259,7 @@
     }
 }
 
-/* --large-screen*/
+/* var(--large-screen) */
 @media (min-width: 66rem) {
     .game {
         flex-flow: row nowrap;

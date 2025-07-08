@@ -123,6 +123,7 @@
     flex: 1;
 }
 
+/* Media queries */
 /* var(--small-screen) */
 @media (min-width: 22rem) {
     .text-xl {

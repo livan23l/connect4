@@ -56,25 +56,23 @@
         <!-- Drop-down menus section -->
         <section id="menus" class="header__menus">
             <!-- Notifications -->
-            <div class="header__menu">
+            <div class="header__menu" data-dropdown="1">
                 <svg class="icon icon--sm" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901" />
                 </svg>
-
-                <div class="header__menu-dropdown header__menu-dropdown--hidden">
-                    <div class="header__menu-option">Nothing here yet</div>
-                </div>
+            </div>
+            <div id="dropdown-1" class="header__dropdown header__dropdown--hidden">
+                <div class="header__menu-option">Nothing here yet</div>
             </div>
 
             <!-- Friends -->
-            <div class="header__menu">
+            <div class="header__menu" data-dropdown="2">
                 <svg class="icon icon--sm" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" />
                 </svg>
-
-                <div class="header__menu-dropdown header__menu-dropdown--hidden">
-                    <div class="header__menu-option">Nothing here yet</div>
-                </div>
+            </div>
+            <div id="dropdown-2" class="header__dropdown header__dropdown--hidden">
+                <div class="header__menu-option">Nothing here yet</div>
             </div>
 
             <!-- Configuration -->
