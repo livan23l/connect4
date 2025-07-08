@@ -8,7 +8,7 @@ class Home {
      * - Updates the UI to reflect the new selection.
      * 
      * @private
-     * @returns { void }
+     * @returns {void}
      */
     #changeLanguageEvent() {
         // Get the DOM elements
@@ -64,7 +64,7 @@ class Home {
      * scroll position.
      * 
      * @private
-     * @returns { void }
+     * @returns {void}
      */
     #toggleArrowVissibility() {
         const $arrow = document.querySelector('#arrow');

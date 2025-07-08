@@ -8,7 +8,7 @@ class Modal {
      * - Restores page scrolling and removes the event listener when the modal is closed.
      *
      * @private
-     * @returns { void }
+     * @returns {void}
      */
     #showModalEvent() {
         window.addEventListener('showModal', (event) => {
