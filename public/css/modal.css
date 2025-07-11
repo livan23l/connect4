@@ -1,5 +1,6 @@
 /* Modal and backdrop styles */
 .modal {
+    --transition-duration: 0.4s;
     width: fit-content;
     padding: 0;
     border: 1px solid var(--text-blue);
@@ -7,15 +8,20 @@
     background-color: var(--primary-blue);
     position: fixed;
     top: 15%;
-    z-index: 15;
+    z-index: 50;
     opacity: 0;
     visibility: hidden;
-    transition: visibility 0.4s ease-in-out, 0.4s ease-in-out, opacity 0.4s ease-in-out, display 0.4s allow-discrete;
+    transition: visibility var(--transition-duration) ease-in-out,
+        top var(--transition-duration) ease-in-out,
+        opacity var(--transition-duration) ease-in-out,
+        display var(--transition-duration) allow-discrete;
 }
 
 .modal::backdrop {
     background-color: transparent;
-    transition: background-color 0.4s ease-in-out, display 0.4s allow-discrete;
+    transition: background-color var(--transition-duration) ease-in-out,
+        backdrop-filter var(--transition-duration) allow-discrete,
+        display var(--transition-duration) allow-discrete;
 }
 
 .modal[open] {
@@ -31,10 +37,12 @@
 
 .modal[open]::backdrop {
     background-color: #00000080;
+    backdrop-filter: blur(5px);
     cursor: alias;
 
     @starting-style {
         background-color: transparent;
+        backdrop-filter: blur(0);
     }
 }
 

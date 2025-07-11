@@ -1,5 +1,6 @@
 /* Variables */
 :root {
+    /* General styles */
     --background-primary: #00061A;
     --background-secondary: #00132F;
     --primary-blue: #042C4E;
@@ -11,6 +12,14 @@
     --text-red: #F7AB00;
     --text-red-dark: #BE0C02;
     --text-red-light: #FFD899;
+    /* Discs colors */
+    --disc-red: #A31400;
+    --disc-red-light: #FF1E00;
+    --disc-red-dark: #5D0B00;
+    --disc-blue: #004075;
+    --disc-blue-light: #1F9AFF;
+    --disc-blue-dark: #002442;
+    /* Screen sizes */
     --small-screen: 22rem;
     --smartphone-screen: 28rem;
     --medium-screen: 42rem;

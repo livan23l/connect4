@@ -1,30 +1,56 @@
 class Board {
-    #$floatingDisc;
     #$board;
     #animationDelay;
     #game;
-    #gameValues;
+    #boardValues;
     #sounds;
     #currentColor;
     #isOver;
     #boardLock;
 
+    /**
+     * Locks the game to prevent the user from performing any actions. Also,
+     * removes all columns with the "hover" class to hide the floating disc.
+     * 
+     * @returns {void}
+     */
     lock() {
         this.#boardLock = true;
 
-        // Get the hover column and delete the hover class
-        const hoverColumn = this.#$board.querySelector('.board__column--hover');
+        // Get all the hover columns and remove their hover class
+        const hoverColumns = this.#$board.querySelectorAll('.board__column--hover');
 
-        if (hoverColumn) {
-            hoverColumn.classList.remove('board__column--hover');
-        }
+        hoverColumns.forEach((column) => {
+            column.classList.remove('board__column--hover');
+        });
     }
 
+    /**
+     * Unlocks the game to allow the user to make a move or view the floating
+     * disc by hovering over the board.
+     * 
+     * @returns {void}
+     */
     unlock() {
         this.#boardLock = false;
     }
 
+    /**
+     * Calculates the maximum number of connected discs of the same color from a
+     * given move in all possible directions (vertical, horizontal, and both
+     * diagonals) on the board.
+     *
+     * @param {[number, number]} move - The [column, slot] position of the
+     * current move.
+     * @param {string} colorValue - The value representing the player's
+     * disc color to check for connections.
+     * @returns {{number: number, direction: string|null, positions: array}} An
+     * object containing the maximum number of connected discs (`number`), the
+     * direction (`direction`) where this maximum occurs and all the discs
+     * positions (positions).
+     */
     #getMaxNumberOfConnections(move, colorValue) {
+        // Get the column and slot of the current move
         const [column, slot] = move;
 
         const validations = {
@@ -34,44 +60,47 @@ class Board {
             diagonalNegative: [[-1, 1], [1, -1]],  // The negative diagonal
         }
 
-        // Initialize the maximum number and if the move has the color value
-        const moveHasColor = this.#game.board[column][slot] == colorValue;
-        let maxNumber = 0;
+        // Initialize the object that will contain the maximum connection
+        const connection = {
+            number: 0,
+            direction: null,
+            positions: []
+        };
 
-        // Check if the current move has the color value
-        if (moveHasColor) maxNumber++;
+        // Check if the move has the color value to increase maximum number
+        const moveHasColor = this.#game.board[column][slot] == colorValue;
+        if (moveHasColor) connection.number++;
 
         // Check all the validations
-        for (const key in validations) {
-            const validation = validations[key];
+        for (const direction in validations) {
+            const validation = validations[direction];
+
+            // Initialize the array that will have the discs with the same value
             const sameDiscs = [];
             if (moveHasColor) sameDiscs.push(move);
 
-            // Check the rest of the discs in the directions of the validation
-            for (const direction of validation) {
-                const [valCol, valSlot] = direction;
-
-                // Get and save the current column and slot
-                let curCol = column;
-                let curSlot = slot;
+            // Check all the discs in the current direction
+            for (const movement of validation) {
+                const [movCol, movSlot] = movement;
+                let [curCol, curSlot] = [column, slot];
 
                 // Validate until get another color or reach the end of the board
                 let validate = true;
                 while (validate) {
-                    // Get the new column and slot
-                    curCol += valCol;
-                    curSlot += valSlot;
+                    // Set the new column and slot
+                    curCol += movCol;
+                    curSlot += movSlot;
 
                     // Check that they are valid values
                     if ((curCol < 0 || curCol >= this.#game.cols) ||
                         (curSlot < 0 || curSlot >= this.#game.discsPerCol)) {
-                        validate = false;
+                        validate = false;  // Stop the validation
                         continue;
                     }
 
                     // Check if the disc has not the same color value
                     if (this.#game.board[curCol][curSlot] != colorValue) {
-                        validate = false;
+                        validate = false;  // Stop the validation
                         continue;
                     }
 
@@ -80,19 +109,36 @@ class Board {
                 }
             }
 
-            // Check if the sameDiscs array has more elements than the max number
-            maxNumber = Math.max(maxNumber, sameDiscs.length);
+            // Check if the `sameDiscs` has more elements than the max number
+            if (sameDiscs.length > connection.number) {
+                connection.number = sameDiscs.length;
+                connection.direction = direction;
+                connection.positions = sameDiscs;
+            }
         }
 
-        return maxNumber;
+        return connection;
     }
 
+    /**
+     * Verifies if the game has ended after a move, either by a win or a draw.
+     * Sets the game state to over if a player has connected four or if the
+     * board is full (draw).
+     *
+     * @private
+     * @param {[number, number]} move - The move to verify, represented as
+     * [column, slot].
+     * @returns {void}
+     */
     #verifyEnd(move) {
+        // Get the current move value
         const [column, slot] = move;
         const value = this.#game.board[column][slot];
 
-        const connections = this.#getMaxNumberOfConnections(move, value);
+        // Check the number of connections of the current movement
+        const connections = this.#getMaxNumberOfConnections(move, value).number;
 
+        // Four or more means the game is over
         if (connections >= 4) {
             this.#isOver = true;
             return;
@@ -100,21 +146,20 @@ class Board {
 
         // Check if is a draw
         for (const discs of this.#game.discs) {
+            // If there are empty slots ends the verification and returns
             if (discs < this.#game.discsPerCol) return;
         }
 
         this.#isOver = true;
     }
 
-    #changeColor() {
-        // Change the current color
-        if (this.#currentColor == null) {
-            this.#currentColor = 'red';
-        }
-        else {
-            this.#currentColor = (this.#currentColor == 'red') ? 'blue' : 'red';
-        }
-
+    /**
+     * Updates the board's CSS custom properties to reflect the current color.
+     * 
+     * @private
+     * @returns {void}
+     */
+    #setColor() {
         // Define the color classes
         const colorVar = `var(--disc-${this.#currentColor})`;
         const colorLightVar = `var(--disc-${this.#currentColor}-light)`;
@@ -126,14 +171,37 @@ class Board {
         this.#$board.style.setProperty('--color-dark', colorDarkVar);
     }
 
-    #dispatchMoveEvent(move) {
-        const oldColor = (this.#currentColor == 'red') ? 'blue' : 'red';
+    /**
+     * Handles the current color between 'red' and 'blue', and updates the color
+     * using the `#setColor` method.
+     * 
+     * @private
+     * @returns {void}
+     */
+    #changeColor() {
+        // Change the color value and set the new color.
+        this.#currentColor = (this.#currentColor == 'red') ? 'blue' : 'red';
+        this.#setColor();
+    }
 
+    /**
+     * Dispatches a custom 'playEnd' event to the window object after a move is
+     * made.
+     *
+     * @private
+     * @param {[number, number]} move - The last move made in the game.
+     * @returns {void}
+     */
+    #dispatchMoveEvent(move) {
+        // Get the previous color that made the move
+        const prevColor = (this.#currentColor == 'red') ? 'blue' : 'red';
+
+        // Dispatch a custom event to indicate that the movement has ended
         window.dispatchEvent(new CustomEvent(
             'playEnd',
             {
                 detail: {
-                    color: oldColor,
+                    color: prevColor,
                     end: this.#isOver,
                     board: this.#game.board,
                     move,
@@ -142,8 +210,24 @@ class Board {
         ));
     }
 
+    /**
+     * Handles the visual and logical process of playing a disc in the specified
+     * column.
+     * - Checks if the column has available slots.
+     * - Animates the disc drop and plays a sound effect.
+     * - Updates the internal game state and board representation.
+     * - Handles end-of-move logic, including checking for game over, switching
+     * player color, and dispatching events.
+     * - Locks the board.
+     *
+     * @private
+     * @param {number} column - The index of the column where the disc is to be
+     * played.
+     * @returns {boolean} Returns true if the move was successful, false if the
+     * column is full.
+     */
     #showPlay(column) {
-        // Get the amount of discs and check there are empty slots in the column
+        // Check if there are empty slots in the current column
         const disc = this.#game.discs[column];
         if (disc >= this.#game.discsPerCol) return false;
 
@@ -156,7 +240,7 @@ class Board {
         $slot.classList.add('board__slot--active');
 
         // Update the board game with the value of the current color
-        this.#game.board[column][disc] = this.#gameValues[this.#currentColor];
+        this.#game.board[column][disc] = this.#boardValues[this.#currentColor];
 
         // Play the 'drop' sound after the corresponding animation delay
         setTimeout(() => {
@@ -169,12 +253,13 @@ class Board {
             // Remove the active class in the slot and add the corresponding
             $slot.classList.remove('board__slot--active');
             $slot.classList.add(`board__slot--${this.#currentColor}`);
+            void $slot.offsetWidth;  // Force the element reflow
 
             // Check if the game is over
             const move = [column, disc];
             this.#verifyEnd(move);
 
-            // Change the color and dispatch the play event
+            // Change the color and dispatch the move event
             this.#changeColor();
             this.#dispatchMoveEvent(move);
         }, { once: true });
@@ -185,36 +270,14 @@ class Board {
         return true;
     }
 
-    #moveFloatingDiscEvent() {
-        this.#$board.addEventListener('mousemove', (event) => {
-            if (this.#boardLock || this.#isOver) {
-                // Remove all the hover class in the column elements
-                const hoverElements = this.#$board.querySelectorAll('.board__column--hover');
-                hoverElements.forEach((element) => {
-                    element.classList.remove('board__column--hover');
-                });
-                return;
-            };
-
-            // Check if the clicked target is a column
-            let target = event.target;
-            if (!target.classList.contains('board__column')) {
-                // Check now the parent element
-                target = target.parentElement;
-                if (!target.classList.contains('board__column')) return;
-            }
-
-            // Add the hover class to the column
-            target.classList.add('board__column--hover');
-
-            // Change the 'left' property based on the column
-            const col = target.dataset.column;
-            const left = `calc(1rem + (0.5rem * ${col}) + (((100% - 5rem) / 7) * ${col}))`;
-
-            this.#$floatingDisc.style.left = left;
-        });
-    }
-
+    /**
+     * Handles click events on the game board.
+     * Listens for clicks on board columns and, if the game is not locked or
+     * over,triggers the display of the current play.
+     * 
+     * @private
+     * @returns {void}
+     */
     #boardClickEvent() {
         this.#$board.addEventListener('click', (event) => {
             // Check if a new move is allowed
@@ -236,57 +299,129 @@ class Board {
         });
     }
 
-    getRandomMove() {
-        if (this.#isOver) return [-1, -1];
+    /**
+     * Handles the mousemove event on the game board to update the position of
+     * the floating disc.
+     * 
+     * When the mouse moves over a valid column, highlights the column and
+     * repositions the floating disc to visually indicate where the next disc
+     * will be dropped.
+     * 
+     * Ignores the event if the board is locked or the game is over.
+     *
+     * @private
+     * @returns {void}
+     */
+    #moveFloatingDiscEvent() {
+        // Get the floating disc element
+        const floatingDisc = document.querySelector('.board__floating-disc');
 
-        const move = [];
-        while (move.length == 0) {
-            const column = Math.floor(Math.random() * this.#game.cols);
-            const slot = this.#game.discs[column];
+        // Set the 'mousemove' event on the board
+        this.#$board.addEventListener('mousemove', (event) => {
+            // Check if the board is locked or the game is over
+            if (this.#boardLock || this.#isOver) return;
 
-            if (slot < this.#game.discsPerCol) {
-                move.push(column, slot);
+            // Check if the clicked target is a column
+            let target = event.target;
+            if (!target.classList.contains('board__column')) {
+                // Check now the parent element
+                target = target.parentElement;
+                if (!target.classList.contains('board__column')) return;
             }
-        }
 
-        return move;
+            // Add the hover class to the column
+            target.classList.add('board__column--hover');
+
+            // Change the 'left' value of the disc based on the column number
+            const col = target.dataset.column;
+            const left = `calc(1rem + (0.5rem * ${col}) + (((100% - 5rem) / 7) * ${col}))`;
+
+            floatingDisc.style.left = left;
+        });
     }
 
+    /**
+     * Highlight all discs adjacent to the disc corresponding to the winning
+     * move. This method adds the 'board__slot--highlight' class to the winning
+     * discs.
+     *
+     * @param {[number, number]} move - The winning move.
+     * @returns {void}
+     */
+    highlightWiningMove(move) {
+        // Get all the positions of the maximum number of conections
+        const [col, slot] = move;
+        const value = this.#game.board[col][slot];
+        const { positions } = this.#getMaxNumberOfConnections(move, value);
+
+        // Highlight all the wining discs
+        positions.forEach((position) => {
+            // Get the column and slot in the position
+            const [posCol, posSlot] = position;
+
+            // Get the current slot according to the position
+            const $column = this.#$board.querySelector(`[data-column="${posCol}"]`);
+            const $slot = $column.querySelector(`[data-slot="${posSlot}"]`);
+
+            // Add the highlight class on the current slot
+            $slot.classList.add('board__slot--highlight');
+        });
+    }
+
+    /**
+     * Calculates and returns the best move for the given color.
+     * The method evaluates all possible moves, considering both the current
+     * player and the opponent, to determine the optimal column and row to place
+     * a disc. It prioritizes winning moves, blocks opponent's winning moves,
+     * and prefers moves closer to the center of the board.
+     *
+     * @param {string} color - The color of the player making the move ('red' or
+     * 'blue').
+     * @returns {number[]} The best move as an array [column, row], representing
+     * the position to place the disc.
+     */
     getBestMove(color) {
         const oppositeColor = {
-            red: this.#gameValues.blue,
-            blue: this.#gameValues.red
+            red: this.#boardValues.blue,
+            blue: this.#boardValues.red
         };
 
-        const colorValue = this.#gameValues[color];
+        // Get theh current color value and the opposite value
+        const colorValue = this.#boardValues[color];
         const oppositeColorValue = oppositeColor[color];
 
         // Define a function to get the bigger connection with one color
         const getBestPlay = (opponent = false) => {
+            // Define the color values depending on the 'opponent' value
             const colorVal = opponent ? oppositeColorValue : colorValue;
             const oppositeColorVal = opponent ? colorValue : oppositeColorValue;
-            let biggerValue = 0;
-            const connections = [];
+
+            // Set the variables to select the best move
+            const bestMoves = [];  // An array with the best moves
+            let biggerValue = 0;  // The bigger value after checking all discs
+
+            // Function to set the best move when the bigger value increase
             const setBestMove = (value, move) => {
                 biggerValue = value;
 
-                connections.length = 0;
-                connections.push({
+                bestMoves.length = 0;
+                bestMoves.push({
                     value: value,
                     position: move
                 });
             };
 
+            // Check all the columns to get the best moves
             for (let col = 0; col < this.#game.cols; col++) {
                 // Check if the current column has no empty slots
                 const disc = this.#game.discs[col];
                 if (disc >= this.#game.discsPerCol) continue;
 
-                // Get the current number of connections
+                // Get the number of connections in the current column
                 const move = [col, disc];
                 let value = this.#getMaxNumberOfConnections(
                     move, colorVal
-                ) + 1;  // Add the current disc
+                ).number + 1;  // Add the current disc
 
                 // Finish if the current value is lower
                 if (value < Math.floor(biggerValue)) continue;
@@ -315,28 +450,30 @@ class Board {
                 const nextColor = opponent ? colorVal : oppositeColorVal;
 
                 const nextValue = nextIsValid
-                        ? this.#getMaxNumberOfConnections(nextMove, nextColor) + 1
-                        : 1;
+                    ? this.#getMaxNumberOfConnections(nextMove, nextColor).number + 1
+                    : 1;
 
                 // Check if the opponent wins with the current move
                 if (nextValue >= 4) value = 0;  // The current play is bad
 
                 // Now check if the resulting value is bigger or equal
                 if (value > biggerValue) {
+                    // Reset the best move
                     setBestMove(value, move);
                 } else if (value == biggerValue) {
-                    connections.push({
+                    // Add the move to the best moves array
+                    bestMoves.push({
                         value: value,
                         position: move
                     });
                 }
             }
 
-            // Return one of the bigger connections selected randomly
-            return connections[Math.floor(Math.random() * connections.length)];
+            // Return one of the best moves selected randomly
+            return bestMoves[Math.floor(Math.random() * bestMoves.length)];
         };
 
-        // Check all the columns with the color to search a win
+        // Check if there is a winning play for the current color
         const bestPlay = getBestPlay();
         if (bestPlay.value >= 4) return bestPlay.position;
 
@@ -355,6 +492,37 @@ class Board {
         }
     }
 
+    /**
+     * Returns a random valid move for the current game state.
+     * If the game is over, returns [-1, -1].
+     *
+     * @returns {number[]} An array containing the column and row indices for a
+     * valid move, or [-1, -1] if no moves are possible.
+     */
+    getRandomMove() {
+        if (this.#isOver) return [-1, -1];
+
+        const move = [];
+        while (move.length == 0) {
+            const column = Math.floor(Math.random() * this.#game.cols);
+            const slot = this.#game.discs[column];
+
+            if (slot < this.#game.discsPerCol) {
+                move.push(column, slot);
+            }
+        }
+
+        return move;
+    }
+
+    /**
+     * Attempts to play a move in the game.
+     * 
+     * @param {[number, number]} move - An array containing the column index
+     * and slot index for the move.
+     * @returns {boolean} Returns false if the game is over or the move is
+     * invalid, otherwise returns the result of the move.
+     */
     play(move) {
         if (this.#isOver) return false;
 
@@ -366,16 +534,20 @@ class Board {
         return this.#showPlay(column);
     }
 
+    /**
+     * Initializes the board with all the events
+     * 
+     * @constructor
+     */
     constructor() {
         // Get DOM elements
-        this.#$floatingDisc = document.querySelector('.board__floating-disc');
         this.#$board = document.querySelector('#board');
 
         // Define the game attributes
         this.#sounds = {
             drop: new Audio('../sounds/drop.wav'),
         };
-        this.#gameValues = {
+        this.#boardValues = {
             empty: 0,
             red: 1,
             blue: 2
@@ -385,11 +557,11 @@ class Board {
                 .getPropertyValue('--animation-duration')
         ) / 2) - 5;  // The animation delay for each slot minus 5 ms.
         this.#isOver = false;
-        this.lock(); // The board is locked until execute 'play()'
+        this.lock(); // Lock the board
 
         /* Initialize the game. The board is defined according to the game
         values. The discs only hold the current number of discs per column. */
-        const e = this.#gameValues.empty;
+        const e = this.#boardValues.empty;
         this.#game = {
             board: [
                 [e, e, e, e, e, e],
@@ -400,12 +572,14 @@ class Board {
                 [e, e, e, e, e, e],
                 [e, e, e, e, e, e]
             ],
-            discs: [0, 0, 0, 0, 0, 0, 0],
-            cols: 7,
-            discsPerCol: 6,
+            discs: [0, 0, 0, 0, 0, 0, 0],  // The current number of discs in each column
+            cols: 7,  // The total number of columns
+            discsPerCol: 6,  // The maximum number of disc per column
         };
-        this.#currentColor = null;
-        this.#changeColor();
+
+        // Set the initial color
+        this.#currentColor = 'red';
+        this.#setColor();
 
         // Set the game events
         this.#moveFloatingDiscEvent();
@@ -423,10 +597,23 @@ class Game {
     #hostNumber;
     #hostColor;
 
+    /**
+     * Handles the robot's turn in the game based on the current player's color
+     * and game difficulty.
+     * - If it's the robot's turn, decides whether to make the best move or a
+     * random move according to the difficulty setting.
+     * - If it's the host's turn, unlocks the board for the next move.
+     *
+     * @private
+     * @param {Object} detail - The detail object containing information about the old move.
+     * @param {string} detail.color - The color of the player making the move.
+     * @returns {void}
+     */
     #robotGame(detail) {
+        // Get the color of the last move
         const { color } = detail;
 
-        // Check if the play was made by the host or the robot
+        // Check if the last play was made by the host or the robot
         if (this.#hostColor == color) {  // Host
             // Get the move according to the difficulty
             const isBestMove = Math.random() <= this.#gameData.
@@ -443,6 +630,14 @@ class Game {
         }
     }
 
+    /**
+     * Manages the flow of the game, including setup, managing different game
+     * modes, and responding to the end of each player's turn by detecting the
+     * "playEnd" event to process game progress or completion.
+     *
+     * @private
+     * @returns {void}
+     */
     #manageGame() {
         // Game preparation
         if (this.#hostNumber == 1) this.#board.unlock();
@@ -469,6 +664,8 @@ class Game {
 
             // Check if is the end
             if (end) {
+                // highlight the winning discs
+                this.#board.highlightWiningMove(detail.move);
                 console.log(detail.board);
                 return
             };
@@ -487,6 +684,12 @@ class Game {
         });
     }
 
+    /**
+     * Initializes and sets up player information for the game.
+     * 
+     * @private
+     * @returns {void}
+     */
     #getAndSetPlayers() {
         // Get both players with their names and images
         //--Player 1
@@ -614,25 +817,32 @@ class Game {
         }, 1200);
     }
 
+    /**
+     * Initializes and sets up game data based on the current game mode and URL
+     * parameters.
+     *
+     * @private
+     * @returns {void}
+     */
     #setGameData() {
         // Get the current game mode
         const path = window.location.pathname.replaceAll('/', '');
+
+        // Prepare general data
+        this.#gameData.oppositeColor = {
+            red: 'blue',
+            blue: 'red'
+        };
+        this.#gameData.precisionByDifficulty = {
+            easy: 0.2,
+            normal: 0.7,
+            hard: 1
+        };
 
         // Set the current mode and get the corresponding preparation
         switch (path) {
             case 'playofflinerobot':
                 this.#gameMode = this.#gameModes.robot;
-
-                // Set general information to the robot mode
-                this.#gameData.oppositeColor = {
-                    red: 'blue',
-                    blue: 'red'
-                };
-                this.#gameData.precisionByDifficulty = {
-                    easy: 0.2,
-                    normal: 0.7,
-                    hard: 1
-                };
 
                 // Get and set the difficulty in the game preparation
                 //--Get the difficulty in the params
@@ -663,7 +873,7 @@ class Game {
                 $difficultyName.innerText = this.#gameData.difficulty;
                 $difficultyName.setAttribute('data-translate', this.#gameData.difficulty);
                 window.dispatchEvent(new CustomEvent(
-                    'translateElement', { detail: { element: $difficultyName} }
+                    'translateElement', { detail: { element: $difficultyName } }
                 ));
 
                 //--Add the corresponding class to the difficulty

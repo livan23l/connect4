@@ -11,7 +11,8 @@ class Translator {
      * element's text content.
      *
      * @private
-     * @param {HTMLElement} element - The DOM element whose text should be translated.
+     * @param {HTMLElement} element - The DOM element whose text should be
+     * translated.
      * @throws {TypeError} If the provided element is not a valid HTMLElement.
      * @returns {void}
      */
@@ -119,7 +120,8 @@ class Translator {
      * @private
      * @returns {void}
      * @listens window#changeLanguage
-     * @param {CustomEvent} event - The custom event containing the language to switch to in event.detail.language.
+     * @param {CustomEvent} event - The custom event containing the language to
+     * switch to in event.detail.language.
      */
     #changeLanguageEvent() {
         window.addEventListener('changeLanguage', (event) => {

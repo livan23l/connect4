@@ -1,5 +1,7 @@
 <?php
 $title = 'Play vs robot';
+$styles = ['modal', 'effects'];
+$scripts = ['modal', 'effects'];
 require_once BASE . 'resources/components/header_game.php';
 ?>
 
@@ -60,7 +62,7 @@ require_once BASE . 'resources/components/header_game.php';
     </main>
 </main>
 
-<dialog id="modal-versus" class="versus modal" closedby="none">
+<dialog id="modal-versus" class="versus" closedby="none">
     <div class="versus__content">
         <img class="versus__logo" src="img/logo.webp" alt="Image of the app logo">
         <div class="versus__players">

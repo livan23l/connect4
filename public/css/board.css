@@ -2,16 +2,11 @@
     --board: #001B41;
     --board-boder: #0098EA;
     --board-slot: #000F23;
-    --disc-red: #A31400;
-    --disc-red-light: #FF1E00;
-    --disc-red-dark: #5D0B00;
-    --disc-blue: #004075;
-    --disc-blue-light: #1F9AFF;
-    --disc-blue-dark: #002442;
     --animation-duration: 70ms;
     --animation-delay: calc(var(--animation-duration) / 2);
 }
 
+/* Board styles */
 .board {
     --color: transparent;
     --color-light: transparent;
@@ -87,6 +82,7 @@
     background: radial-gradient(var(--color) 0%, var(--color-dark) 75%);
 }
 
+/*--Column styles--*/
 .board__column {
     flex: 1;
     height: 100%;
@@ -120,6 +116,7 @@
     opacity: 1;
 }
 
+/*--Slots and discs styles--*/
 .board__slot {
     flex: 1;
     aspect-ratio: 1;
@@ -133,6 +130,7 @@
     overflow: hidden;
 }
 
+/*--Discs--*/
 .board__slot::after {
     content: "";
     width: 100%;
@@ -166,6 +164,12 @@
 }
 
 /*--Slot animations--*/
+.board__slot--highlight::after {
+    border-color: white;
+    transform: rotateY(360deg);
+    transition: transform 0.5s ease-in-out, border-color 0.5s ease-in-out;
+}
+
 .board__slot--active::after {
     animation-name: disc-active;
     animation-duration: 300ms;

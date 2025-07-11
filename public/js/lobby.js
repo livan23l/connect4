@@ -5,8 +5,10 @@ class Lobby {
 
     /**
      * Attaches an event listener to the play mode options in the lobby.
-     * Handles user selection of different play modes (robot, local, friend, quick)
-     * and dispatches corresponding actions or events based on the selected mode.
+     * Handles user selection of different play modes (robot, local, friend,
+     * quick) and dispatches corresponding actions or events based on the
+     * selected mode.
+     * 
      * Prevents interaction if the selection is currently blocked.
      *
      * @private
@@ -93,7 +95,8 @@ class Lobby {
     }
 
     /**
-     * Highlights the active section in the header based on the current URL path.
+     * Highlights the active section in the header based on the current URL
+     * path.
      * 
      * @private
      * @returns {void}

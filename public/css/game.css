@@ -57,7 +57,7 @@
     border-radius: 10px;
     background-color: transparent;
     position: fixed;
-    z-index: 15;
+    z-index: 50;
     top: -15%;
     opacity: 1;
     user-select: none;
@@ -71,6 +71,7 @@
 
 .versus[open]::backdrop {
     background-color: #000000CC;
+    backdrop-filter: blur(5px);
     transition: background-color var(--transition-duration) ease-in-out;
 
     @starting-style {
