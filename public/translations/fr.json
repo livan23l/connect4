@@ -19,5 +19,45 @@
     "contact form": "formulaire de contact",
 
     "Contact": "Contact",
-    "Credits": "Crédits"
+    "Credits": "Crédits",
+
+
+
+    "Store": "Boutique",
+    "Access to unlock your profile": "Accès pour débloquer votre profil",
+
+    "Online modes": "Modes en ligne",
+    "Play vs friend (online)": "Jouer contre un ami (en ligne)",
+    "Quick match": "Partie rapide",
+
+    "Local modes": "Modes locaux",
+    "Play vs robot": "Jouer contre le robot",
+    "Two players (same device)": "Deux joueurs (même appareil)",
+
+    "Select the difficulty": "Sélectionnez la difficulté",
+    "Easy": "Facile",
+    "Normal": "Normal",
+    "Hard": "Difficile",
+
+
+
+    "Access to unlock the store": "Accès pour débloquer la boutique",
+
+
+
+    "Playing vs robot": "Partie contre le robot",
+    "Playing locally": "Partie locale",
+    "easy": "facile",
+    "normal": "normal",
+    "hard": "difficile",
+    "Anonymous": "Anonyme",
+    "Robot": "Robot",
+    "Red": "Rouge",
+    "Blue": "Bleu",
+    "Go back to the lobby": "Retour au salon",
+    "Game over": "Fin de la partie",
+    "Winner": "Gagnant",
+    "Draw": "Match nul",
+    "Restart": "Recommencer",
+    "Exit": "Quitter"
 }

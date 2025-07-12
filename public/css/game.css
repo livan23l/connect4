@@ -1,0 +1,470 @@
+@import url('./board.css');
+
+/* Winner and draw styles */
+/*--Winner styles--*/
+.winner {
+    width: 100%;
+    padding: 1.5rem 1.25rem 1.25rem;
+    box-shadow:
+        0 -3px 3px var(--text-blue),
+        3px -3px 3px var(--text-blue),
+        3px 0 3px var(--text-blue),
+        3px 3px 3px var(--text-blue-light),
+        0 3px 3px var(--text-blue-light),
+        -3px 3px 3px var(--text-blue-light),
+        -3px 0 3px var(--text-blue-light),
+        -3px -3px 3px var(--text-blue-light);
+    border-radius: 5px;
+    background:
+        radial-gradient(circle at top right, var(--text-blue) 0%, transparent 20%),
+        radial-gradient(circle at bottom left, var(--text-blue) 0%, transparent 45%);
+    position: relative;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-red-light);
+    gap: 0.5rem;
+}
+
+.winner::before,
+.winner::after {
+    content: "";
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    position: absolute;
+    translate: -50% -50%;
+    opacity: 0.75;
+}
+
+.winner::before {
+    /* Blue disc */
+    border: 2px solid var(--text-blue);
+    background-color: var(--secondary-blue);
+    animation: border-rotate-blue 3s linear infinite;
+}
+
+.winner::after {
+    /* Red disc */
+    border: 2px solid var(--text-red);
+    background-color: var(--secondary-red);
+    animation: border-rotate-red 3s linear infinite;
+}
+
+.winner__title {
+    padding: 1rem 0.75rem;
+    background-color: var(--primary-blue);
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 50%;
+    translate: -50% -50%;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.winner__image {
+    max-width: 3.5rem;
+    min-width: 0;
+    width: 100%;
+    border-radius: 50%;
+}
+
+.winner__name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/*--Draw styles--*/
+.draw {
+    font-size: 1.25rem;
+    color: var(--text-red-light);
+    text-align: center;
+}
+
+.winner--hidden,
+.draw--hidden {
+    display: none;
+    visibility: hidden;
+}
+
+/* Players styles */
+.player {
+    min-width: 6rem;
+    height: 4.5rem;
+    width: 90%;
+    padding: 0.5rem;
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.player--red {
+    background-color: var(--primary-red);
+    color: var(--text-red-light);
+}
+
+.player--blue {
+    background-color: var(--primary-blue);
+    color: var(--text-blue-light);
+}
+
+.player--red .player__image {
+    border-color: var(--text-red-light);
+}
+
+.player--blue .player__image {
+    border-color: var(--text-blue-light);
+}
+
+.player--selected.player--blue {
+    border: 1px solid var(--text-blue-light);
+}
+
+.player--selected.player--red {
+    border: 1px solid var(--text-red-light);
+}
+
+.player--selected::before,
+.player--selected::after {
+    content: "";
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    position: absolute;
+    translate: -50% -50%;
+    opacity: 0.75;
+}
+
+.player--selected::before {
+    /* Blue disc */
+    border: 2px solid var(--text-blue);
+    background-color: var(--secondary-blue);
+    animation: border-rotate-blue 3s linear infinite;
+}
+
+.player--selected::after {
+    /* Red disc */
+    border: 2px solid var(--text-red);
+    background-color: var(--secondary-red);
+    animation: border-rotate-red 3s linear infinite;
+}
+
+.player__image {
+    min-width: 0;
+    max-width: 3.5rem;
+    aspect-ratio: 1;
+    width: 35%;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 50%;
+}
+
+.player__name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Versus styles */
+.versus[open] {
+    --transition-duration: 0.5s;
+    max-width: 34rem;
+    width: 80%;
+    padding: 0;
+    border-style: none;
+    outline-style: none;
+    border-radius: 10px;
+    background-color: transparent;
+    position: fixed;
+    z-index: 50;
+    top: -15%;
+    opacity: 1;
+    user-select: none;
+    transition: opacity var(--transition-duration) ease-in-out, top var(--transition-duration) ease-in-out;
+
+    @starting-style {
+        top: 15%;
+        opacity: 0;
+    }
+}
+
+.versus[open]::backdrop {
+    background-color: #000000CC;
+    backdrop-filter: blur(5px);
+    transition: background-color var(--transition-duration) ease-in-out;
+
+    @starting-style {
+        background-color: transparent;
+    }
+}
+
+.versus--close {
+    animation: versus-fade-out 0.75s ease-in-out;
+}
+
+.versus__content {
+    width: 100%;
+    padding: 1rem 0.5rem;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    gap: 2rem;
+}
+
+.versus__logo {
+    max-width: 12rem;
+    min-width: 0;
+    aspect-ratio: 1;
+    width: 80%;
+}
+
+.versus__players {
+    width: 100%;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Difficulties styles */
+.difficulty {
+    --border-color: transparent;
+    aspect-ratio: 1;
+    max-width: 4rem;
+    width: 50%;
+    margin-inline: auto;
+    padding: 0.5rem;
+    border: 4px outset var(--border-color);
+    background-color: var(--secondary-blue);
+    border-radius: 5px;
+    position: relative;
+}
+
+.difficulty--easy {
+    --border-color: var(--text-blue);
+}
+
+.difficulty--normal {
+    --border-color: var(--text-red);
+}
+
+.difficulty--hard {
+    --border-color: var(--text-red-dark);
+}
+
+.difficulty__name {
+    padding: 0.5rem 0.75rem;
+    background-color: var(--secondary-blue);
+    border-radius: 5px;
+    border: 2px solid var(--border-color);
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    right: 0;
+    opacity: 0;
+    translate: 0 -50%;
+    text-transform: capitalize;
+    color: var(--text-red);
+    transition: opacity 0.3s ease-in-out, translate 0.3s ease-in-out;
+}
+
+.difficulty:hover > .difficulty__name {
+    translate: 100% -50%;
+    opacity: 1;
+}
+
+/* Game styles */
+.game {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+/*--Game aside styles--*/
+.game__aside {
+    padding: 1rem 0.5rem;
+    background:
+        radial-gradient(circle at left bottom, var(--secondary-blue) 0%, transparent 35%),
+        radial-gradient(circle at right top, var(--secondary-blue) 0%, var(--background-secondary) 15%);
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.aside__header,
+.aside__main {
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.aside__header {
+    display: none;
+    gap: 1rem;
+}
+
+.aside__title {
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.aside__main {
+    gap: 1.5rem;
+}
+
+.aside__players {
+    max-width: 36rem;
+    width: 100%;
+    height: 11.65rem;
+    margin-inline: auto;
+    padding: 0;
+    position: relative;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    transition: top 0.35s ease-out, scale 0.45s ease-in;
+}
+
+.aside__players--hidden {
+    scale: 0;
+    top: -75%;
+}
+
+.aside__vs {
+    font-weight: bold;
+    color: var(--text-blue);
+    text-transform: uppercase;
+}
+
+.aside__options {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    transition: opacity 0.75s ease-in-out 0.5s;
+}
+
+.aside__options--hidden {
+    opacity: 0;
+}
+
+.aside__option {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--text-blue);
+    border-radius: 5px;
+    position: relative;
+    z-index: 10;
+    font-size: 1.1rem;
+    color: var(--text-blue);
+    text-decoration: none;
+    overflow: hidden;
+    transition: scale 0.2s ease-in-out;
+}
+
+.aside__option::before {
+    content: "";
+    background-color: var(--primary-blue);
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.aside__option:hover {
+    scale: 0.97;
+}
+
+.aside__option:hover::before {
+    opacity: 0.6;
+}
+
+/*--Game main styles--*/
+.game__main {
+    min-height: 65vh;
+    padding: 3.2rem 0.5rem 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+/* Animations */
+@keyframes versus-fade-out {
+    from {
+        scale: 1;
+        opacity: 1;
+    }
+
+    to {
+        scale: 1.5;
+        opacity: 0;
+    }
+}
+
+/* Media queries */
+/* var(--small-screen) */
+@media (min-width: 22rem) {
+    .winner {
+        flex-flow: row nowrap;
+    }
+
+    .player {
+        width: 50%;
+    }
+
+    .aside__players {
+        height: 6.5rem;
+        padding: 1rem 0.5rem;
+        flex-direction: row;
+    }
+
+    .aside__main {
+        gap: 1rem;
+    }
+}
+
+/* var(--smartphone-screen) */
+@media (min-width: 28rem) {
+    .game__main {
+        padding: 5rem 0.5rem 1.5rem;
+    }
+}
+
+/* var(--medium-screen) */
+@media (min-width: 42rem) {
+    .versus__players {
+        min-height: 0;
+        display: flex;
+        flex-direction: row;
+    }
+}
+
+/* var(--large-screen) */
+@media (min-width: 66rem) {
+    .game {
+        flex-flow: row nowrap;
+    }
+
+    .game__aside {
+        flex: 1;
+        padding: 1rem;
+        gap: 2rem;
+    }
+
+    .aside__header {
+        display: flex;
+    }
+
+    .game__main {
+        flex: 2;
+    }
+}

@@ -5,6 +5,65 @@ class Translator {
     #translations;
 
     /**
+     * Translates the text content of a given DOM element based on its
+     * `data-translate` attribute.
+     * If a translation exists in the internal translations map, it updates the
+     * element's text content.
+     *
+     * @private
+     * @param {HTMLElement} element - The DOM element whose text should be
+     * translated.
+     * @throws {TypeError} If the provided element is not a valid HTMLElement.
+     * @returns {void}
+     */
+    #translateElement(element) {
+        // Get the text to be translated
+        const text = element.dataset.translate;
+
+        // Verify the text can be translated
+        if (text in this.#translations) {
+            // Get and set the translation
+            const translation = this.#translations[text];
+            element.textContent = translation;
+        }
+    }
+
+    /**
+     * Listens to the 'translateElement' event and translates the element based
+     * on the id passed in the event detail.
+     * This method works when dynamically adding text with JS that wasn't
+     * originally translated when this class was instantiated.
+     * 
+     * @private
+     * @returns {void}
+     */
+    #translateElementEvent() {
+        window.addEventListener('translateElement', (event) => {
+            // Get the element from the detail and translate
+            const element = event.detail.element;
+
+            // Attempt to translate the element a maximum of five times
+            const retryDelay = 100;
+            let attemptsNumber = 5;
+            const tryAgain = () => {
+                if (attemptsNumber == 0) return;
+
+                // Check the translations map
+                if (this.#translations) {
+                    this.#translateElement(element);
+                    return;
+                }
+
+                attemptsNumber--;
+                setTimeout(tryAgain, retryDelay);
+            };
+
+            // Start the first attempt
+            tryAgain();
+        });
+    }
+
+    /**
      * Translate to the current language all translatable elements on the page.
      * If translations have not been loaded, the method exits early.
      * 
@@ -15,17 +74,8 @@ class Translator {
         // Check that the translations have been loaded correctly
         if (typeof this.#translations == undefined) return;
 
-        this.#$translatables.forEach((element) => {
-            // Get the text to be translated
-            const text = element.dataset.translate;
-
-            // Verify the text can be translated
-            if (text in this.#translations) {
-                // Get and set the translation
-                const translation = this.#translations[text];
-                element.textContent = translation;
-            }
-        });
+        // Translate each element
+        this.#$translatables.forEach((el) => { this.#translateElement(el) });
     }
 
     /**
@@ -70,7 +120,8 @@ class Translator {
      * @private
      * @returns {void}
      * @listens window#changeLanguage
-     * @param {CustomEvent} event - The custom event containing the language to switch to in event.detail.language.
+     * @param {CustomEvent} event - The custom event containing the language to
+     * switch to in event.detail.language.
      */
     #changeLanguageEvent() {
         window.addEventListener('changeLanguage', (event) => {
@@ -114,8 +165,9 @@ class Translator {
         // Load the translation file and translate the translatables elements
         this.#loadAndTranslate(this.#language);
 
-        // Prepare the global event to change the language
+        // Prepare the global events
         this.#changeLanguageEvent();
+        this.#translateElementEvent();
     }
 }
 

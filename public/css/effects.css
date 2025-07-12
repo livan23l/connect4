@@ -1,0 +1,48 @@
+.effect__disc {
+    aspect-ratio: 1;
+    border-width: 1px;
+    border-style: outset;
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    z-index: 20;
+    translate: -50% -100%;
+}
+
+.effect__disc--red {
+    border-color: var(--disc-red-light);
+    background: radial-gradient(var(--disc-red) 0%, var(--disc-red-dark) 75%);
+}
+
+.effect__disc--blue {
+    border-color: var(--disc-blue-light);
+    background: radial-gradient(var(--disc-blue) 0%, var(--disc-blue-dark) 75%);
+}
+
+/* Animations */
+@keyframes effect-bounce {
+  0% {
+    top: 0;
+  }
+
+  80% {
+    top: 100%;
+  }
+
+  90% {
+    top: 80%;
+  }
+
+  100% {
+    top: 100%;
+  }
+}
+
+
+/* Media queries */
+/* var(--small-screen) */
+@media (min-width: 22rem) {
+    .effect__disc {
+        border-width: 2px;
+    }
+}

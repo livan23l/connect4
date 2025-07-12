@@ -1,0 +1,115 @@
+/* Play a game styles */
+.play {
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 3.5rem;
+}
+
+.play__modes {
+    max-width: fit-content;
+    width: 85%;
+    padding: 2rem 1rem 1rem;
+    border: 1px solid var(--text-blue);
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.play__modes::before,
+.play__modes::after {
+    content: "";
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    position: absolute;
+    translate: -50% -50%;
+    opacity: 0;
+}
+
+.play__modes::before {
+    /* Blue disc */
+    border: 2px solid var(--text-blue);
+    background-color: var(--secondary-blue);
+}
+
+.play__modes::after {
+    /* Red disc */
+    border: 2px solid var(--text-red);
+    background-color: var(--secondary-red);
+}
+
+.play__modes:hover::before {
+    opacity: 0.75;
+    animation: border-rotate-blue 3s linear infinite;
+}
+
+.play__modes:hover::after {
+    opacity: 0.75;
+    animation: border-rotate-red 3s linear infinite;
+}
+
+.play__title {
+    width: fit-content;
+    padding: 1rem;
+    background-color: var(--background-primary);
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 50%;
+    translate: -50% -50%;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    font-size: 1rem;
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+.play__option {
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--text-blue);
+    border-radius: 7px;
+    position: relative;
+    background-color: transparent;
+    font-size: 0.75rem;
+    color: var(--text-blue);
+    text-transform: capitalize;
+    text-decoration: none;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.play__option::before {
+    content: "";
+    background-color: var(--primary-blue);
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.play__option:hover::before {
+    opacity: 0.6;
+}
+
+/* Media queries */
+/* var(--small-screen) */
+@media (min-width: 22rem) {
+    .play__modes {
+        padding: 2.5rem 3.5rem 2rem;
+    }
+
+    .play__title {
+        font-size: 1.5rem;
+    }
+
+    .play__option {
+        font-size: 1rem;
+    }
+}
