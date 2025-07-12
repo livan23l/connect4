@@ -46,10 +46,18 @@
 
 
     "Playing vs robot": "Partie contre le robot",
+    "Playing locally": "Partie locale",
     "easy": "facile",
     "normal": "normal",
     "hard": "difficile",
     "Anonymous": "Anonyme",
     "Robot": "Robot",
-    "Go back to the lobby": "Retour au salon"
+    "Red": "Rouge",
+    "Blue": "Bleu",
+    "Go back to the lobby": "Retour au salon",
+    "Game over": "Fin de la partie",
+    "Winner": "Gagnant",
+    "Draw": "Match nul",
+    "Restart": "Recommencer",
+    "Exit": "Quitter"
 }

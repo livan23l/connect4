@@ -46,10 +46,18 @@
 
 
     "Playing vs robot": "Partida contra el robot",
+    "Playing locally": "Partida local",
     "easy": "fácil",
     "normal": "normal",
     "hard": "difícil",
     "Anonymous": "Anónimo",
     "Robot": "Robot",
-    "Go back to the lobby": "Volver al menú principal"
+    "Red": "Rojo",
+    "Blue": "Azul",
+    "Go back to the lobby": "Volver al menú principal",
+    "Game over": "Fin del juego",
+    "Winner": "Ganador",
+    "Draw": "Empate",
+    "Restart": "Reiniciar",
+    "Exit": "Salir"
 }

@@ -12,13 +12,13 @@ require_once BASE . 'resources/components/header_game.php';
         $players = [
             [
                 'image' => 'red-disc',
-                'name' => 'Red player',
-                'translate' => 'Red player'
+                'name' => 'Red',
+                'translate' => 'Red'
             ],
             [
                 'image' => 'blue-disc',
-                'name' => 'Blue player',
-                'translate' => 'Blue player'
+                'name' => 'Blue',
+                'translate' => 'Blue'
             ]
         ];
         require_once BASE . 'resources/components/game_aside.php';

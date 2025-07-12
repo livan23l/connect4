@@ -46,10 +46,18 @@
 
 
     "Playing vs robot": "",
+    "Playing locally": "",
     "easy": "",
     "normal": "",
     "hard": "",
     "Anonymous": "",
     "Robot": "",
-    "Go back to the lobby": ""
+    "Red": "",
+    "Blue": "",
+    "Go back to the lobby": "",
+    "Game over": "",
+    "Winner": "",
+    "Draw": "",
+    "Restart": "",
+    "Exit": ""
 }
