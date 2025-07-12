@@ -11,7 +11,7 @@
     </dialog>
 
     <!-- Game end modal -->
-     <dialog id="modal-game-end" class="modal modal--backdrop-useless" closedby="none">
+    <dialog id="modal-game-end" class="modal modal--backdrop-useless" closedby="none">
         <div class="modal__content modal__content--separate">
             <h3 class="modal__title" data-translate="Game over">Game over</h3>
 

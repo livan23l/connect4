@@ -20,7 +20,7 @@
 
 <header class="aside__header">
     <h1 class="aside__title" data-translate="<?= $aside_title ?>"><?= $aside_title ?></h1>
-    
+
     <?php if (isset($aside_difficulty)): ?>
         <div id="difficulty" class="difficulty">
             <p id="difficulty-name" class="difficulty__name"></p>
