@@ -15,8 +15,8 @@ require_once BASE . 'resources/components/header_lobby.php';
             </svg>
             <span data-translate="Online modes">Online modes</span>
         </h2>
-        <button data-mode="2" class="play__option" data-translate="Play vs friend (online)">Play vs friend (online)</button>
-        <button data-mode="3" class="play__option" data-translate="Quick match">Quick match</button>
+        <button data-mode="2" class="play__option" data-translate="Quick match">Quick match</button>
+        <button data-mode="3" class="play__option" data-translate="Play vs friend (online)">Play vs friend (online)</button>
     </div>
 
     <!-- Local modes -->
@@ -29,12 +29,12 @@ require_once BASE . 'resources/components/header_lobby.php';
         </h2>
 
         <button data-mode="0" class="play__option" data-translate="Play vs robot">Play vs robot</button>
-        <button data-mode="1" class="play__option" data-translate="Two players (same device)">Two players (same device)</button>
+        <a href="play/offline/local" data-mode="1" class="play__option" data-translate="Two players (same device)">Two players (same device)</a>
     </div>
 </div>
 
 <dialog id="modal-robot" class="modal">
-    <div class="modal__content">
+    <div class="modal__content modal__content--separate">
         <h3 class="modal__title" data-translate="Select the difficulty">Select the difficulty</h3>
 
         <div class="modal__options">

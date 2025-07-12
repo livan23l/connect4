@@ -1,4 +1,16 @@
 class Modal {
+    #makeAction(element) {
+        if (!element) return;
+
+        const action = element.dataset.action;
+
+        switch (action) {
+            case 'reload':
+                location.reload();
+                break;
+        }
+    }
+
     /**
      * Sets up an event listener for the custom 'showModal' event.
      * - Retrieves the modal element by its ID from the event details.
@@ -16,6 +28,8 @@ class Modal {
         window.addEventListener('showModal', (event) => {
             // Get the modal id
             const id = event.detail.id;
+            const escClose = event.detail.escClose ?? true;
+            const backdropClose = event.detail.backdropClose ?? true;
 
             // Get the current modal
             const $modal = document.querySelector(`#${id}`);
@@ -27,17 +41,36 @@ class Modal {
             // Shows the modal
             $modal.showModal();
 
-            const handleVisibility = (event) => {
-                // Check if the target is the backdrop or a close modal element
-                const target = event.target;
-                if (target != $modal && !target.hasAttribute('data-close-modal')) return;
+            // Check if the close by pressing 'esc' is canceled
+            if (!escClose) {
+                const cancelFunction = (event) => {
+                    event.preventDefault();
+                }
+                $modal.addEventListener('cancel', cancelFunction);
+            }
 
-                // Show the page scroll
+            const handleVisibility = (event) => {
+                // Get the clicked target
+                const target = event.target;
+
+                // Make the action of the target
+                this.#makeAction(target.closest('[data-action]'));
+
+                // Close modal validations
+                //--Check if the target is the backdrop or a close modal element
+                if (target != $modal && !target.hasAttribute('data-close-modal')) return;
+                //--Check the backdrop validation
+                if (target == $modal && !backdropClose) return;
+
+                // Close the modal and show the page scroll
+                $modal.close();
                 document.documentElement.style.overflowY = 'auto';
 
-                // Close the modal and remove the listener
-                $modal.close();
+                // Remove the listeners
                 $modal.removeEventListener('pointerdown', handleVisibility);
+                if (!escClose) {
+                    $modal.removeEventListener('cancel', cancelFunction);
+                }
             }
 
             // Add the pointerdown event to the modal

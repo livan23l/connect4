@@ -1,13 +1,14 @@
 /* Modal and backdrop styles */
 .modal {
     --transition-duration: 0.4s;
+    max-width: min(70dvw, 24rem);
     width: fit-content;
     padding: 0;
     border: 1px solid var(--text-blue);
     border-radius: 10px;
     background-color: var(--primary-blue);
     position: fixed;
-    top: 15%;
+    top: 35%;
     z-index: 50;
     opacity: 0;
     visibility: hidden;
@@ -18,6 +19,7 @@
 }
 
 .modal::backdrop {
+    cursor: alias;
     background-color: transparent;
     transition: background-color var(--transition-duration) ease-in-out,
         backdrop-filter var(--transition-duration) allow-discrete,
@@ -30,7 +32,7 @@
     visibility: visible;
 
     @starting-style {
-        top: 15%;
+        top: 35%;
         opacity: 0;
     }
 }
@@ -38,7 +40,6 @@
 .modal[open]::backdrop {
     background-color: #00000080;
     backdrop-filter: blur(5px);
-    cursor: alias;
 
     @starting-style {
         background-color: transparent;
@@ -46,13 +47,21 @@
     }
 }
 
+.modal--backdrop-useless::backdrop {
+    cursor: default;
+}
+
 .modal__content {
     padding: 1rem;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
-    gap: 2rem;
+    gap: 1rem;
     color: var(--text-blue-light);
+}
+
+.modal__content--separate {
+    gap: 2rem;
 }
 
 /* Modal elemetns styles */
@@ -72,10 +81,17 @@
     gap: 2rem 1rem;
 }
 
+.modal__options--vertical {
+    flex-flow: column nowrap;
+    gap: 1rem;
+}
+
+.modal__option,
 .modal__tooltip {
     padding: 0.75rem 1rem;
     border: 1px solid var(--text-blue);
     border-radius: 10px;
+    background-color: transparent;
     position: relative;
     z-index: 10;
     display: flex;
@@ -83,14 +99,18 @@
     align-items: center;
     gap: 0.5rem;
     color: var(--text-blue-light);
+    font-size: 1rem;
     text-decoration: none;
+    cursor: pointer;
     transition: scale 0.2s ease-in-out;
 }
 
+.modal__option:hover,
 .modal__tooltip:hover {
     scale: 0.97;
 }
 
+.modal__option::before,
 .modal__tooltip::before {
     content: "";
     border-radius: 10px;
@@ -101,6 +121,7 @@
     transition: opacity 0.2s ease-in-out;
 }
 
+.modal__option:hover::before,
 .modal__tooltip:hover::before {
     opacity: 0.4;
 }
@@ -111,6 +132,8 @@
     left: 50%;
     opacity: 0;
     translate: -50% 0;
+    font-size: 1rem;
+    font-weight: normal;
     transition: opacity 0.3s ease-in-out, translate 0.3s ease-in-out;
 }
 

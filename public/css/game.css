@@ -1,5 +1,94 @@
 @import url('./board.css');
 
+/* Winner and draw styles */
+/*--Winner styles--*/
+.winner {
+    width: 100%;
+    padding: 1.5rem 1.25rem 1.25rem;
+    box-shadow:
+        0 -3px 3px var(--text-blue),
+        3px -3px 3px var(--text-blue),
+        3px 0 3px var(--text-blue),
+        3px 3px 3px var(--text-blue-light),
+        0 3px 3px var(--text-blue-light),
+        -3px 3px 3px var(--text-blue-light),
+        -3px 0 3px var(--text-blue-light),
+        -3px -3px 3px var(--text-blue-light);
+    border-radius: 5px;
+    background:
+        radial-gradient(circle at top right, var(--text-blue) 0%, transparent 20%),
+        radial-gradient(circle at bottom left, var(--text-blue) 0%, transparent 45%);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-red-light);
+    gap: 0.5rem;
+}
+
+.winner::before,
+.winner::after {
+    content: "";
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    position: absolute;
+    translate: -50% -50%;
+    opacity: 0.75;
+}
+
+.winner::before {
+    /* Blue disc */
+    border: 2px solid var(--text-blue);
+    background-color: var(--secondary-blue);
+    animation: border-rotate-blue 3s linear infinite;
+}
+
+.winner::after {
+    /* Red disc */
+    border: 2px solid var(--text-red);
+    background-color: var(--secondary-red);
+    animation: border-rotate-red 3s linear infinite;
+}
+
+.winner__title {
+    padding: 1rem 0.75rem;
+    background-color: var(--primary-blue);
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 50%;
+    translate: -50% -50%;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.winner__image {
+    max-width: 3.5rem;
+    min-width: 0;
+    width: 100%;
+    border-radius: 50%;
+}
+
+.winner__name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/*--Draw styles--*/
+.draw {
+    font-size: 1.25rem;
+    color: var(--text-red-light);
+    text-align: center;
+}
+
+.winner--hidden,
+.draw--hidden {
+    display: none;
+    visibility: hidden;
+}
+
 /* Players styles */
 .player {
     min-width: 6rem;

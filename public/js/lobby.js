@@ -33,16 +33,13 @@ class Lobby {
                         'showModal', { detail: { id: 'modal-robot' } }
                     ));
                     break;
-                case this.#playModes.local:
-                    console.log("Current mode: local");
+                case this.#playModes.quick:
+                    // this.#block = true;
+                    console.log("Current mode: quick");
                     break;
                 case this.#playModes.friend:
                     // Block the game selection
                     console.log("Current mode: friend");
-                    break;
-                case this.#playModes.quick:
-                    // this.#block = true;
-                    console.log("Current mode: quick");
                     break;
             }
         });
@@ -122,8 +119,8 @@ class Lobby {
         this.#playModes = {
             robot: 0,
             local: 1,
-            friend: 2,
-            quick: 3,
+            quick: 2,
+            friend: 3,
         };
         this.#block = false;
 

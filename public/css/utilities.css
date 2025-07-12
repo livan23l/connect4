@@ -9,6 +9,16 @@
     max-height: 2rem;
 }
 
+.icon--xs {
+    max-width: 1.5rem;
+    max-height: 1.5rem;
+}
+
+.icon--2xs {
+    max-width: 1.25rem;
+    max-height: 1.25rem;
+}
+
 .icon--min-xs {
     min-width: 1.5rem;
     min-height: 1.5rem;

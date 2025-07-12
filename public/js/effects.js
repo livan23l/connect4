@@ -33,7 +33,7 @@ class EMaths {
 class Effect {
     #discs;
     #amountOfDiscs;
-    #animationEnd
+    #animationEnd;
 
     #resetDisc(disc) {
         // Change the style values
@@ -85,11 +85,13 @@ class Effect {
     }
 
     #rainAnimation() {
-        // Animation properties
-        const acceleration = 0.9;
-        const deceleration = 0.9;
+        // Generate the discs
+        this.#generateDiscs();
 
         // Define the animation function
+        //--Animation properties
+        const acceleration = 0.9;
+        const deceleration = 0.9;
         const animation = () => {
             // Check if the animation ends
             if (this.#animationEnd) return;
@@ -175,9 +177,6 @@ class Effect {
         this.#discs = [];
         this.#amountOfDiscs = 15;
         this.#animationEnd = false;
-
-        // Generate the discs
-        this.#generateDiscs();
 
         // Set the effects events
         this.#startEffectEvent();

@@ -5,7 +5,7 @@ class Board {
     #boardValues;
     #sounds;
     #currentColor;
-    #isOver;
+    #gameOver;
     #boardLock;
 
     /**
@@ -140,7 +140,8 @@ class Board {
 
         // Four or more means the game is over
         if (connections >= 4) {
-            this.#isOver = true;
+            this.#gameOver.isOver = true;
+            this.#gameOver.winner = this.#currentColor;
             return;
         }
 
@@ -150,7 +151,7 @@ class Board {
             if (discs < this.#game.discsPerCol) return;
         }
 
-        this.#isOver = true;
+        this.#gameOver.isOver = true;
     }
 
     /**
@@ -202,7 +203,7 @@ class Board {
             {
                 detail: {
                     color: prevColor,
-                    end: this.#isOver,
+                    gameOver: this.#gameOver,
                     board: this.#game.board,
                     move,
                 }
@@ -281,7 +282,7 @@ class Board {
     #boardClickEvent() {
         this.#$board.addEventListener('click', (event) => {
             // Check if a new move is allowed
-            if (this.#boardLock || this.#isOver) return;
+            if (this.#boardLock || this.#gameOver.isOver) return;
 
             // Get the clicked element
             let target = event.target;
@@ -319,7 +320,7 @@ class Board {
         // Set the 'mousemove' event on the board
         this.#$board.addEventListener('mousemove', (event) => {
             // Check if the board is locked or the game is over
-            if (this.#boardLock || this.#isOver) return;
+            if (this.#boardLock || this.#gameOver.isOver) return;
 
             // Check if the clicked target is a column
             let target = event.target;
@@ -500,7 +501,7 @@ class Board {
      * valid move, or [-1, -1] if no moves are possible.
      */
     getRandomMove() {
-        if (this.#isOver) return [-1, -1];
+        if (this.#gameOver.isOver) return [-1, -1];
 
         const move = [];
         while (move.length == 0) {
@@ -524,7 +525,7 @@ class Board {
      * invalid, otherwise returns the result of the move.
      */
     play(move) {
-        if (this.#isOver) return false;
+        if (this.#gameOver.isOver) return false;
 
         // Check if is a valid move
         const [column, slot] = move;
@@ -556,7 +557,10 @@ class Board {
             getComputedStyle(document.documentElement)
                 .getPropertyValue('--animation-duration')
         ) / 2) - 5;  // The animation delay for each slot minus 5 ms.
-        this.#isOver = false;
+        this.#gameOver = {
+            isOver: false,
+            winner: null,
+        };
         this.lock(); // Lock the board
 
         /* Initialize the game. The board is defined according to the game
@@ -598,6 +602,16 @@ class Game {
     #hostColor;
 
     /**
+     * Manages local game logic, simply unlocking the board after each move.
+     *
+     * @private
+     * @returns {void}
+     */
+    #localGame() {
+        this.#board.unlock();
+    }
+
+    /**
      * Handles the robot's turn in the game based on the current player's color
      * and game difficulty.
      * - If it's the robot's turn, decides whether to make the best move or a
@@ -605,7 +619,8 @@ class Game {
      * - If it's the host's turn, unlocks the board for the next move.
      *
      * @private
-     * @param {Object} detail - The detail object containing information about the old move.
+     * @param {Object} detail - The detail object containing information about
+     * the old move.
      * @param {string} detail.color - The color of the player making the move.
      * @returns {void}
      */
@@ -631,14 +646,94 @@ class Game {
     }
 
     /**
-     * Manages the flow of the game, including setup, managing different game
-     * modes, and responding to the end of each player's turn by detecting the
-     * "playEnd" event to process game progress or completion.
+     * Manages the end of the game, showing the winner if there is one,
+     * otherwise it only shows that the game ends in a draw.
      *
+     * @private
+     * @param {Object} detail - The detail object containing information about
+     * the old move.
+     * @param {[number, number]} detail.move - The last move made containing the
+     * column index and the slot index.
+     * @param {string} detail.color - The color of the player that made the last
+     * move ('blue' or 'red').
+     * @param {Object} detail.gameOver - One object with the endgame data.
+     * @param {string|null} detail.gameOver.winner - The winner of the game, it
+     * will be 'blue', 'red' or null if the game end with a draw.
+     * @returns {void}
+     */
+    #manageGameEnd(detail) {
+        // Check if there is a winner
+        const winner = detail.gameOver.winner;
+        if (winner) {
+            // highlight the winning discs and play the discs sound
+            this.#board.highlightWiningMove(detail.move);
+            this.#sounds.discs.play();
+        }
+
+        // Get the current end element ('winner' or 'draw') and make it visible
+        const endElementId = (winner) ? 'winner' : 'draw';
+        const $endElement = document.querySelector(`#${endElementId}`);
+        $endElement.classList.remove(`${endElementId}--hidden`);
+
+        // Set a flag that will define if the host won
+        let hostWon = false;
+
+        // Set the winner's image and name if applicable
+        if (endElementId == 'winner') {
+            // Get the image and name elements
+            const $image = $endElement.querySelector('.winner__image');
+            const $name = $endElement.querySelector('.winner__name');
+
+            // Get if the host won
+            hostWon = (this.#hostColor == detail.color);
+
+            // Get the winner's image and name
+            const $winnerImage = (hostWon)
+                ? this.#players[this.#hostNumber - 1].image
+                : this.#players[
+                    this.#gameData.oppositeNumber[this.#hostNumber] - 1
+                ].image;
+            const $winnerName = (hostWon)
+                ? this.#players[this.#hostNumber - 1].name
+                : this.#players[
+                    this.#gameData.oppositeNumber[this.#hostNumber] - 1
+                ].name;
+
+            // Set the image and name
+            $image.src = $winnerImage.src;
+            $name.innerText = $winnerName.innerText;
+        }
+
+        // Show the game end
+        const delay = (endElementId == 'winner') ? 1000 : 250;
+        setTimeout(() => {
+            // Show the rain effect if the host won or is playing the local mode
+            if (winner && (hostWon || this.#gameMode == this.#gameModes.local)) {
+                window.dispatchEvent(new CustomEvent('effectStart'));
+            }
+
+            // Show the end game modal
+            window.dispatchEvent(new CustomEvent(
+                'showModal', {
+                detail: {
+                    id: 'modal-game-end',
+                    escClose: false,
+                    backdropClose: false,
+                }
+            }));
+        }, delay);
+
+        console.log(detail.board);
+        return;
+    }
+
+    /**
+     * Manages the game setup depending on the `this.#hostNumber` attribute.
+     * 
      * @private
      * @returns {void}
      */
-    #manageGame() {
+    #manageGameStart() {
         // Game preparation
         if (this.#hostNumber == 1) this.#board.unlock();
 
@@ -649,36 +744,51 @@ class Game {
                     this.#board.play(this.#board.getRandomMove());
                 }
                 break;
-            case this.#gameModes.robot:
+            case this.#gameModes.local:
+                // Unlock the board
+                this.#board.unlock();
                 break;
-            case this.#gameModes.robot:
+            case this.#gameModes.quick:
                 break;
-            case this.#gameModes.robot:
+            case this.#gameModes.friend:
                 break;
         }
+    }
+
+    /**
+     * Manages the flow of the game, including setup, managing different game
+     * modes, and responding to the end of each player's turn by detecting the
+     * "playEnd" event to process game progress or completion.
+     *
+     * @private
+     * @returns {void}
+     */
+    #manageGame() {
+        // Prepare the game
+        this.#manageGameStart();
 
         // The event when each player ends his play
         window.addEventListener('playEnd', (event) => {
             const detail = event.detail;
-            const { end } = detail;
+            const { gameOver } = detail;
 
             // Check if is the end
-            if (end) {
-                // highlight the winning discs
-                this.#board.highlightWiningMove(detail.move);
-                console.log(detail.board);
-                return
+            if (gameOver.isOver) {
+                this.#manageGameEnd(detail);
+                return;
             };
 
+            // Manage the game with the corresponding method
             switch (this.#gameMode) {
                 case this.#gameModes.robot:
                     this.#robotGame(detail);
                     break;
-                case this.#gameModes.robot:
+                case this.#gameModes.local:
+                    this.#localGame();
                     break;
-                case this.#gameModes.robot:
+                case this.#gameModes.quick:
                     break;
-                case this.#gameModes.robot:
+                case this.#gameModes.friend:
                     break;
             }
         });
@@ -705,36 +815,32 @@ class Game {
         const $game = document.querySelector('#game');
         this.#hostNumber = Number($game.dataset.hostNumber);
 
-        // Check if it's an offline mode to change or correct the names
-        switch (this.#gameMode) {
-            case this.#gameModes.robot:
-                // Randomly select whether the robot will be player 1 or 2
-                const robot = Math.floor(Math.random() * 2) + 1;
+        // Check if it's the robot mode
+        if (this.#gameMode == this.#gameModes.robot) {
+            // Randomly select whether the robot will be player 1 or 2
+            const robot = Math.floor(Math.random() * 2) + 1;
 
-                // Check if the robot is player 1 and change the data
-                if (robot == 1) {
-                    // Images
-                    $player2Image.src = $player1Image.src;
-                    if ($player1Name.innerText == '_Anonymous') {
-                        $player2Image.src = 'img/profile/blue-disc.webp';
-                    }
-                    $player1Image.src = 'img/profile/red-robot.webp';
-
-                    // Names
-                    $player2Name.innerText = $player1Name.innerText;
-                    $player1Name.innerText = 'Robot';
-
-                    // Translations
-                    const translateTemporal = $player1Name.dataset.translate;
-                    $player1Name.dataset.translate = $player2Name.dataset.translate;
-                    $player2Name.dataset.translate = translateTemporal;
-
-                    // Change the host number
-                    this.#hostNumber = 2;
+            // Check if the robot is player 1 and change the data
+            if (robot == 1) {
+                // Images
+                $player2Image.src = $player1Image.src;
+                if ($player1Name.innerText == '_Anonymous') {
+                    $player2Image.src = 'img/profile/blue-disc.webp';
                 }
-                break;
-            case this.#gameModes.local:
-                break;
+                $player1Image.src = 'img/profile/red-robot.webp';
+
+                // Names
+                $player2Name.innerText = $player1Name.innerText;
+                $player1Name.innerText = 'Robot';
+
+                // Translations
+                const translateTemporal = $player1Name.dataset.translate;
+                $player1Name.dataset.translate = $player2Name.dataset.translate;
+                $player2Name.dataset.translate = translateTemporal;
+
+                // Change the host number
+                this.#hostNumber = 2;
+            }
         }
 
         // Check if the user names are '_Anonymous' and correct the names
@@ -833,6 +939,10 @@ class Game {
             red: 'blue',
             blue: 'red'
         };
+        this.#gameData.oppositeNumber = {
+            1: 2,
+            2: 1
+        };
         this.#gameData.precisionByDifficulty = {
             easy: 0.2,
             normal: 0.7,
@@ -896,12 +1006,13 @@ class Game {
         this.#gameModes = {
             robot: 0,
             local: 1,
-            friend: 2,
-            quick: 3,
+            quick: 2,
+            friend: 3,
         };
         this.#board = new Board();  // Initialize a new instance of the board
         this.#sounds = {  // Get the sounds
             versus: new Audio('../sounds/versus.wav'),
+            discs: new Audio('../sounds/discs.wav'),
         };
 
         // Start the game events
