@@ -20,6 +20,7 @@
         radial-gradient(circle at bottom left, var(--text-blue) 0%, transparent 45%);
     position: relative;
     display: flex;
+    flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
     color: var(--text-red-light);
@@ -412,6 +413,10 @@
 /* Media queries */
 /* var(--small-screen) */
 @media (min-width: 22rem) {
+    .winner {
+        flex-flow: row nowrap;
+    }
+
     .player {
         width: 50%;
     }
