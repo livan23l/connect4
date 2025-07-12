@@ -602,13 +602,19 @@ class Game {
     #hostColor;
 
     /**
-     * Manages local game logic, simply unlocking the board after each move.
+     * Manages the local game logic, simply unlocks the board after each move
+     * and highlight the next player to play by adding the 'selected' class.
      *
      * @private
      * @returns {void}
      */
     #localGame() {
+        // Unlock the board
         this.#board.unlock();
+
+        // Show as selected the next player
+        this.#players[0].element.classList.toggle('player--selected');
+        this.#players[1].element.classList.toggle('player--selected');
     }
 
     /**
@@ -704,6 +710,17 @@ class Game {
             $name.innerText = $winnerName.innerText;
         }
 
+        // Remove the highlight class for both players 
+        switch (this.#gameMode) {
+            case this.#gameModes.local:
+                this.#players[0].element.classList.remove('player--selected');
+                this.#players[1].element.classList.remove('player--selected');
+                break;
+            case this.#gameModes.quick:
+            case this.#gameModes.friend:
+                break;
+        }
+
         // Show the game end
         const delay = (endElementId == 'winner') ? 1000 : 250;
         setTimeout(() => {
@@ -747,6 +764,8 @@ class Game {
             case this.#gameModes.local:
                 // Unlock the board
                 this.#board.unlock();
+                // Put the 'selected' class on the red player
+                this.#players[0].element.classList.add('player--selected');
                 break;
             case this.#gameModes.quick:
                 break;

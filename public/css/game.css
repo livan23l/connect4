@@ -96,25 +96,10 @@
     width: 90%;
     padding: 0.5rem;
     border-radius: 10px;
+    position: relative;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-}
-
-.player__image {
-    min-width: 0;
-    max-width: 3.5rem;
-    aspect-ratio: 1;
-    width: 35%;
-    border-width: 2px;
-    border-style: solid;
-    border-radius: 50%;
-}
-
-.player__name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 .player--red {
@@ -133,6 +118,55 @@
 
 .player--blue .player__image {
     border-color: var(--text-blue-light);
+}
+
+.player--selected.player--blue {
+    border: 1px solid var(--text-blue-light);
+}
+
+.player--selected.player--red {
+    border: 1px solid var(--text-red-light);
+}
+
+.player--selected::before,
+.player--selected::after {
+    content: "";
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    position: absolute;
+    translate: -50% -50%;
+    opacity: 0.75;
+}
+
+.player--selected::before {
+    /* Blue disc */
+    border: 2px solid var(--text-blue);
+    background-color: var(--secondary-blue);
+    animation: border-rotate-blue 3s linear infinite;
+}
+
+.player--selected::after {
+    /* Red disc */
+    border: 2px solid var(--text-red);
+    background-color: var(--secondary-red);
+    animation: border-rotate-red 3s linear infinite;
+}
+
+.player__image {
+    min-width: 0;
+    max-width: 3.5rem;
+    aspect-ratio: 1;
+    width: 35%;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 50%;
+}
+
+.player__name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* Versus styles */
@@ -264,7 +298,8 @@
     flex-flow: column nowrap;
 }
 
-.aside__header, .aside__main {
+.aside__header,
+.aside__main {
     width: 100%;
     display: flex;
     flex-flow: column nowrap;
