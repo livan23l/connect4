@@ -1,5 +1,5 @@
 <?php
-$title = 'Play menu';
+$title = 'Points store';
 $access_message = 'Access to unlock the store';
 require_once BASE . 'resources/components/header_lobby.php';
 ?>

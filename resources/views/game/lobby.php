@@ -1,5 +1,5 @@
 <?php
-$title = 'Play menu';
+$title = 'Play lobby';
 $styles = ['play', 'modal'];
 $scripts = ['modal'];
 $access_message = 'Access to unlock your profile';

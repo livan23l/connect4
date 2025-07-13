@@ -1,5 +1,5 @@
 <?php
-$title = 'Play vs robot';
+$title = 'Playing locally';
 $styles = ['modal', 'effects'];
 $scripts = ['modal', 'effects'];
 require_once BASE . 'resources/components/header_game.php';
