@@ -51,6 +51,20 @@ class Controller
     }
 
     /**
+     * Redirects the users to his previous route. If the previous route is null
+     * then it redirects to the home page.
+     *
+     *
+     * @return void
+     */
+    protected function redirectBack()
+    {
+        $backURL = $_SERVER['HTTP_REFERER'] ?? '/';
+        header("Location: $backURL");
+        exit;
+    }
+
+    /**
      * Sends an HTTP response with the specified status code.
      *
      * @param int  $code   The HTTP status code to send in the response.
