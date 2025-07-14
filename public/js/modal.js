@@ -1,4 +1,11 @@
 class Modal {
+    /**
+     * Executes an action based on the element's `data-action` attribute.
+     *
+     * @private
+     * @param {HTMLElement} element - The element with the action to execute.
+     * @returns {void}
+     */
     #makeAction(element) {
         if (!element) return;
 

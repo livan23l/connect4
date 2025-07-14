@@ -2,10 +2,25 @@ class Access {
     #section;
     #animation;
 
-    #replaceURI(newURI = `access?section=${this.#section}&animation=${this.#animation}`) {
+    /**
+     * Replaces the current browser history entry's URI with a new one.
+     *
+     * @private
+     * @param {string} newUri - The new URI to set in the history.
+     * @returns {void}
+     */
+    #replaceURI(newURI) {
         history.replaceState({}, '', newURI);
     }
 
+    /**
+     * Animates the display of a form element using two sequential animations,
+     * then applies a transition effect to reveal the form content smoothly.
+     *
+     * @private
+     * @param {HTMLElement} $form - The form element to animate and show.
+     * @returns {void}
+     */
     #showFormWithAnimation($form) {
         // Define the animations
         const animation1 = 'show-form-1 0.75s ease-out 0.25s';
@@ -34,6 +49,13 @@ class Access {
         }, { once: true });
     }
 
+    /**
+     * Dispatches a custom event to translate all elements with the
+     * 'field__error' class.
+     *
+     * @private
+     * @returns {void}
+     */
     #translateErrors() {
         // Get all the errors
         const $errors = document.querySelectorAll('.field__error');
@@ -47,6 +69,12 @@ class Access {
         });
     }
 
+    /**
+     * Initializes internal URI-related properties based on URL parameters.
+     *
+     * @private
+     * @returns {void}
+     */
     #setInitialURI() {
         // Get the URI params
         const params = new URLSearchParams(window.location.search);
@@ -69,9 +97,19 @@ class Access {
         this.#animation = getParam(params, 'animation', ['true', 'false']);
 
         // Replace and set the new URI
-        this.#replaceURI();
+        this.#replaceURI(
+            `access?section=${this.#section}&animation=${this.#animation}`
+        );
     }
 
+    /**
+     * Displays the initial form based on the current section.
+     * If animation is disabled, shows the form immediately; otherwise, shows
+     * it with animation.
+     *
+     * @private
+     * @returns {void}
+     */
     #showInitialForm() {
         // Get the corresponding form
         const $form = document.querySelector(`#form-${this.#section}`);
@@ -86,6 +124,14 @@ class Access {
         this.#showFormWithAnimation($form);
     }
 
+    /**
+     * Adds click event listeners to elements that trigger section changes.
+     * On click, prevents default navigation, animates the current form exit,
+     * shows the next form with animation, and updates the browser URI.
+     *
+     * @private
+     * @returns {void}
+     */
     #changeSectionEvent() {
         const $changeElements = document.querySelectorAll('[data-action="change-section"]');
 
@@ -117,6 +163,9 @@ class Access {
         });
     }
 
+    /**
+     * Initializes the Access instance and set all the events
+     */
     constructor() {
         // Make all the initial actions
         this.#translateErrors();

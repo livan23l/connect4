@@ -104,7 +104,7 @@ class Translator {
      * loaded.
      * @returns {void}
      */
-    #loadTranslations(language, callback = () => {}) {
+    #loadTranslations(language, callback) {
         // Get the current translations file path
         const translationPath = `/translations/${language}.json`;
 

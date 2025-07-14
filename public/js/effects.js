@@ -1,4 +1,16 @@
 class EMaths {
+    /**
+     * Maps a reference value from one range to a proportional value in a target
+     * range.
+     * Can invert the proportion if specified.
+     *
+     * @static
+     * @param {[number, number]} targetRange - The target range [min, max].
+     * @param {[number, number]} referenceRange - The reference range [min, max].
+     * @param {number} referenceValue - The value within the reference range to map.
+     * @param {boolean} [inverse=false] - Whether to invert the proportion.
+     * @returns {number} The proportional value mapped to the target range.
+     */
     static getProportion(targetRange, referenceRange, referenceValue, inverse = false) {
         const [minTr, maxTr] = targetRange;
         const [minRef, maxRef] = referenceRange;
@@ -14,6 +26,17 @@ class EMaths {
         return normalized * trDiff + minTr;
     }
 
+    /**
+     * Generates a random floating-point number within a specified range,
+     * rounded to a given number of decimals.
+     *
+     * @static
+     * @param {number} min - The minimum value (inclusive).
+     * @param {number} max - The maximum value (inclusive).
+     * @param {number} [decimals=1] - The number of decimal places to round to.
+     * @returns {number} A random float between min and max, rounded to the
+     * specified decimals.
+     */
     static randomFloat(min, max, decimals = 1) {
         const difference = max - min;
         const factor = 10 ** decimals;
@@ -25,6 +48,14 @@ class EMaths {
         return randomFinal + min;
     }
 
+    /**
+     * Randomly checks whether a probability is met or not
+     *
+     * @static
+     * @param {number} probability - A value between 0 and 1 representing the
+     * chance of success.
+     * @returns {boolean} True if the random check succeeds, false otherwise.
+     */
     static checkProbability(probability) {
         return (Math.random() <= probability);
     }
@@ -35,6 +66,14 @@ class Effect {
     #amountOfDiscs;
     #animationEnd;
 
+    /**
+     * Resets the given disc to its initial state.
+     * Randomizes its horizontal position and resets all motion properties.
+     *
+     * @private
+     * @param {Object} disc - The disc to reset.
+     * @returns {void}
+     */
     #resetDisc(disc) {
         // Change the style values
         const left = EMaths.randomFloat(0, 100);
@@ -49,6 +88,16 @@ class Effect {
         disc.velocity = disc.initialVelocity;
     }
 
+    /**
+     * Generates the initial set of discs for the effect.
+     *
+     * Creates each disc element, sets its random properties, adds it to the
+     * DOM, stores its configuration in the internal array, and resets its
+     * state.
+     *
+     * @private
+     * @returns {void}
+     */
     #generateDiscs() {
         for (let i = 0; i < this.#amountOfDiscs; i++) {
             // Create a new disc
@@ -84,6 +133,17 @@ class Effect {
         }
     }
 
+    /**
+     * Runs the rain animation by generating the discs and continuously updating
+     * their position based on simple physics.
+     *
+     * The method handles the motion, bounce, and reset logic for each disc.
+     * It stops the animation loop when the internal flag indicates the
+     * animation should end.
+     *
+     * @private
+     * @returns {void}
+     */
     #rainAnimation() {
         // Generate the discs
         this.#generateDiscs();
@@ -160,18 +220,36 @@ class Effect {
         requestAnimationFrame(animation);
     }
 
+    /**
+     * Registers an event listener for the custom 'effectEnd' event.
+     * When triggered, it sets the internal flag to indicate that the animation
+     * has ended.
+     *
+     * @private
+     * @returns {void}
+     */
     #endEffectEvent() {
         window.addEventListener('effectEnd', () => {
             this.#animationEnd = true;
         });
     }
 
+    /**
+     * Registers an event listener for the custom 'effectStart' event.
+     * When triggered, it runs the internal rain animation.
+     *
+     * @private
+     * @returns {void}
+     */
     #startEffectEvent() {
         window.addEventListener('effectStart', () => {
             this.#rainAnimation();
         });
     }
 
+    /**
+     * Initializes the Effect instance and set all the events
+     */
     constructor() {
         // Set the effect properties
         this.#discs = [];
