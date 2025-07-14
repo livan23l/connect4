@@ -9,7 +9,7 @@ require_once BASE . 'resources/components/header.php';
 <h1 class="main__title" data-translate="Access page">Access page</h1>
 
 <!-- Login form -->
-<form id="form-signin" class="form form--hidden form--red" action="/signin" method="post" novalidate>
+<form id="form-signin" class="form form--hidden form--red" action="/signin" method="post">
     <div class="form__content">
         <h2 class="form__title" data-translate="Login">Login</h2>
         <div class="form__tooltip">
@@ -48,7 +48,7 @@ require_once BASE . 'resources/components/header.php';
 </form>
 
 <!-- Sign up form -->
-<form id="form-signup" class="form form--hidden form--blue" action="/signup" method="post" novalidate>
+<form id="form-signup" class="form form--hidden form--blue" action="/signup" method="post">
     <div class="form__content">
         <h2 class="form__title" data-translate="Sign up">Sign up</h2>
         <div class="form__tooltip">
