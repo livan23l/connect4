@@ -739,8 +739,6 @@ class Game {
                 }
             }));
         }, delay);
-
-        console.log(detail.board);
         return;
     }
 
