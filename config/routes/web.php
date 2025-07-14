@@ -11,8 +11,8 @@ require_once BASE . 'app/controllers/StoreController.php';
 Router::GET('/', [IndexController::class, 'index']);
 
 Router::GET('/access', [AccessController::class, 'access']);
-Router::POST('/signin', [IndexController::class, 'signIn']);
-Router::POST('/signup', [IndexController::class, 'signUp']);
+Router::POST('/signin', [AccessController::class, 'signIn']);
+Router::POST('/signup', [AccessController::class, 'signUp']);
 
 Router::GET('/play', [GameController::class, 'lobby']);
 Router::GET('/play/offline/robot', [GameController::class, 'robot']);

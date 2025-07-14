@@ -25,4 +25,4 @@
 </head>
 
 <body>
-    <main>
+    <main <?= isset($main_classes) ? 'class="' . $main_classes . '"' : '' ?>>

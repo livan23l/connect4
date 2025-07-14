@@ -35,7 +35,7 @@ class AccessController extends Controller
         if (!$currentUser || !password_verify($password, $currentUser['password'])) {
             // Redirect back with errors
             $this->redirect(
-                '/',
+                '/access?section=signin&animation=false',
                 ['signin' => LoginErrorsEnum::USER_OR_PASSWORD_INCORRECT->errorMessage()],
                 $this->withPrefix($this->request, 'signin_')
             );
@@ -54,7 +54,7 @@ class AccessController extends Controller
         // If the credentials are not valid we redirect back
         if (!$validation) {
             $this->redirect(
-                '/',
+                '/access?section=signup&animation=false',
                 $this->withPrefix($this->errors, 'signup_'),
                 $this->withPrefix($this->request, 'signup_')
             );
