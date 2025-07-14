@@ -68,7 +68,7 @@ class AccessController extends Controller
         if ($user->find($username)) {
             // Redirect back with errors
             $this->redirect(
-                '/',
+                '/access?section=signup&animation=false',
                 ['signup' => LoginErrorsEnum::USER_ALREADY_REGISTERED->errorMessage()],
                 $this->withPrefix($this->request, 'signup_')
             );

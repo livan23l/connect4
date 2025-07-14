@@ -23,6 +23,48 @@
 
 
 
+    "Access page": "",
+    "Login": "",
+    "Connect4 wants to be a fast-paced entertainment site. We'll never ask for your email address to enjoy our content. Sign in or create an account with just your username and password.": "",
+    "Username": "",
+    "Password": "",
+    "Sign in": "",
+    "Don't have an account yet?": "",
+    "Sign up": "",
+    "Confirm your password": "",
+    "Continue": "",
+    "Already have an account?": "",
+
+
+
+    "The username or password is incorrect": "",
+    "That username is already registered": "",
+    ":user": "",
+    ":password": "",
+    "#The :$field field is required": "",
+    "#The :$field field must be a valid string": "",
+    "#The :$field field must be a valid integer": "",
+    "#The :$field field must be a valid decimal number": "",
+    "#The :$field field must be a valid number": "",
+    "#The :$field field must have at least :restriction character": "",
+    "#The :$field field must have at least :restriction characters": "",
+    "#The :$field field must have no more than :restriction character": "",
+    "#The :$field field must have no more than :restriction characters": "",
+    "#The :$field field must be a valid email": "",
+    "#The :$field field must be greater than :restriction": "",
+    "#The :$field field must be less than :restriction": "",
+    "#The :$field field must have at least :restriction capital letter": "",
+    "#The :$field field must have at least :restriction capital letters": "",
+    "#The :$field field must have at least :restriction lowercase letter": "",
+    "#The :$field field must have at least :restriction lowercase letters": "",
+    "#The :$field field must have at least :restriction number": "",
+    "#The :$field field must have at least :restriction numbers": "",
+    "#The :$field field must have at least :restriction special character": "",
+    "#The :$field field must have at least :restriction special characters": "",
+    "#The :$field field does not match its confirmation field.": "",
+
+
+
     "Play lobby": "",
     "Store": "",
     "Access to unlock your profile": "",

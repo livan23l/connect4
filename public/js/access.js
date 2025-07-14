@@ -6,31 +6,6 @@ class Access {
         history.replaceState({}, '', newURI);
     }
 
-    #setInitialURI() {
-        // Get the URI params
-        const params = new URLSearchParams(window.location.search);
-
-        // Create the function to get the correct value in the params
-        const getParam = (params, name, values) => {
-            // Get the param value
-            const paramValue = params.get(name);
-
-            // Set the correct value
-            const value = values.includes(paramValue)
-                ? paramValue
-                : values[0];
-
-            return value;
-        }
-
-        // Set the GET properties
-        this.#section = getParam(params, 'section', ['signin', 'signup']);
-        this.#animation = getParam(params, 'animation', ['true', 'false']);
-
-        // Replace and set the new URI
-        this.#replaceURI();
-    }
-
     #showFormWithAnimation($form) {
         // Define the animations
         const animation1 = 'show-form-1 0.75s ease-out 0.25s';
@@ -57,6 +32,44 @@ class Access {
                 }, { once: true });
             }, { once: true });
         }, { once: true });
+    }
+
+    #translateErrors() {
+        // Get all the errors
+        const $errors = document.querySelectorAll('.field__error');
+
+        // Translate all the errors
+        $errors.forEach(($error) => {
+            // Dispatch the translation event
+            window.dispatchEvent(new CustomEvent(
+                'translateElement', { detail: { element: $error} }
+            ));
+        });
+    }
+
+    #setInitialURI() {
+        // Get the URI params
+        const params = new URLSearchParams(window.location.search);
+
+        // Create the function to get the correct value in the params
+        const getParam = (params, name, values) => {
+            // Get the param value
+            const paramValue = params.get(name);
+
+            // Set the correct value
+            const value = values.includes(paramValue)
+                ? paramValue
+                : values[0];
+
+            return value;
+        }
+
+        // Set the GET properties
+        this.#section = getParam(params, 'section', ['signin', 'signup']);
+        this.#animation = getParam(params, 'animation', ['true', 'false']);
+
+        // Replace and set the new URI
+        this.#replaceURI();
     }
 
     #showInitialForm() {
@@ -106,6 +119,7 @@ class Access {
 
     constructor() {
         // Make all the initial actions
+        this.#translateErrors();
         this.#setInitialURI();
         this.#showInitialForm();
 

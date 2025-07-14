@@ -23,6 +23,48 @@
 
 
 
+    "Access page": "Página de acceso",
+    "Login": "Acceder",
+    "Connect4 wants to be a fast-paced entertainment site. We'll never ask for your email address to enjoy our content. Sign in or create an account with just your username and password.": "Connect4 busca ser un sitio de entretenimiento simple. Nunca te pediremos tu correo electrónico para disfrutar de nuestro contenido. Inicia sesión o crea una cuenta solo con un nombre de usuario y una contraseña.",
+    "Username": "Usuario",
+    "Password": "Contraseña",
+    "Sign in": "Iniciar sesión",
+    "Don't have an account yet?": "¿Aún no tienes una cuenta?",
+    "Sign up": "Registrarme",
+    "Confirm your password": "Confirma tu contraseña",
+    "Continue": "Continuar",
+    "Already have an account?": "¿Ya tienes una cuenta?",
+
+
+
+    "The username or password is incorrect": "El usuario o la contraseña es incorrecto",
+    "That username is already registered": "Ese usuario ya se encuentra registrado",
+    ":user": "'usuario'",
+    ":password": "'contraseña'",
+    "#The :$field field is required": "El campo :$field es obligatorio",
+    "#The :$field field must be a valid string": "El campo :$field debe ser un texto válido",
+    "#The :$field field must be a valid integer": "El campo :$field debe ser un entero válido",
+    "#The :$field field must be a valid decimal number": "El campo :$field debe ser un número decimal válido",
+    "#The :$field field must be a valid number": "El campo :$field debe ser un número válido",
+    "#The :$field field must have at least :restriction character": "El campo :$field debe tener al menos :restriction carácter",
+    "#The :$field field must have at least :restriction characters": "El campo :$field debe tener al menos :restriction caracteres",
+    "#The :$field field must have no more than :restriction character": "El campo :$field no debe tener más de :restriction carácter",
+    "#The :$field field must have no more than :restriction characters": "El campo :$field no debe tener más de :restriction caracteres",
+    "#The :$field field must be a valid email": "El campo :$field debe ser un correo electrónico válido",
+    "#The :$field field must be greater than :restriction": "El campo :$field debe ser mayor que :restriction",
+    "#The :$field field must be less than :restriction": "El campo :$field debe ser menor que :restriction",
+    "#The :$field field must have at least :restriction capital letter": "El campo :$field debe tener al menos :restriction letra mayúscula",
+    "#The :$field field must have at least :restriction capital letters": "El campo :$field debe tener al menos :restriction letras mayúsculas",
+    "#The :$field field must have at least :restriction lowercase letter": "El campo :$field debe tener al menos :restriction letra minúscula",
+    "#The :$field field must have at least :restriction lowercase letters": "El campo :$field debe tener al menos :restriction letras minúsculas",
+    "#The :$field field must have at least :restriction number": "El campo :$field debe tener al menos :restriction número",
+    "#The :$field field must have at least :restriction numbers": "El campo :$field debe tener al menos :restriction números",
+    "#The :$field field must have at least :restriction special character": "El campo :$field debe tener al menos :restriction carácter especial",
+    "#The :$field field must have at least :restriction special characters": "El campo :$field debe tener al menos :restriction caracteres especiales",
+    "#The :$field field does not match its confirmation field.": "El campo :$field no concuerda con su campo de confirmación",
+
+
+
     "Play lobby": "Sala de juegos",
     "Store": "Tienda",
     "Access to unlock your profile": "Accede para desbloquear tu perfil",
