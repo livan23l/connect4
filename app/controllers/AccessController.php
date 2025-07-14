@@ -16,20 +16,28 @@ class AccessController extends Controller
 
     public function access()
     {
-        // Check if the user is authenticated and redirect him back
-        if (isset($_SESSION['auth'])) $this->redirectBack();
+        // Check if the username is authenticated and redirect him back
+        if (isset($_SESSION['auth'])) $this->redirect('/play');
 
         // Otherwise show the access view
         return $this->view('access');
     }
 
+    private function authenticate($user)
+    {
+        $_SESSION['auth'] = [
+            'username' => $user['username'],
+        ];
+        $this->redirect('/play');
+    }
+
     public function signIn()
     {
-        $id = $this->request['user'];
+        $username = $this->request['username'];
         $password = $this->request['password'];
 
-        $user = new User();
-        $currentUser = $user->find($id);
+        $User = new User();
+        $currentUser = $User->find($username);
 
         // Validate the user and the password
         if (!$currentUser || !password_verify($password, $currentUser['password'])) {
@@ -41,13 +49,14 @@ class AccessController extends Controller
             );
         }
 
-        $this->redirect('/success');
+        // Authenticate the user
+        $this->authenticate($currentUser);
     }
 
     public function signUp()
     {
         $validation = $this->validate([
-            'user' => 'required|str|minlen:5|maxlen:50',
+            'username' => 'required|str|minlen:5|maxlen:50',
             'password' => 'required|minlen:8|w_number:1|confirmed',
         ]);
 
@@ -60,12 +69,12 @@ class AccessController extends Controller
             );
         }
 
-        $user = new User();
-        $username = $this->request['user'];
+        $User = new User();
+        $username = $this->request['username'];
         $password = $this->request['password'];
 
         // Check if the user exists
-        if ($user->find($username)) {
+        if ($User->find($username)) {
             // Redirect back with errors
             $this->redirect(
                 '/access?section=signup&animation=false',
@@ -75,11 +84,12 @@ class AccessController extends Controller
         }
 
         // Create the new user
-        $user->create([
-            'user' => $username,
+        $userCreated = $User->create([
+            'username' => $username,
             'password' => password_hash($password, PASSWORD_BCRYPT)
         ]);
 
-        $this->redirect('/success');
+        // Authenticate the user
+        $this->authenticate($userCreated);
     }
 }

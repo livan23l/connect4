@@ -39,7 +39,7 @@
 
     "The username or password is incorrect": "L’utilisateur ou le mot de passe est incorrect",
     "That username is already registered": "Cet utilisateur est déjà enregistré",
-    ":user": "'utilisateur'",
+    ":username": "'utilisateur'",
     ":password": "'mot de passe'",
     "#The :$field field is required": "Le champ :$field est obligatoire",
     "#The :$field field must be a valid string": "Le champ :$field doit être une chaîne de caractères valide",

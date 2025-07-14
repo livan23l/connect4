@@ -21,8 +21,8 @@ require_once BASE . 'resources/components/header.php';
         <div class="fieldset">
             <div class="field">
                 <div class="field__element">
-                    <input id="signin_user" class="field__input" name="user" type="text" minlength="5" maxlength="50" value="<?= old('signin_user') ?>" placeholder="" required>
-                    <label for="signin_user" class="field__label" data-translate="Username">Username</label>
+                    <input id="signin_username" class="field__input" name="username" type="text" minlength="5" maxlength="50" value="<?= old('signin_username') ?>" placeholder="" required>
+                    <label for="signin_username" class="field__label" data-translate="Username">Username</label>
                 </div>
             </div>
 
@@ -55,10 +55,10 @@ require_once BASE . 'resources/components/header.php';
         <div class="fieldset">
             <div class="field">
                 <div class="field__element">
-                    <input id="signup_user" class="field__input" name="user" type="text" minlength="5" maxlength="50" value="<?= old('signup_user') ?>" placeholder="" required>
-                    <label for="signup_user" class="field__label" data-translate="Username">Username</label>
+                    <input id="signup_username" class="field__input" name="username" type="text" minlength="5" maxlength="50" value="<?= old('signup_username') ?>" placeholder="" required>
+                    <label for="signup_username" class="field__label" data-translate="Username">Username</label>
                 </div>
-                <p class="field__error" data-translate="<?= error('signup_user') ?>"><?= error('signup_user') ?></p>
+                <p class="field__error" data-translate="<?= error('signup_username') ?>"><?= error('signup_username') ?></p>
             </div>
 
             <div class="field">
