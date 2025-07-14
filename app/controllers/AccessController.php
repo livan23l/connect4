@@ -82,10 +82,4 @@ class AccessController extends Controller
 
         $this->redirect('/success');
     }
-
-    public function notFound()
-    {
-        http_response_code(404);
-        return $this->view('_404');
-    }
 }
