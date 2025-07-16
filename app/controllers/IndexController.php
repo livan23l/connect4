@@ -11,6 +11,11 @@ class IndexController extends Controller
         return $this->view('home');
     }
 
+    public function settings()
+    {
+        return $this->view('settings');
+    }
+
     public function notFound()
     {
         http_response_code(404);
