@@ -5,6 +5,7 @@ return new class {
         $sql = 'CREATE TABLE IF NOT EXISTS profiles (
             id CHAR(9) PRIMARY KEY,
             avatar VARCHAR(15) NOT NULL,
+            points INT DEFAULT(200),
             `name` VARCHAR(50) NOT NULL,
             `description` VARCHAR(255) NULL DEFAULT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
