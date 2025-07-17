@@ -12,9 +12,15 @@ require_once BASE . 'resources/components/header_game.php';
         $aside_difficulty = true;
         $players = [
             [
-                'image' => (false) ? '' : 'red-disc',
-                'name' => (false) ? '' : '_Anonymous',
-                'translate' => (false) ? '' : 'Anonymous'
+                'image' => (isset($_SESSION['auth']))
+                    ? $_SESSION['auth']['profile']['avatar']
+                    : 'red-disc',
+                'name' => (isset($_SESSION['auth']))
+                    ? $_SESSION['auth']['profile']['name']
+                    : '_Anonymous',
+                'translate' => (isset($_SESSION['auth']))
+                    ? ''
+                    : 'Anonymous'
             ],
             [
                 'image' => 'blue-robot',
