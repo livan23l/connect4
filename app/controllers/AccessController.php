@@ -3,7 +3,7 @@
 require_once BASE . 'app/controllers/Controller.php';
 require_once BASE . 'app/models/User.php';
 require_once BASE . 'app/models/Profile.php';
-require_once BASE . 'app/enums/LoginErrorsEnum.php';
+require_once BASE . 'app/enums/GeneralErrorsEnum.php';
 
 class AccessController extends Controller
 {
@@ -47,7 +47,7 @@ class AccessController extends Controller
             // Redirect back with errors
             $this->redirect(
                 '/access?section=signin&animation=false',
-                ['signin' => LoginErrorsEnum::USER_OR_PASSWORD_INCORRECT->errorMessage()],
+                ['signin' => GeneralErrorsEnum::USER_OR_PASSWORD_INCORRECT->errorMessage()],
                 $this->withPrefix($this->request, 'signin_')
             );
         }
@@ -177,7 +177,7 @@ class AccessController extends Controller
             // Redirect back with errors
             $this->redirect(
                 '/access?section=signup&animation=false',
-                ['signup' => LoginErrorsEnum::USER_ALREADY_REGISTERED->errorMessage()],
+                ['signup' => GeneralErrorsEnum::USER_ALREADY_REGISTERED->errorMessage()],
                 $this->withPrefix($this->request, 'signup_')
             );
         }
