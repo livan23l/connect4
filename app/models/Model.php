@@ -228,7 +228,7 @@ class Model
     public function update($id, $data)
     {
         $columns = array_keys($data);
-        $values = array_values($data);
+        $columns_values = array_values($data);
 
         $sql = "UPDATE $this->table SET ";
 
@@ -236,9 +236,15 @@ class Model
         for ($i = 0; $i < $last; $i++) {
             $sql .= "$columns[$i] = :$columns[$i], ";
         }
-        $sql .= "$columns[$last] = :$columns[$last] WHERE $this->pk_column = $id";
+        $sql .= "$columns[$last] = :$columns[$last] WHERE $this->pk_column = :id;";
 
-        $this->preparedQuery($sql, $columns, $values);
+        $values = array_combine(
+            array_map(function ($col) {return ":$col";}, $columns),
+            $columns_values
+        );
+        $values[":id"] = $id;
+
+        $this->preparedQuery($sql, $values);
 
         return $this->find($id);
     }
