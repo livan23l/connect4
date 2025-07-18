@@ -12,6 +12,13 @@
     --text-red: #F7AB00;
     --text-red-dark: #BE0C02;
     --text-red-light: #FFD899;
+    /* Alerts colors */
+    --success: #005400;
+    --success-text: #40FF40;
+    --warning: #544600;
+    --warning-text: #FFD240;
+    --danger: #3d0400;
+    --danger-text: #FF6262;
     /* Discs colors */
     --disc-red: #A31400;
     --disc-red-light: #FF1E00;

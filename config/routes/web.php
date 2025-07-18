@@ -10,6 +10,9 @@ require_once BASE . 'app/controllers/StoreController.php';
 // Routes
 Router::GET('/', [IndexController::class, 'index']);
 Router::GET('/settings', [IndexController::class, 'settings']);
+Router::POST('/change-password', [IndexController::class, 'changePassword']);
+Router::POST('/close-session', [IndexController::class, 'closeSession']);
+Router::POST('/delete-account', [IndexController::class, 'deleteAccount']);
 
 Router::GET('/access', [AccessController::class, 'access']);
 Router::POST('/signin', [AccessController::class, 'signIn']);

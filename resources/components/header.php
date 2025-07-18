@@ -27,7 +27,7 @@
 
 <body class="page">
     <?php if (isset($_SESSION['alert'])): ?>
-        <div class="server-alert <?= $_SESSION['alert']['type'] ?>">
+        <div class="server-alert server-alert--<?= $_SESSION['alert']['type'] ?>">
             <p class="server-alert__message"><?= $_SESSION['alert']['message'] ?></p>
         </div>
         <?php unset($_SESSION['alert']); ?>
