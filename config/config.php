@@ -10,6 +10,7 @@ date_default_timezone_set('America/Mexico_City');
 //-General
 define('BASE', str_replace('\\', '/', rtrim(__DIR__, 'config')));
 define('HTML_BASE', 'http://connect4.test/');
+define('PASSWORD_VALIDATIONS', 'required|minlen:8|w_number:1|confirmed');
 
 // Languages
 define('LANGUAGES', ['en', 'es', 'pt', 'fr']);

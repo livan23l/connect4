@@ -155,7 +155,7 @@ class AccessController extends Controller
         // Validate the submitted data
         $validation = $this->validate([
             'username' => 'required|str|minlen:5|maxlen:50',
-            'password' => 'required|minlen:8|w_number:1|confirmed',
+            'password' => PASSWORD_VALIDATIONS,
         ]);
 
         // If the credentials are not valid we redirect back
