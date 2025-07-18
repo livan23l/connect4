@@ -17,12 +17,6 @@ class Router
         self::$POST[trim($uri, '/')] = $action;
     }
 
-    public static function show()
-    {
-        var_dump(self::$GET);
-        var_dump(self::$POST);
-    }
-
     private static function execute($action, $parameters = [])
     {
         // Get the controller and method from the action
