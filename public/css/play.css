@@ -79,6 +79,7 @@
     background-color: transparent;
     font-size: 0.75rem;
     color: var(--text-blue);
+    font-family: inherit;
     text-transform: capitalize;
     text-decoration: none;
     cursor: pointer;

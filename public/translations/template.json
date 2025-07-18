@@ -39,8 +39,10 @@
 
     "The username or password is incorrect": "",
     "That username is already registered": "",
+    "The current password is incorrect": "",
     ":username": "",
     ":password": "",
+    ":new_password": "",
     "#The :$field field is required": "",
     "#The :$field field must be a valid string": "",
     "#The :$field field must be a valid integer": "",
@@ -103,5 +105,32 @@
     "Winner": "",
     "Draw": "",
     "Restart": "",
-    "Exit": ""
+    "Exit": "",
+
+
+
+    "Password updated successfully": "",
+    "The session was successfully closed": "",
+    "The account was successfully deleted": "",
+    "There was an unknown error": "",
+
+
+
+    "Settings": "",
+    "General settings": "",
+    "Change the language": "",
+    "Account": "",
+    "Change password": "",
+    "Current password": "",
+    "New password": "",
+    "Confirm the password": "",
+    "Update": "",
+    "Other options": "",
+    "Close session": "",
+    "Delete account": "",
+    "Enter your password": "",
+    "Access to unlock your account settings": "",
+    "Delete confirmation": "",
+    "Cancel": "",
+    "Delete": ""
 }

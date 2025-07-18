@@ -39,8 +39,10 @@
 
     "The username or password is incorrect": "El usuario o la contraseña es incorrecto",
     "That username is already registered": "Ese usuario ya se encuentra registrado",
+    "The current password is incorrect": "La contraseña actual es incorrecta",
     ":username": "'usuario'",
     ":password": "'contraseña'",
+    ":new_password": "'nueva contraseña'",
     "#The :$field field is required": "El campo :$field es obligatorio",
     "#The :$field field must be a valid string": "El campo :$field debe ser un texto válido",
     "#The :$field field must be a valid integer": "El campo :$field debe ser un entero válido",
@@ -103,5 +105,32 @@
     "Winner": "Ganador",
     "Draw": "Empate",
     "Restart": "Reiniciar",
-    "Exit": "Salir"
+    "Exit": "Salir",
+
+
+
+    "Password updated successfully": "Contraseña actualizada exitosamente",
+    "The session was successfully closed": "La sesión se cerró correctamente",
+    "The account was successfully deleted": "La cuenta fue correctamente eliminada",
+    "There was an unknown error": "Hubo un error desconocido",
+
+
+
+    "Settings": "Ajustes",
+    "General settings": "Ajustes generales",
+    "Change the language": "Cambiar el idioma",
+    "Account": "Cuenta",
+    "Change password": "Cambiar contraseña",
+    "Current password": "Contraseña actual",
+    "New password": "Nueva contraseña",
+    "Confirm the password": "Confirma la contraseña",
+    "Update": "Actualizar",
+    "Other options": "Otras opciones",
+    "Close session": "Cerrar sesión",
+    "Delete account": "Eliminar cuenta",
+    "Enter your password": "Ingresa tu contraseña",
+    "Access to unlock your account settings": "Accede para desbloquear los ajustes de tu cuenta",
+    "Delete confirmation": "Confirmación de eliminación",
+    "Cancel": "Cancelar",
+    "Delete": "Eliminar"
 }

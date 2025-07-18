@@ -27,7 +27,17 @@ class IndexController extends Controller
         $this->redirect($route, [], []);
     }
 
-    public function changePassword()
+    public function closeSession()
+    {
+        unset($_SESSION['auth']);
+        $this->redirectWithAlert(
+            '/settings',
+            'success',
+            AlertMessagesEnum::SESSION_CLOSED->message(),
+        );
+    }
+
+    private function getAuthUser()
     {
         // Check if the user is auth
         if (!isset($_SESSION['auth'])) {
@@ -49,9 +59,18 @@ class IndexController extends Controller
             );
         }
 
+        return $userAuth;
+    }
+
+    public function changePassword()
+    {
+        // Get the auth user
+        $User = new User();
+        $authUser = $this->getAuthUser();
+
         // Validate the current password
         $currentPassword = $this->request['current_password'];
-        if (!password_verify($currentPassword, $userAuth['password'])) {
+        if (!password_verify($currentPassword, $authUser['password'])) {
             $this->redirect(
                 '/settings',
                 ['current_password' => GeneralErrorsEnum::CURRENT_PASSWORD_INCORRECT->errorMessage()]
@@ -66,10 +85,13 @@ class IndexController extends Controller
 
         // Change the password
         $newPassword = $this->request['new_password'];
-        $User->update(
-            $userAuth['username'],
-            ['password' => password_hash($newPassword, PASSWORD_BCRYPT),]
+        $updatedUser = $User->update(
+            $authUser['username'],
+            ['password' => password_hash($newPassword, PASSWORD_BCRYPT)]
         );
+
+        // Update the session values
+        $_SESSION['auth']['updated_at'] = $updatedUser['updated_at'];
 
         // Redirect with the corresponding alert
         $this->redirectWithAlert(
@@ -79,43 +101,30 @@ class IndexController extends Controller
         );
     }
 
-    public function closeSession()
-    {
-        unset($_SESSION['auth']);
-        $this->redirectWithAlert(
-            '/settings',
-            'success',
-            AlertMessagesEnum::SESSION_CLOSED->message(),
-        );
-    }
-
     public function deleteAccount()
     {
-        if (!isset($_SESSION['auth'])) {
-            $this->redirectWithAlert(
-                '/settings',
-                'danger',
-                AlertMessagesEnum::UNKNOWN_ERRROR->message(),
-            );
-        }
-
-        // Check the user exists
+        // Get the auth user
         $User = new User();
-        $userDeleted = $User->delete($_SESSION['auth']['username']);
+        $authUser = $this->getAuthUser();
 
-        if (!$userDeleted) {
-            $this->redirectWithAlert(
-                '/settings',
-                'danger',
-                AlertMessagesEnum::UNKNOWN_ERRROR->message(),
+        // Validate the request password
+        $confirmation_password = $this->request['confirmation_password'];
+        if (!password_verify($confirmation_password, $authUser['password'])) {
+            $this->redirect(
+                '/settings?modal=true',
+                ['confirmation_password' => GeneralErrorsEnum::CURRENT_PASSWORD_INCORRECT->errorMessage()]
             );
         }
+
+        // Delete the auth user
+        $User->delete($authUser['username']);
 
         // Delete the profile associated profile
         $Profile = new Profile();
-        $Profile->delete($userDeleted['profile_id']);
+        $Profile->delete($authUser['profile_id']);
 
         // Redirect back with the corresponding alert
+        unset($_SESSION['auth']);
         $this->redirectWithAlert(
             '/settings',
             'success',

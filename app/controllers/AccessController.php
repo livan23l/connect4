@@ -28,9 +28,10 @@ class AccessController extends Controller
     {
         $_SESSION['auth'] = [
             'username' => $user['username'],
+            'updated_at' => $user['updated_at'],
             'profile' => $profile,
         ];
-        $this->redirect('/play');
+        $this->redirect('/play', [], []);
     }
 
     public function signIn()

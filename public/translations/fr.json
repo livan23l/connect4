@@ -39,8 +39,10 @@
 
     "The username or password is incorrect": "L’utilisateur ou le mot de passe est incorrect",
     "That username is already registered": "Cet utilisateur est déjà enregistré",
+    "The current password is incorrect": "Le mot de passe actuel est incorrect",
     ":username": "'utilisateur'",
     ":password": "'mot de passe'",
+    ":new_password": "'nouveau mot de passe'",
     "#The :$field field is required": "Le champ :$field est obligatoire",
     "#The :$field field must be a valid string": "Le champ :$field doit être une chaîne de caractères valide",
     "#The :$field field must be a valid integer": "Le champ :$field doit être un entier valide",
@@ -103,5 +105,32 @@
     "Winner": "Gagnant",
     "Draw": "Match nul",
     "Restart": "Recommencer",
-    "Exit": "Quitter"
+    "Exit": "Quitter",
+
+
+
+    "Password updated successfully": "Mot de passe mis à jour avec succès",
+    "The session was successfully closed": "La session a été fermée avec succès",
+    "The account was successfully deleted": "Le compte a été supprimé avec succès",
+    "There was an unknown error": "Une erreur inconnue s'est produite",
+
+
+
+    "Settings": "Paramètres",
+    "General settings": "Paramètres généraux",
+    "Change the language": "Changer la langue",
+    "Account": "Compte",
+    "Change password": "Changer le mot de passe",
+    "Current password": "Mot de passe actuel",
+    "New password": "Nouveau mot de passe",
+    "Confirm the password": "Confirmer le mot de passe",
+    "Update": "Mise à jour",
+    "Other options": "Autres options",
+    "Close session": "Fermer la session",
+    "Delete account": "Supprimer le compte",
+    "Enter your password": "Entrez votre mot de passe",
+    "Access to unlock your account settings": "Accédez pour déverrouiller les paramètres de votre compte",
+    "Delete confirmation": "Confirmation de suppression",
+    "Cancel": "Annuler",
+    "Delete": "Supprimer"
 }

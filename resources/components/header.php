@@ -28,7 +28,7 @@
 <body class="page">
     <?php if (isset($_SESSION['alert'])): ?>
         <div class="server-alert server-alert--<?= $_SESSION['alert']['type'] ?>">
-            <p class="server-alert__message"><?= $_SESSION['alert']['message'] ?></p>
+            <p class="server-alert__message" data-translate="<?= $_SESSION['alert']['message'] ?>"><?= $_SESSION['alert']['message'] ?></p>
         </div>
         <?php unset($_SESSION['alert']); ?>
     <?php endif; ?>

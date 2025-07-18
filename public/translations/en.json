@@ -39,8 +39,10 @@
 
     "The username or password is incorrect": "The username or password is incorrect",
     "That username is already registered": "That username is already registered",
+    "The current password is incorrect": "The current password is incorrect",
     ":username": "'username'",
     ":password": "'password'",
+    ":new_password": "'new password'",
     "#The :$field field is required": "The :$field field is required",
     "#The :$field field must be a valid string": "The :$field field must be a valid string",
     "#The :$field field must be a valid integer": "The :$field field must be a valid integer",
@@ -103,5 +105,32 @@
     "Winner": "Winner",
     "Draw": "Draw",
     "Restart": "Restart",
-    "Exit": "Exit"
+    "Exit": "Exit",
+
+
+
+    "Password updated successfully": "Password updated successfully",
+    "The session was successfully closed": "The session was successfully closed",
+    "The account was successfully deleted": "The account was successfully deleted",
+    "There was an unknown error": "There was an unknown error",
+
+
+
+    "Settings": "Settings",
+    "General settings": "General settings",
+    "Change the language": "Change the language",
+    "Account": "Account",
+    "Change password": "Change password",
+    "Current password": "Current password",
+    "New password": "New password",
+    "Confirm the password": "Confirm the password",
+    "Update": "Update",
+    "Other options": "Other options",
+    "Close session": "Close session",
+    "Delete account": "Delete account",
+    "Enter your password": "Enter your password",
+    "Access to unlock your account settings": "Access to unlock your account settings",
+    "Delete confirmation": "Delete confirmation",
+    "Cancel": "Cancel",
+    "Delete": "Delete"
 }

@@ -80,6 +80,7 @@
     padding: 0.75rem 1rem;
     border-style: none;
     border-radius: 5px;
+    font-family: inherit;
     font-size: 1rem;
     cursor: pointer;
     background-color: var(--btn-back);
@@ -172,6 +173,18 @@
 
 .text-center {
     text-align: center;
+}
+
+/* Select options */
+.select {
+    height: 100%;
+    appearance: none;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--text-blue);
+    border-radius: 3px;
+    background-color: var(--primary-blue);
+    cursor: pointer;
+    color: var(--text-blue-light);
 }
 
 /* Others */
