@@ -18,15 +18,36 @@ class IndexController extends Controller
         return $this->view('settings');
     }
 
+    private function redirectWithAlert($route, $alert_type, $alert_message)
+    {
+        $_SESSION['alert'] = [
+            'type' => $alert_type,
+            'message' => $alert_message,
+        ];
+        $this->redirect($route, [], []);
+    }
+
     public function changePassword()
     {
         // Check if the user is auth
-        if (!isset($_SESSION['auth'])) $this->redirectBack();
+        if (!isset($_SESSION['auth'])) {
+            $this->redirectWithAlert(
+                '/settings',
+                'danger',
+                AlertMessagesEnum::UNKNOWN_ERRROR->message(),
+            );
+        }
 
         // Get the auth user
         $User = new User();
         $userAuth = $User->find($_SESSION['auth']['username']);
-        if (!$userAuth) $this->redirectBack();
+        if (!$userAuth) {
+            $this->redirectWithAlert(
+                '/settings',
+                'danger',
+                AlertMessagesEnum::UNKNOWN_ERRROR->message(),
+            );
+        }
 
         // Validate the current password
         $currentPassword = $this->request['current_password'];
@@ -51,34 +72,55 @@ class IndexController extends Controller
         );
 
         // Redirect with the corresponding alert
-        $_SESSION['alert'] = [
-            'type' => 'success',
-            'message' => AlertMessagesEnum::PASSWORD_UPDATED->message()
-        ];
-        $this->redirect('/settings', [], []);
+        $this->redirectWithAlert(
+            '/settings',
+            'success',
+            AlertMessagesEnum::PASSWORD_UPDATED->message(),
+        );
     }
 
     public function closeSession()
     {
         unset($_SESSION['auth']);
-        $this->redirectBack();
+        $this->redirectWithAlert(
+            '/settings',
+            'success',
+            AlertMessagesEnum::SESSION_CLOSED->message(),
+        );
     }
 
     public function deleteAccount()
     {
-        if (!isset($_SESSION['auth'])) $this->redirectBack();
+        if (!isset($_SESSION['auth'])) {
+            $this->redirectWithAlert(
+                '/settings',
+                'danger',
+                AlertMessagesEnum::UNKNOWN_ERRROR->message(),
+            );
+        }
 
         // Check the user exists
         $User = new User();
         $userDeleted = $User->delete($_SESSION['auth']['username']);
 
-        if (!$userDeleted) $this->redirectBack();
+        if (!$userDeleted) {
+            $this->redirectWithAlert(
+                '/settings',
+                'danger',
+                AlertMessagesEnum::UNKNOWN_ERRROR->message(),
+            );
+        }
 
         // Delete the profile associated profile
         $Profile = new Profile();
         $Profile->delete($userDeleted['profile_id']);
 
-        $this->closeSession();
+        // Redirect back with the corresponding alert
+        $this->redirectWithAlert(
+            '/settings',
+            'success',
+            AlertMessagesEnum::ACCOUNT_DELETED->message(),
+        );
     }
 
     public function notFound()
