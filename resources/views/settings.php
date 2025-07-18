@@ -78,9 +78,15 @@ require_once BASE . "resources/components/header.php";
                     </div>
                 </div>
             <?php else: ?>
-                <a class="w-fit mx-auto anchor" href="/access" data-translate="Access to unlock your account settings">
-                    Access to unlock your account settings
-                </a>
+                <div class="setting setting--column">
+                    <a class="w-fit text-center anchor" href="/access" data-translate="Access to unlock your account settings">
+                        Access to unlock your account settings
+                    </a>
+
+                    <a class="w-fit text-center anchor" href="/play" data-translate="Go back to the lobby">
+                        Go back to the lobby
+                    </a>
+                </div>
             <?php endif; ?>
         </div>
     </section>

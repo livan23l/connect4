@@ -31,6 +31,9 @@ class Access {
 
         // Set an event listener for when the animation ends
         $form.addEventListener('animationend', () => {
+            // Block the vertical scroll
+            document.documentElement.style.overflowY = 'hidden';
+
             // Start the second animation
             $form.style.animation = animation2;
 
@@ -44,6 +47,9 @@ class Access {
                 $form.addEventListener('transitionend', () => {
                     $form.style.animation = '';
                     $form.classList.remove('form--transition');
+
+                    // Unock the vertical scroll
+                    document.documentElement.style.overflowY = 'auto';
                 }, { once: true });
             }, { once: true });
         }, { once: true });
