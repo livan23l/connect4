@@ -130,7 +130,6 @@
 
 .form__label {
     color: var(--text-blue-light);
-    white-space: nowrap;
 }
 
 .form__input {
