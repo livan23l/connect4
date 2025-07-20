@@ -1,0 +1,318 @@
+/* Page styles */
+.page {
+    min-height: 100vh;
+    background-image: radial-gradient(circle at center center, var(--primary-blue) 0%, transparent 50%);
+    display: grid;
+    grid-template-rows: 1fr auto;
+}
+
+.page__main {
+    grid-row: 1/2;
+    padding: 1rem 0 2rem;
+}
+
+/* Profile styles */
+.profile {
+    max-width: 42rem;
+    width: 90%;
+    margin-inline: auto;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
+.avatar,
+.information {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid var(--text-red);
+    background-color: var(--primary-blue);
+    background-image:
+        linear-gradient(225deg, var(--secondary-blue) 0%, transparent 50%),
+        linear-gradient(45deg, var(--secondary-blue) 0%, transparent 50%);
+    position: relative;
+}
+
+/*--Profile avatar styles--*/
+.avatar {
+    max-width: 32rem;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    color: var(--text-red-light);
+}
+
+.avatar__image {
+    max-width: 6.5rem;
+    min-width: 0;
+    width: 50%;
+    border-radius: 50%;
+    border: 2px solid var(--text-red-light);
+}
+
+.avatar__name {
+    max-width: 80vw;
+    width: 100%;
+    font-size: 1.35rem;
+    font-weight: bold;
+    word-wrap: break-word;
+}
+
+.avatar__points {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    color: var(--text-blue-light);
+}
+
+.avatar__options {
+    margin: 0.5rem 0 0 auto;
+}
+
+.avatar__option {
+    padding: 0.5rem;
+    border: 1px solid var(--text-blue);
+    border-radius: 7px;
+    background-color: var(--primary-blue);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: scale 0.2s ease-in-out, filter 0.2s ease-in-out;
+}
+
+.avatar__option:hover {
+    scale: 1.02;
+    filter: brightness(1.05);
+}
+
+/*--Profile information styles--*/
+.information {
+    max-width: 26rem;
+    margin-top: 0.5rem;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 1rem;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.information__profile {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.information__joined {
+    color: var(--text-red-light);
+}
+
+.information__joined-word {
+    filter: brightness(0.9);
+}
+
+.information__games {
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
+}
+
+.information__game {
+    --text: transparent;
+    color: var(--text);
+    position: relative;
+}
+
+.information__game--win {
+    --text: var(--success-text);
+    filter: brightness(0.85);
+}
+
+.information__game--lose {
+    --text: var(--danger-text);
+}
+
+.information__game--draw {
+    --text: var(--warning-text);
+}
+
+.information__game-tooltip {
+    padding: 0.2rem 0.5rem;
+    border: 1px solid var(--text-blue);
+    background-color: var(--secondary-blue);
+    position: absolute;
+    top: -0.2rem;
+    right: 0;
+    translate: 0 -100%;
+    opacity: 0;
+    visibility: hidden;
+    white-space: nowrap;
+}
+
+.information__game:hover>.information__game-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+.information__game-number {
+    display: block;
+    padding: 0 0.25rem;
+}
+
+.information__description {
+    color: var(--text-blue-light);
+    word-wrap: break-word;
+}
+
+/* Achievements styles */
+.achievements {
+    max-width: 42rem;
+    width: 100%;
+    margin-inline: auto;
+    margin-top: 3rem;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.achievements__title {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--text-red);
+    border-radius: 5px;
+    background-color: var(--secondary-blue);
+    font-size: 1.7rem;
+    color: var(--text-red);
+}
+
+.achievements__icons {
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.achievement {
+    aspect-ratio: 1;
+    max-width: 9rem;
+    width: 100%;
+    border: 2px solid var(--text-red);
+    border-radius: 10px;
+    background-color: var(--secondary-blue);
+    background-image:
+        radial-gradient(circle at top right, var(--text-blue) 0%, transparent 40%),
+        radial-gradient(circle at bottom left, var(--text-blue) 0%, transparent 30%);
+    position: relative;
+    z-index: 10;
+}
+
+.achievement::after,
+.achievement::before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0;
+}
+
+.achievement::before {
+    background-color: #000000;
+    opacity: 0.5;
+}
+
+.achievement::after {
+    background-color: var(--text-red-light);
+    translate: 14% 10%;
+    clip-path: path("M50 0a25 25 0 0 1 25 25v12.5a15.625 15.625 0 0 1 12.5 15.625v31.25a15.625 15.625 0 0 1-15.625 15.625h-43.75A15.625 15.625 0 0 1 12.5 84.375v-31.25A15.625 15.625 0 0 1 25 37.5V25A25 25 0 0 1 50 0m0 6.25a18.75 18.75 0 0 0-18.75 18.75v12.5h37.5V25A18.75 18.75 0 0 0 50 6.25");
+}
+
+.achievement__unlock::before,
+.achievement__unlock::after {
+    background-color: transparent;
+}
+
+.achievement__image {
+    min-width: 0;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.achievement__tooltip {
+    padding: 0.25rem 0.5rem;
+    border-radius: 5px;
+    background-color: var(--primary-red);
+    position: absolute;
+    z-index: 11;
+    top: -1rem;
+    left: 0;
+    translate: 0 -100%;
+    color: var(--text-red-light);
+    text-align: center;
+    visibility: hidden;
+}
+
+.achievement__tooltip::after {
+    content: "";
+    width: 1rem;
+    height: 1rem;
+    background-color: inherit;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    translate: -50% 100%;
+    clip-path: polygon(0 0, 100% 0, 50% 80%);
+}
+
+.achievement:hover .achievement__tooltip {
+    visibility: visible;
+}
+
+/* Options styles */
+.options {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+/* Media queries */
+/* var(--small-screen) */
+@media (min-width: 22rem) {
+    .main__access {
+        font-size: 1.25rem;
+    }
+
+    .avatar__options {
+        margin: 0;
+        position: absolute;
+        top: 4rem;
+        right: 0.75rem;
+    }
+}
+
+/* var(--medium-screen) */
+@media (min-width: 42rem) {
+    .avatar {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .avatar__name {
+        max-width: 14rem;
+        margin-inline: 0;
+    }
+
+    .avatar__options {
+        top: auto;
+        bottom: 0.75rem;
+    }
+}

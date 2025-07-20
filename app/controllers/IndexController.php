@@ -3,11 +3,19 @@
 require_once BASE . 'app/controllers/Controller.php';
 require_once BASE . 'app/models/User.php';
 require_once BASE . 'app/models/Profile.php';
+require_once BASE . 'app/models/Achievement.php';
+require_once BASE . 'app/models/AchievementProfile.php';
 require_once BASE . 'app/enums/GeneralErrorsEnum.php';
 require_once BASE . 'app/enums/AlertMessagesEnum.php';
 
 class IndexController extends Controller
 {
+    public function notFound()
+    {
+        http_response_code(404);
+        return $this->view('_404');
+    }
+
     public function index()
     {
         return $this->view('home');
@@ -16,6 +24,37 @@ class IndexController extends Controller
     public function settings()
     {
         return $this->view('settings');
+    }
+
+    public function profile()
+    {
+        // Check the profile exists
+        $Profile = new Profile();
+        $id = $this->parameters['id'];
+        $currentProfile = $Profile->find($id);
+
+        if (!$currentProfile) return $this->notFound();
+
+        // Get all the achievements
+        $Achievement = new Achievement();
+        $allAchievements = $Achievement->all();
+
+        // Get the unlocked achivements
+        $AchievementProfile = new AchievementProfile();
+        $unlocked = array_map(
+            function($a) {
+                return $a['achievement_id'];
+            }, 
+            $AchievementProfile->where(
+                'profile_id', $currentProfile['id']
+            )->all()
+        );
+
+        return $this->view('profile', [
+            'profile' => $currentProfile,
+            'achievements' => $allAchievements,
+            'unlockedAchievements' => $unlocked,
+        ]);
     }
 
     private function redirectWithAlert($route, $alert_type, $alert_message)
@@ -130,11 +169,5 @@ class IndexController extends Controller
             'success',
             AlertMessagesEnum::ACCOUNT_DELETED->message(),
         );
-    }
-
-    public function notFound()
-    {
-        http_response_code(404);
-        return $this->view('_404');
     }
 }

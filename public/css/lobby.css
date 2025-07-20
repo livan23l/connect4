@@ -124,7 +124,7 @@
 .main {
     grid-row: 2/3;
     width: 100%;
-    padding: 2rem 1rem 3rem;
+    padding: 1rem 1rem 3rem;
     background:
         radial-gradient(circle at top left, var(--primary-blue) 0%, transparent 15%),
         radial-gradient(circle at center right, var(--primary-blue) 0%, transparent 15%);
@@ -154,11 +154,11 @@
 
 /* Profile styles */
 .profile {
-    max-width: fit-content;
-    width: 100%;
+    max-width: 90%;
+    width: fit-content;
     margin-inline: auto;
-    padding: 0.75rem;
-    border: 1px solid var(--text-red-light);
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--text-red);
     border-radius: 10px;
     background-image:
         linear-gradient(0deg, var(--primary-blue) 0%, transparent 75%),
@@ -166,28 +166,31 @@
     position: relative;
     display: flex;
     justify-content: center;
-    gap: 1rem;
-    color: var(--text-blue-light);
+    gap: 0.5rem;
+    color: var(--text-red-light);
+    cursor: pointer;
+    user-select: none;
+    text-decoration: none;
+    transition: transform 0.2s ease-in-out, border-color 0.3s ease-in-out;
 }
 
-.profile__section {
-    height: 100%;
+.profile:hover {
+    border-color: var(--text-red-light);
+    transform: scale(1.05);
+}
+
+.profile__column {
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
-    align-items: center;
     gap: 0.5rem;
-}
-
-.profile__section--top {
-    justify-content: flex-start;
 }
 
 .profile__figure {
     max-width: 4rem;
     aspect-ratio: 1;
     width: 100%;
-    border: 2px solid var(--text-blue-light);
+    border: 2px solid var(--text-red-light);
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -208,56 +211,12 @@
     white-space: nowrap;
 }
 
-.profile__achivements {
-    max-width: 10rem;
-    margin-top: 0.25rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.profile__achivement {
-    aspect-ratio: 1;
-    width: 1.5rem;
-    padding: 0.1rem;
-    border-radius: 5px;
-    border: 1px solid gray;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: scale 0.2s ease-in-out, rotate 0.2s ease-in-out;
-    overflow: hidden;
-}
-
-.profile__achivement::after {
-    content: "";
-    background-color: gray;
-    position: absolute;
-    inset: 0;
-    opacity: 0.7;
-}
-
-.profile__achivement:hover {
-    scale: 1.1;
-    rotate: 4deg;
-}
-
-.profile__achivement--unlock {
-    border-color: var(--text-red-light);
-}
-
-.profile__achivement--unlock::after {
-    background-color: var(--primary-blue);
-}
-
 .profile__points {
-    margin-left: 0.5rem;
     display: flex;
+    justify-content: flex-end;
     align-items: center;
     gap: 0.2rem;
+    color: var(--text-blue-light);
 }
 
 /* Media queries */
@@ -289,12 +248,5 @@
 
     .header__section-p {
         display: block;
-    }
-}
-
-/* var(--large-screen) */
-@media (min-width: 66rem) {
-    .main {
-        gap: 2rem;
     }
 }

@@ -62,7 +62,21 @@
     }
 }
 
+@keyframes spining {
+    from {
+        transform: rotateY(0);
+    }
+
+    to {
+        transform: rotateY(360deg);
+    }
+}
+
 .fade-in {
     opacity: 0;
     animation: fade-in 1.5s ease-in-out 0.2s forwards;
+}
+
+.spining {
+    animation: spining 2.25s infinite 1.5s alternate;
 }
