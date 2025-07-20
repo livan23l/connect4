@@ -2,13 +2,8 @@
 $title = "Settings";
 $styles = ['modal', 'settings'];
 $scripts = ['modal', 'settings'];
-$without_main = true;
-require_once BASE . "resources/components/header.php";
+require_once BASE . "resources/components/header_menus.php";
 ?>
-
-<header class="header">
-    <h1 class="header__title" data-translate="Settings">Settings</h1>
-</header>
 
 <main class="main">
     <!-- General setings -->
@@ -66,8 +61,6 @@ require_once BASE . "resources/components/header.php";
                     <h3 class="setting__title" data-translate="Other options">Other options</h3>
 
                     <div class="setting__options">
-                        <a class="setting__button" href="/play" data-translate="Go back to the lobby">Go back to the lobby</a>
-
                         <form action="/close-session" method="post">
                             <button class="setting__button" type="submit" data-translate="Close session">Close session</button>
                         </form>
@@ -81,10 +74,6 @@ require_once BASE . "resources/components/header.php";
                 <div class="setting setting--column">
                     <a class="w-fit text-center anchor" href="/access" data-translate="Access to unlock your account settings">
                         Access to unlock your account settings
-                    </a>
-
-                    <a class="w-fit text-center anchor" href="/play" data-translate="Go back to the lobby">
-                        Go back to the lobby
                     </a>
                 </div>
             <?php endif; ?>

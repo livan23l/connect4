@@ -2,8 +2,7 @@
 $title = 'Profile page';
 $styles = ['profile'];
 $scripts = ['profile'];
-$main_classes = 'page__main';
-require_once BASE . 'resources/components/header.php';
+require_once BASE . 'resources/components/header_menus.php';
 ?>
 
 <main class="main">
@@ -90,11 +89,6 @@ require_once BASE . 'resources/components/header.php';
                 </div>
             <?php endforeach; ?>
         </div>
-    </div>
-
-    <!-- General options -->
-    <div class="options">
-        <a class="anchor text-lg" href="/play" data-translate="Go back to the lobby">Go back to the lobby</a>
     </div>
 </main>
 

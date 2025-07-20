@@ -1,8 +1,8 @@
 <?php
 $title = 'Play vs robot';
-$styles = ['modal', 'effects'];
-$scripts = ['modal', 'effects'];
-require_once BASE . 'resources/components/header_game.php';
+$styles = ['game', 'modal', 'effects'];
+$scripts = ['game', 'modal', 'effects'];
+require_once BASE . 'resources/components/header.php';
 ?>
 
 <main id="game" class="game" data-host-number="1">
@@ -38,5 +38,7 @@ require_once BASE . 'resources/components/header_game.php';
 </main>
 
 <?php
-require_once BASE . 'resources/components/footer_game.php';
+require_once BASE . 'resources/components/game_modals.php';
 ?>
+</body>
+</html>

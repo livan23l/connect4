@@ -1,0 +1,73 @@
+/* Mini profile styles */
+.mini-profile {
+    max-width: 90%;
+    width: fit-content;
+    margin-inline: auto;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--text-red);
+    border-radius: 10px;
+    background-image:
+        linear-gradient(0deg, var(--primary-blue) 0%, transparent 75%),
+        linear-gradient(180deg, var(--primary-blue) 0%, transparent 75%);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--text-red-light);
+    cursor: pointer;
+    user-select: none;
+    text-decoration: none;
+    transition: transform 0.2s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+.mini-profile--access {
+    margin-top: 1rem;
+    padding: 1rem;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.mini-profile:hover {
+    border-color: var(--text-red-light);
+    transform: scale(1.05);
+}
+
+.mini-profile__column {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.mini-profile__figure {
+    max-width: 4rem;
+    aspect-ratio: 1;
+    width: 100%;
+    border: 2px solid var(--text-red-light);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mini-profile__image {
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.mini-profile__name {
+    max-width: 12rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mini-profile__points {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.2rem;
+    color: var(--text-blue-light);
+}

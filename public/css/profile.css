@@ -1,14 +1,7 @@
-/* Page styles */
-.page {
-    min-height: 100vh;
+/* Main styles */
+.main {
     background-image: radial-gradient(circle at center center, var(--primary-blue) 0%, transparent 50%);
-    display: grid;
-    grid-template-rows: 1fr auto;
-}
-
-.page__main {
-    grid-row: 1/2;
-    padding: 1rem 0 2rem;
+    padding-block: 2rem 3rem;
 }
 
 /* Profile styles */
@@ -277,20 +270,9 @@
     visibility: visible;
 }
 
-/* Options styles */
-.options {
-    margin-top: 2rem;
-    display: flex;
-    justify-content: center;
-}
-
 /* Media queries */
 /* var(--small-screen) */
 @media (min-width: 22rem) {
-    .main__access {
-        font-size: 1.25rem;
-    }
-
     .avatar__options {
         margin: 0;
         position: absolute;

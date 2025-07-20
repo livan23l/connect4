@@ -32,7 +32,3 @@
         </div>
         <?php unset($_SESSION['alert']); ?>
     <?php endif; ?>
-
-    <?php if (!isset($without_main)): ?>
-        <main <?= isset($main_classes) ? 'class="' . $main_classes . '"' : '' ?>>
-    <?php endif; ?>

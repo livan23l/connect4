@@ -1,0 +1,12 @@
+/* Main styles */
+.main {
+    width: 100%;
+    padding: 1rem 1rem 3rem;
+    background:
+        radial-gradient(circle at top left, var(--primary-blue) 0%, transparent 15%),
+        radial-gradient(circle at center right, var(--primary-blue) 0%, transparent 15%);
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    gap: 3rem;
+}

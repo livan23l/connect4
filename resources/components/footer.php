@@ -1,5 +1,3 @@
-    </main>
-
     <footer class="footer">
         <div class="footer__content">
             <a class="anchor" href="/contact" data-translate="Contact">Contact</a>

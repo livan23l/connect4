@@ -1,30 +1,9 @@
-/* Page styles */
-.page {
-    min-height: 100vh;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-}
-
-/* Header styles */
-.header {
-    grid-row: 1/2;
-    width: 100%;
-    padding: 0.5rem;
-    background-color: var(--background-secondary);
-}
-
-.header__title {
-    font-size: 2.2rem;
-    text-align: center;
-}
-
 /* Main styles */
 .main {
-    grid-row: 2/3;
     max-width: 32rem;
     width: 90%;
     height: fit-content;
-    margin: 2rem auto;
+    margin: 2rem auto 3rem;
     padding: 1rem;
     border: 1px solid var(--text-blue);
     border-radius: 10px;
