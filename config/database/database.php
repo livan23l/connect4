@@ -4,15 +4,18 @@ require_once __DIR__ . '/../config.php';
 
 class Database
 {
-    private $connection;
-    private $migrationRoute;
+    /**
+     * The PDO database connection
+     */
+    private static PDO $connection;
 
     /**
-     * Constructor.
      * Initializes the database connection using configuration constants.
-     * Additionally, it obtains the root path of the migrations.
+     * If the connection fails, print an error message and finish the execution.
+     * 
+     * @return void
      */
-    public function __construct()
+    protected static function init()
     {
         $db_mang = DB_MANAGER;
         $db_host = DB_HOST;
@@ -24,122 +27,203 @@ class Database
         $dsn = "$db_mang:host=$db_host;dbname=$db_name;port=$db_port";
 
         try {
-            $this->connection = new PDO($dsn, $db_user, $db_pass);
+            self::$connection = new PDO($dsn, $db_user, $db_pass);
         } catch (PDOException $e) {
-            echo 'Error: ' . $e->getMessage();
+            die('Error: ' . $e->getMessage());
         }
-
-        $this->migrationRoute = BASE . 'config/database/migrations/';
     }
 
     /**
-     * Executes the SQL code of a single migration, either 'up' or 'down'.
+     * Executes SQL code from a given file and method.
      *
-     * @param string $file The migration file name.
-     * @param string $type The type of migration to execute: 'up' or 'down'.
+     * @param string $filePath Path to the file containing SQL.
+     * @param string $method Name of the static method to call on the file class.
+     * @return void
      */
-    private function executeMigration($file, $type)
+    private static function runSQL($filePath, $method)
     {
-        $migration = include $this->migrationRoute . $file;
-        $sql = $migration::$type();
+        // Check if the file exists
+        if (!file_exists($filePath)) {
+            die("Error: The file '$filePath' does not exists\n");
+        }
 
+        // Get the SQL code
+        $file = include $filePath;
+        $sql = $file::$method();
+
+        // Try to execute the SQL
         try {
-            $this->connection->exec($sql);
-            $message = match ($type) {
-                'up' => 'Create',
-                'down' => 'Revert',
-            };
-            echo "$message migration: $file\n";
+            self::$connection->exec($sql);
         } catch (PDOException $e) {
-            echo 'SQL error: ' . $e->getMessage() . "\n";
-            die();
+            die("SQL error: " . $e->getMessage() . "\n");
         }
     }
 
     /**
-     * Executes the up or down method for one or all migrations based on the
-     * given type.
+     * Returns an array of files in the given base directory.
+     * If a specific file is provided, returns an array with only that file.
+     * Exits with an error if no files are found.
      *
-     * @param string $migration The name of the migration to execute. If the
-     * method receives an empty string it will run all the migrations.
-     * @param string $type The type of migration to execute: 'up' or 'down'.
+     * @param string $base Base directory.
+     * @param string $file Specific file name (optional).
+     * @return array List of file paths.
      */
-    private function upOrDown($migration, $type)
+    private static function getFiles($base, $file = '')
     {
-        // Check if it's just one migration
-        if ($migration !== '') {
-            $file = $this->migrationRoute . $migration . '.php';
+        // Check if it's just one file
+        if ($file !== '') return ["$file.php"];
 
-            // Check that the current migration file exists
-            if (file_exists($file)) {
-                $this->executeMigration("$migration.php", $type);
-            } else {
-                echo 'The specified migration does not exist.';
-                die();
-            }
-
-            return;
-        }
-
-        // Get all the migration files
-        $files = scandir($this->migrationRoute);
-        // Delete the first two position of the files array
+        // Get all the files in the base
+        $files = scandir($base);
+        //--Delete the first two position of the files array
         array_shift($files);  // Delete '.'
         array_shift($files);  // Delete '..'
 
-        // Check if there is at least one migration
+        // Check if there are no files
         if (count($files) == 0) {
-            echo 'There are no migration files';
-            die();
+            die("There are no files in '$base'.\n");
         }
 
-        // Reverse the files array if the type is 'down' to avoid errors
-        if ($type == 'down') {
-            $files = array_reverse($files);
-        }
+        return $files;
+    }
 
-        // Execute all the migrations
+    /**
+     * Executes all SQL files in the given base path in order.
+     * If a specific file is provided, only that file is executed.
+     * Prints a message for each executed file.
+     *
+     * @param string $base    Base directory containing the files.
+     * @param string $method  Name of the static method in each file to execute.
+     * @param string $message Message to print for each executed file.
+     * @param string $file    Specific file name to execute (optional).
+     * @return void
+     */
+    protected static function executeForwards($base, $method, $message, $file)
+    {
+        // Start the database connection
+        self::init();
+
+        // Get the files
+        $files = self::getFiles($base, $file);
+
+        // Execute all the files
         foreach ($files as $file) {
-            $this->executeMigration($file, $type);
+            self::runSQL("$base$file", $method);
+            echo "$message: $file\n";
         }
     }
 
     /**
-     * Runs the given migration. If no migration is specified, runs all the
-     * migrations.
+     * Executes all SQL files in the given base path in reverse order.
+     * If a specific file is provided, only that file is executed.
+     * Prints a message for each executed file.
+     * Useful for rollbacks.
      *
-     * @param string $migration The name of the migration to run (optional).
+     * @param string $base    Base directory containing the files.
+     * @param string $method  Name of the static method in each file to execute.
+     * @param string $message Message to print for each executed file.
+     * @param string $file    Specific file name to execute (optional).
+     * @return void
      */
-    public function up($migration = '')
+    protected static function executeBackwards($base, $method, $message, $file)
     {
-        $this->upOrDown($migration, 'up');
-    }
+        // Start the database connection
+        self::init();
 
-    /**
-     * Reverts the given migration. If no migration is specified, reverts all
-     * migrations.
-     *
-     * @param string $migration The name of the migration to revert (optional).
-     */
-    public function down($migration = '')
-    {
-        $this->upOrDown($migration, 'down');
-    }
+        // Get the files
+        $files = array_reverse(self::getFiles($base, $file));
 
-    /**
-     * Refreshes the given migration by running its down method followed by its
-     * up method. If no migration is specified, refreshes all migrations.
-     *
-     * @param string $migration The name of the migration to refresh (optional).
-     */
-    public function refresh($migration = '')
-    {
-        $this->down($migration);
-        $this->up($migration);
+        // Execute all the files
+        foreach ($files as $file) {
+            self::runSQL("$base$file", $method);
+            echo "$message: $file\n";
+        }
     }
 }
 
-$database = new Database();
+class Migration extends Database
+{
+    /**
+     * Base path where migration files are stored.
+     */
+    private static string $migrationRoute = BASE . 'config/database/migrations/';
 
-// Executes one migration method
-$database->refresh();
+    /**
+     * Runs the given migration. If no migration is specified, runs all migrations.
+     * The migration name should match the file name (without extension).
+     *
+     * @param string $migration Name of the migration to run (optional).
+     * @return void
+     */
+    public static function up($migration = '')
+    {
+        echo "--------------------------------------------------------------\n";
+        self::executeForwards(
+            self::$migrationRoute,
+            'up',
+            'Create migration',
+            $migration
+        );
+    }
+
+    /**
+     * Reverts the given migration. If no migration is specified, reverts all migrations.
+     * The migration name should match the file name (without extension).
+     *
+     * @param string $migration Name of the migration to revert (optional).
+     * @return void
+     */
+    public static function down($migration = '')
+    {
+        echo "--------------------------------------------------------------\n";
+        self::executeBackwards(
+            self::$migrationRoute,
+            'down',
+            'Revert migration',
+            $migration
+        );
+    }
+
+    /**
+     * Refreshes the given migration by reverting and re-running it.
+     * If no migration is specified, refreshes all migrations.
+     * This will undo and reapply all changes.
+     *
+     * @param string $migration Name of the migration to refresh (optional).
+     * @return void
+     */
+    public static function refresh($migration = '')
+    {
+        self::down($migration);
+        self::up($migration);
+    }
+}
+
+class Seeder extends Database
+{
+    /**
+     * Base path where seeder files are stored.
+     */
+    private static $seedersRoute = BASE . 'config/database/seeders/';
+
+    /**
+     * Runs the given seeder. If no seeder is specified, runs all seeders.
+     * The seeder name should match the file name (without extension).
+     *
+     * @param string $seeder Name of the seeder to run (optional).
+     * @return void
+     */
+    public static function run($seeder = '')
+    {
+        echo "--------------------------------------------------------------\n";
+        self::executeForwards(
+            self::$seedersRoute,
+            'run',
+            'Run seeder',
+            $seeder
+        );
+    }
+}
+
+Migration::refresh();
+Seeder::run();
