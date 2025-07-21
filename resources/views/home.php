@@ -42,7 +42,7 @@ require_once BASE . "resources/components/header.php";
                 <img class="about__image" src="img/game.webp" alt="Image of hands playing connect 4">
             </figure>
         </div>
-    
+
         <!-- About the site -->
         <div class="about__section about__section--reverse">
             <article class="about__content">
@@ -57,7 +57,7 @@ require_once BASE . "resources/components/header.php";
                 <img class="about__image" src="img/page.webp" alt="Representative image of the page">
             </figure>
         </div>
-    
+
         <!-- About the Connect4 project -->
         <div class="about__section">
             <article class="about__content">
