@@ -24,7 +24,7 @@ require_once BASE . "resources/components/header.php";
 <a href="#about-us" id="arrow" class="arrow arrow--hidden">↓</a>
 
 <!-- About us -->
-<section class="about">
+<main class="about">
     <h1 id="about-us" class="about__title" data-translate="About us">About us</h1>
 
     <!-- Sections -->
@@ -74,7 +74,7 @@ require_once BASE . "resources/components/header.php";
             </figure>
         </div>
     </div>
-</section>
+</main>
 
 <!-- Change language -->
 <div class="language">
