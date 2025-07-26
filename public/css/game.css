@@ -99,26 +99,20 @@
     border-radius: 10px;
     position: relative;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     gap: 0.5rem;
 }
 
 .player--red {
+    border: 2px solid var(--text-red-light);
     background-color: var(--primary-red);
     color: var(--text-red-light);
 }
 
 .player--blue {
+    border: 2px solid var(--text-blue-light);
     background-color: var(--primary-blue);
     color: var(--text-blue-light);
-}
-
-.player--red .player__image {
-    border-color: var(--text-red-light);
-}
-
-.player--blue .player__image {
-    border-color: var(--text-blue-light);
 }
 
 .player--selected.player--blue {
@@ -156,19 +150,41 @@
 
 .player__image {
     min-width: 0;
-    max-width: 3.5rem;
     aspect-ratio: 1;
-    width: 35%;
+    width: 3.5rem;
     border-width: 2px;
     border-style: solid;
     border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0.1rem;
+    translate: 0 -40%;
+}
+
+.player--red .player__image {
+    border-color: var(--text-red-light);
+}
+
+.player--blue .player__image {
+    border-color: var(--text-blue-light);
 }
 
 .player__name {
+    padding: 0.2rem 0.3rem;
+    border-radius: 5px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.player--red .player__name {
+    background-color: var(--primary-red);
+}
+
+.player--blue .player__name {
+    background-color: var(--primary-blue);
+}
+
 
 /* Versus styles */
 .versus[open] {
@@ -324,6 +340,7 @@
     max-width: 36rem;
     width: 100%;
     height: 11.65rem;
+    margin-top: 1rem;
     margin-inline: auto;
     padding: 0;
     position: relative;
@@ -423,6 +440,7 @@
 
     .aside__players {
         height: 6.5rem;
+        margin-top: 0;
         padding: 1rem 0.5rem;
         flex-direction: row;
     }

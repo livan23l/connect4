@@ -85,6 +85,10 @@
     filter: brightness(1.05);
 }
 
+.avatar__option--hidden {
+    display: none;
+}
+
 /*--Profile information styles--*/
 .information {
     max-width: 26rem;
@@ -114,6 +118,7 @@
     display: flex;
     align-items: center;
     gap: 0.1rem;
+    cursor: default;
 }
 
 .information__game {

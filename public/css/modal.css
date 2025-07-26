@@ -2,6 +2,7 @@
 .modal {
     --transition-duration: 0.4s;
     max-width: min(70dvw, 24rem);
+    max-height: 70vh;
     width: fit-content;
     padding: 0;
     border: 1px solid var(--text-blue);
@@ -16,6 +17,10 @@
         top var(--transition-duration) ease-in-out,
         opacity var(--transition-duration) ease-in-out,
         display var(--transition-duration) allow-discrete;
+}
+
+.modal--wide {
+    max-width: min(90dvw, 36rem);
 }
 
 .modal::backdrop {
@@ -52,6 +57,7 @@
 }
 
 .modal__content {
+    width: 100%;
     padding: 1rem;
     display: flex;
     flex-flow: column nowrap;

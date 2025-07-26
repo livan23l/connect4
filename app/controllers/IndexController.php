@@ -3,10 +3,12 @@
 require_once BASE . 'app/controllers/Controller.php';
 require_once BASE . 'app/models/User.php';
 require_once BASE . 'app/models/Profile.php';
+require_once BASE . 'app/models/Friendship.php';
 require_once BASE . 'app/models/Achievement.php';
 require_once BASE . 'app/models/AchievementProfile.php';
 require_once BASE . 'app/enums/GeneralErrorsEnum.php';
 require_once BASE . 'app/enums/AlertMessagesEnum.php';
+require_once BASE . 'app/enums/FriendshipsStatusEnum.php';
 
 class IndexController extends Controller
 {
@@ -39,7 +41,7 @@ class IndexController extends Controller
         $Achievement = new Achievement();
         $allAchievements = $Achievement->all();
 
-        // Get the unlocked achivements
+        // Get the unlocked achivements of the current profile
         $AchievementProfile = new AchievementProfile();
         $unlocked = array_map(
             function($a) {
@@ -50,8 +52,41 @@ class IndexController extends Controller
             )->all()
         );
 
+        // Get the option to show ('edit profile', 'add fried', etc)
+        $option = 0;  // The user is not auth
+        if (isset($_SESSION['auth'])) {
+            // Check if the current profile belongs to the auth user
+            if ($_SESSION['auth']['profile']['id'] == $currentProfile['id']) {
+                $option = 1;  // The own profile
+            } else {
+                //  Check if a friendship record exists in the database
+                $profiles = ($_SESSION['auth']['profile']['id'] < $currentProfile['id'])
+                    ? [$_SESSION['auth']['profile']['id'], $currentProfile['id']]
+                    : [$currentProfile['id'], $_SESSION['auth']['profile']['id']];
+
+                // Get the current friendship
+                $Friendship = new Friendship();
+                $curFriendship = $Friendship->whereConditions([
+                    ['profile_id_1', $profiles[0]],
+                    ['profile_id_2', $profiles[1]]
+                ])->first();
+
+                $option = 2;  // There is no friendship
+
+                if ($curFriendship) {
+                    // Check the status of the friendship
+                    if ($curFriendship['status'] == FriendshipsStatusEnum::PENDING->value) {
+                        $option = 3;  // Friendship with 'pending' status
+                    } else {
+                        $option = 4;  // Friendship with 'accepted' status
+                    }
+                }
+            }
+        }
+
         return $this->view('profile', [
             'profile' => $currentProfile,
+            'option' => $option,
             'achievements' => $allAchievements,
             'unlockedAchievements' => $unlocked,
         ]);

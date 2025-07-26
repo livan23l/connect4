@@ -72,6 +72,6 @@
     color: var(--text-blue-light);
 }
 
-.mini-profile__points:hover .icon {
+.mini-profile:hover .icon {
     animation: spining 2s linear infinite;
 }

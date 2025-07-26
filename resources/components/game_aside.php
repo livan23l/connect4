@@ -32,7 +32,7 @@
 <main class="aside__main">
     <div class="aside__players aside__players--hidden">
         <!-- Player 1 -->
-        <div data-player="1" class="player player--red">
+        <div data-player="1" class="player player--red"> <!--  style="background: url('img/backgrounds/cartoon-background.png') center center; background-size: cover;" -->
             <img class="player__image" src="img/profile/<?= $players[0]['image'] ?>.webp" alt="Player 1 image">
             <p class="player__name" <?= (isset($players[0]['translate'])) ? 'data-translate="' . $players[0]['translate'] . '"' : '' ?>>
                 <?= $players[0]['name'] ?>

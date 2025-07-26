@@ -4,9 +4,10 @@ return new class {
     {
         $sql = 'CREATE TABLE IF NOT EXISTS profiles (
             id CHAR(9) PRIMARY KEY,
-            avatar VARCHAR(15) NOT NULL,
-            `name` VARCHAR(50) NOT NULL,
+            `name` VARCHAR(15) NOT NULL,
             `description` VARCHAR(255) NULL DEFAULT NULL,
+            avatar VARCHAR(20) NOT NULL,
+            banner VARCHAR(25) NULL DEFAULT NULL,
             points INT DEFAULT(200),
             games_won INT DEFAULT(0),
             games_drawn INT DEFAULT(0),
