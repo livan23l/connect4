@@ -89,7 +89,6 @@ require_once BASE . 'resources/components/header.php';
                 </div>
             </div>
 
-
             <div class="form__options">
                 <button class="form__button" type="submit" data-translate="Continue">Continue</button>
                 <a href="/access?section=signin&animation=true" class="anchor text-center" data-action="change-section" data-translate="Already have an account?">Already have an account?</a>
