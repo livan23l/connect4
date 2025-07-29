@@ -9,7 +9,7 @@ return new class {
         ("blue-disc-background", 300),
         ("red-disc-background", 300),
         ("arcade-background", 300),
-        ("exposion-background", 300),
+        ("explosion-background", 300),
         ("cartoon-background", 300);';
         return $sql;
     }
