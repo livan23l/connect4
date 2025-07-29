@@ -105,7 +105,7 @@ require_once BASE . 'resources/components/header_menus.php';
 
         <div class="achievements__icons">
             <?php foreach ($achievements as $acheivement): ?>
-                <div class="achievement <?= in_array($acheivement->id, $unlockedAchievements) ? 'achievement__unlock' : '' ?>">
+                <div class="achievement <?= in_array($acheivement->id, $unlockedAchievements) ? 'achievement--unlock' : '' ?>">
                     <img class="achievement__image" src="/img/achievements/<?= $acheivement->image ?>.webp" alt="<?= $acheivement->image ?> acheivement image">
                     <p class="achievement__tooltip" data-translate="<?= $acheivement->description ?>"><?= $acheivement->description ?></p>
                 </div>

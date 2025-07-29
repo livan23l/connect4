@@ -13,7 +13,7 @@ require_once BASE . 'resources/components/header.php';
         $players = [
             [
                 'image' => (isset($_SESSION['auth']))
-                    ? $_SESSION['auth']['profile']['avatar']
+                    ? $_SESSION['auth']['profile']['avatar_name']
                     : 'red-disc',
                 'name' => (isset($_SESSION['auth']))
                     ? $_SESSION['auth']['profile']['name']
