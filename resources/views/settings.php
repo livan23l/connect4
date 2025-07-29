@@ -5,6 +5,8 @@ $scripts = ['modal', 'settings'];
 require_once BASE . "resources/components/header_menus.php";
 ?>
 
+<h1 class="invisible">Settings</h1>
+
 <main class="main">
     <!-- General setings -->
     <section id="general" class="section">

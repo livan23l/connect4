@@ -210,6 +210,13 @@
     flex: 1;
 }
 
+.invisible {
+    position: fixed;
+    top: 0;
+    left: 0;
+    translate: -100% -100%;
+}
+
 /* Animations */
 @keyframes hide-alert {
     from {

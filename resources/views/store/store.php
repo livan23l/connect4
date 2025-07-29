@@ -5,6 +5,8 @@ $scripts = ['store', 'modal'];
 require_once BASE . 'resources/components/header_menus.php';
 ?>
 
+<h1 class="invisible">Store</h1>
+
 <main class="main">
     <!-- Profile -->
     <?php
