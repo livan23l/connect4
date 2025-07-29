@@ -4,9 +4,117 @@
     padding: 1rem 1rem 3rem;
     background:
         radial-gradient(circle at top left, var(--primary-blue) 0%, transparent 15%),
-        radial-gradient(circle at center right, var(--primary-blue) 0%, transparent 15%);
+        radial-gradient(circle at center right, var(--primary-blue) 0%, transparent 25%),
+        radial-gradient(circle at bottom left, var(--primary-blue) 0%, transparent 15%);
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
     gap: 3rem;
+}
+
+/* Store styles */
+.store {
+    max-width: 42rem;
+    width: 100%;
+    padding-block: 1.5rem;
+    border: 1px solid var(--text-red);
+    border-radius: 10px;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 2rem;
+}
+
+.section {
+    width: 100%;
+    padding-bottom: 5rem;
+    border-bottom: 1px solid var(--text-red);
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 2rem;
+}
+
+.section__title {
+    width: fit-content;
+    margin-inline: auto;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--text-red);
+    border-radius: 5px;
+    background-color: var(--primary-red);
+    font-size: 2rem;
+    color: var(--text-red)
+}
+
+.section__content {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem 4rem;
+}
+
+.section__option {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--text-blue);
+    border-radius: 3px;
+    background-color: var(--primary-blue);
+    position: absolute;
+    bottom: 0.65rem;
+    right: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    color: var(--text-blue-light);
+    cursor: pointer;
+    transition: scale 0.2s ease-in-out;
+}
+
+.section__option:hover {
+    scale: 1.05;
+}
+
+/* Avatar and banners styles */
+.avatar,
+.banner {
+    width: 15rem;
+    height: 4.5rem;
+    margin-top: 2rem;
+    border-top: 2px solid var(--text-red);
+    border-left: 2px solid var(--text-red);
+    border-right: 2px solid var(--text-blue);
+    border-bottom: 2px solid var(--text-blue);
+    border-radius: 5px;
+    background-image:
+        linear-gradient(135deg, var(--primary-red) 0%, transparent 65%),
+        linear-gradient(315deg, var(--primary-blue) 0%, transparent 65%);
+    position: relative;
+}
+
+.avatar__image,
+.banner__image {
+    min-width: 0;
+    aspect-ratio: 1;
+    width: 4.25rem;
+    border-top: 2px solid var(--text-blue);
+    border-left: 2px solid var(--text-blue);
+    border-right: 2px solid var(--text-red);
+    border-bottom: 2px solid var(--text-red);
+    border-radius: 50%;
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0.1rem;
+    translate: 0 -40%;
+}
+
+.avatar__background,
+.banner__background {
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    object-position: center center;
 }

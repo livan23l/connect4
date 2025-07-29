@@ -846,6 +846,10 @@ class Game {
                 }
                 $player1Image.src = 'img/profile/red-robot.webp';
 
+                // Change the styles
+                $player2.style.cssText = $player1.style.cssText;
+                $player1.style.cssText = '';
+
                 // Names
                 $player2Name.innerText = $player1Name.innerText;
                 $player1Name.innerText = 'Robot';

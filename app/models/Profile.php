@@ -98,6 +98,11 @@ class Profile extends Model
         return $this->hasOne('Avatar');
     }
 
+    public function banner()
+    {
+        return $this->hasOne('Banner');
+    }
+
     public function unlockedAchievements()
     {
         // Get the SQL and values
