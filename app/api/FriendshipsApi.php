@@ -8,8 +8,6 @@ class FriendshipsApi extends Controller
 {
     public function request()
     {
-        $Friendship = new Friendship();
-
         // Get the auth user profile
         if (!isset($_SESSION['auth'])) $this->response(400);
         $authProfileId = $_SESSION['auth']['profile']['id'];
@@ -23,7 +21,7 @@ class FriendshipsApi extends Controller
             ? [$authProfileId, $requestProfileId]
             : [$requestProfileId, $authProfileId];
 
-        $Friendship->create([
+        Friendship::create([
             'profile_id_1' => $profiles[0],
             'profile_id_2' => $profiles[1],
         ]);

@@ -6,6 +6,6 @@ class StoreController extends Controller
 {
     public function lobby()
     {
-        return $this->view('store.lobby');
+        return $this->view('store.store');
     }
 }

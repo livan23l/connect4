@@ -3,8 +3,8 @@ return new class {
     public static function up()
     {
         $sql = 'CREATE TABLE IF NOT EXISTS achievements_profiles (
-            achievement_id INT,
-            profile_id char(9),
+            achievement_id INT NOT NULL,
+            profile_id CHAR(9) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             CONSTRAINT pk_achievements_profiles PRIMARY KEY (achievement_id, profile_id),

@@ -3,9 +3,8 @@
 require_once BASE . 'app/controllers/Controller.php';
 require_once BASE . 'app/models/User.php';
 require_once BASE . 'app/models/Profile.php';
-require_once BASE . 'app/models/Friendship.php';
 require_once BASE . 'app/models/Achievement.php';
-require_once BASE . 'app/models/AchievementProfile.php';
+require_once BASE . 'app/models/Friendship.php';
 require_once BASE . 'app/enums/GeneralErrorsEnum.php';
 require_once BASE . 'app/enums/AlertMessagesEnum.php';
 require_once BASE . 'app/enums/FriendshipsStatusEnum.php';
@@ -31,51 +30,44 @@ class IndexController extends Controller
     public function profile()
     {
         // Check the profile exists
-        $Profile = new Profile();
         $id = $this->parameters['id'];
-        $currentProfile = $Profile->find($id);
-
-        if (!$currentProfile) return $this->notFound();
+        $profile = Profile::find($id);
+        if (!$profile) return $this->notFound();
 
         // Get all the achievements
-        $Achievement = new Achievement();
-        $allAchievements = $Achievement->all();
+        $achievementsAll = Achievement::all();
 
-        // Get the unlocked achivements of the current profile
-        $AchievementProfile = new AchievementProfile();
+        // Get the unlocked achivements indexes of the current profile
+        $achievementsUnlock = $profile->unlockedAchievements();
         $unlocked = array_map(
-            function($a) {
+            function ($a) {
                 return $a['achievement_id'];
-            }, 
-            $AchievementProfile->where(
-                'profile_id', $currentProfile['id']
-            )->all()
+            },
+            $achievementsUnlock
         );
 
         // Get the option to show ('edit profile', 'add fried', etc)
         $option = 0;  // The user is not auth
         if (isset($_SESSION['auth'])) {
             // Check if the current profile belongs to the auth user
-            if ($_SESSION['auth']['profile']['id'] == $currentProfile['id']) {
+            if ($_SESSION['auth']['profile']['id'] == $profile->id) {
                 $option = 1;  // The own profile
             } else {
-                //  Check if a friendship record exists in the database
-                $profiles = ($_SESSION['auth']['profile']['id'] < $currentProfile['id'])
-                    ? [$_SESSION['auth']['profile']['id'], $currentProfile['id']]
-                    : [$currentProfile['id'], $_SESSION['auth']['profile']['id']];
+                // Check if a friendship record exists in the database
+                $profiles = ($_SESSION['auth']['profile']['id'] < $profile->id)
+                    ? [$_SESSION['auth']['profile']['id'], $profile->id]
+                    : [$profile->id, $_SESSION['auth']['profile']['id']];
 
                 // Get the current friendship
-                $Friendship = new Friendship();
-                $curFriendship = $Friendship->whereConditions([
+                $friendship = Friendship::whereConditions([
                     ['profile_id_1', $profiles[0]],
                     ['profile_id_2', $profiles[1]]
                 ])->first();
 
                 $option = 2;  // There is no friendship
-
-                if ($curFriendship) {
+                if ($friendship) {
                     // Check the status of the friendship
-                    if ($curFriendship['status'] == FriendshipsStatusEnum::PENDING->value) {
+                    if ($friendship->status == FriendshipsStatusEnum::PENDING->value) {
                         $option = 3;  // Friendship with 'pending' status
                     } else {
                         $option = 4;  // Friendship with 'accepted' status
@@ -84,10 +76,14 @@ class IndexController extends Controller
             }
         }
 
+        // Set the profile array
+        $profileArray = $profile->toArray();
+        $profileArray['avatar_name'] = $profile->avatar()->name;
+
         return $this->view('profile', [
-            'profile' => $currentProfile,
+            'profile' => $profileArray,
             'option' => $option,
-            'achievements' => $allAchievements,
+            'achievements' => $achievementsAll,
             'unlockedAchievements' => $unlocked,
         ]);
     }
@@ -123,8 +119,7 @@ class IndexController extends Controller
         }
 
         // Get the auth user
-        $User = new User();
-        $userAuth = $User->find($_SESSION['auth']['username']);
+        $userAuth = User::find($_SESSION['auth']['username']);
         if (!$userAuth) {
             $this->redirectWithAlert(
                 '/settings',
@@ -139,12 +134,11 @@ class IndexController extends Controller
     public function changePassword()
     {
         // Get the auth user
-        $User = new User();
-        $authUser = $this->getAuthUser();
+        $user = $this->getAuthUser();
 
         // Validate the current password
         $currentPassword = $this->request['current_password'];
-        if (!password_verify($currentPassword, $authUser['password'])) {
+        if (!password_verify($currentPassword, $user->password)) {
             $this->redirect(
                 '/settings',
                 ['current_password' => GeneralErrorsEnum::CURRENT_PASSWORD_INCORRECT->errorMessage()]
@@ -158,14 +152,14 @@ class IndexController extends Controller
         if (!$validation) $this->redirect('/settings');
 
         // Change the password
-        $newPassword = $this->request['new_password'];
-        $updatedUser = $User->update(
-            $authUser['username'],
-            ['password' => password_hash($newPassword, PASSWORD_BCRYPT)]
+        $user->password = password_hash(
+            $this->request['new_password'],
+            PASSWORD_BCRYPT
         );
+        $user->save();
 
         // Update the session values
-        $_SESSION['auth']['updated_at'] = $updatedUser['updated_at'];
+        $_SESSION['auth']['updated_at'] = $user->updated_at;
 
         // Redirect with the corresponding alert
         $this->redirectWithAlert(
@@ -178,24 +172,20 @@ class IndexController extends Controller
     public function deleteAccount()
     {
         // Get the auth user
-        $User = new User();
-        $authUser = $this->getAuthUser();
+        $user = $this->getAuthUser();
 
         // Validate the request password
         $confirmation_password = $this->request['confirmation_password'];
-        if (!password_verify($confirmation_password, $authUser['password'])) {
+        if (!password_verify($confirmation_password, $user->password)) {
             $this->redirect(
                 '/settings?modal=true',
                 ['confirmation_password' => GeneralErrorsEnum::CURRENT_PASSWORD_INCORRECT->errorMessage()]
             );
         }
 
-        // Delete the auth user
-        $User->delete($authUser['username']);
-
-        // Delete the profile associated profile
-        $Profile = new Profile();
-        $Profile->delete($authUser['profile_id']);
+        // Destroy the user and delete the associated profile
+        $user->destroy();
+        Profile::delete($user->profile_id);
 
         // Redirect back with the corresponding alert
         unset($_SESSION['auth']);

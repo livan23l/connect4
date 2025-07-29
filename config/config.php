@@ -49,15 +49,13 @@ function error($field)
 }
 
 // Check if the user session needs to be closed
-function checkSession() {
+function checkSession()
+{
     require_once BASE . 'app/models/User.php';
-    $User = new User();
-
-    // Get the auth user
-    $authUser = $User->find($_SESSION['auth']['username']);
+    $user = User::find($_SESSION['auth']['username']);
 
     // Check if the user has been deleted or the password has changed
-    if (!$authUser || $_SESSION['auth']['updated_at'] != $authUser['updated_at']) {
+    if (!$user || $_SESSION['auth']['updated_at'] != $user->updated_at) {
         unset($_SESSION['auth']);
     }
 }

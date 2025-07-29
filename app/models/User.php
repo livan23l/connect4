@@ -6,4 +6,10 @@ class User extends Model
 {
     protected string $table = 'users';
     protected string $pk_column = 'username';
+    protected array $guarded = ['password'];
+
+    public function profile()
+    {
+        return $this->hasOne('Profile');
+    }
 }

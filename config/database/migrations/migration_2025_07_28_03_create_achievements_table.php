@@ -4,8 +4,8 @@ return new class {
     {
         $sql = 'CREATE TABLE IF NOT EXISTS achievements (
             id INT PRIMARY KEY AUTO_INCREMENT,
-            `image` VARCHAR(50) NOT NULL,
-            `description` VARCHAR(255) NULL DEFAULT NULL,
+            `image` VARCHAR(50) NOT NULL UNIQUE,
+            `description` VARCHAR(255),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );';

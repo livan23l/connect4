@@ -3,7 +3,7 @@
         <!-- Image -->
         <div class="mini-profile__column">
             <figure class="mini-profile__figure">
-                <img class="mini-profile__image" src="img/profile/<?= $_SESSION['auth']['profile']['avatar'] ?>.webp" alt="Profile avatar image">
+                <img class="mini-profile__image" src="img/profile/<?= $_SESSION['auth']['profile']['avatar_name'] ?>.webp" alt="Profile avatar image">
             </figure>
         </div>
 
